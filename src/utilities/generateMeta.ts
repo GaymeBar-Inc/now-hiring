@@ -20,10 +20,18 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   return url
 }
 
+const capitalizeSlug = (slug: string): string => {
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
+  isHomepage?: boolean
 }): Promise<Metadata> => {
-  const { doc } = args
+  const { doc, isHomepage = false } = args
 
   let siteName = 'My Website'
   try {
@@ -35,7 +43,11 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title ? `${doc.meta.title} | ${siteName}` : siteName
+  // Determine the page name: use meta.title, then doc.title, then capitalize slug
+  const pageName = doc?.meta?.title || doc?.title || (doc?.slug ? capitalizeSlug(doc.slug) : null)
+
+  // Homepage: just siteName; other pages: siteName | pageName
+  const title = isHomepage || !pageName ? siteName : `${siteName} | ${pageName}`
 
   return {
     description: doc?.meta?.description,
@@ -51,6 +63,10 @@ export const generateMeta = async (args: {
       title,
       url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),
+    twitter: {
+      card: 'summary_large_image',
+      title,
+    },
     title,
   }
 }

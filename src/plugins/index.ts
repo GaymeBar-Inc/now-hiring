@@ -15,7 +15,9 @@ import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+  // Note: This runs at config time (sync) and is used for admin SEO preview
+  // The actual frontend title uses getSiteSettings() dynamically
+  return doc?.title ? `${doc.title} | Site` : 'Site'
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {

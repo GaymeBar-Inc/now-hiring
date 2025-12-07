@@ -27,7 +27,7 @@ export const mergeOpenGraph = async (
     description: siteDescription,
     images: [{ url: defaultImage }],
     siteName,
-    title: siteName,
+    title: og?.title || siteName,
   }
 
   return {

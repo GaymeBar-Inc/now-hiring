@@ -7,6 +7,7 @@ import React from 'react'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
 import { CardPostData } from '@/components/Card'
+import { getSiteSettings } from '@/utilities/getSiteSettings'
 
 type Args = {
   searchParams: Promise<{
@@ -81,8 +82,18 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   )
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata(): Promise<Metadata> {
+  let siteName = 'My Website'
+  try {
+    const settings = await getSiteSettings()
+    siteName = settings?.siteName || siteName
+  } catch {}
+
+  const title = `${siteName} | Search`
+
   return {
-    title: `Payload Website Template Search`,
+    title,
+    openGraph: { title },
+    twitter: { title },
   }
 }
