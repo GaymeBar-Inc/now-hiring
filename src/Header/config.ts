@@ -10,6 +10,32 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'logo',
+      type: 'group',
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          filterOptions: {
+            mimeType: {
+              in: ['image/svg+xml', 'image/png', 'image/jpeg'],
+            },
+          },
+          admin: {
+            description: 'Logo image - SVG, PNG, or JPG (optional if text is provided)',
+          },
+        },
+        {
+          name: 'text',
+          type: 'text',
+          admin: {
+            description: 'Logo text (optional if image is provided)',
+          },
+        },
+      ],
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [

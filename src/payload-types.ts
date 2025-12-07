@@ -1635,6 +1635,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  logo?: {
+    /**
+     * Logo image - SVG, PNG, or JPG (optional if text is provided)
+     */
+    image?: (number | null) | Media;
+    /**
+     * Logo text (optional if image is provided)
+     */
+    text?: string | null;
+  };
   navItems?:
     | {
         link: {
@@ -1692,6 +1702,12 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?:
+    | T
+    | {
+        image?: T;
+        text?: T;
+      };
   navItems?:
     | T
     | {

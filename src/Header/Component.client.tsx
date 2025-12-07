@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-import type { Header } from '@/payload-types'
+import type { Header, Media as MediaType } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
+import { Media } from '@/components/Media'
 import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
@@ -29,11 +30,27 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
+  const logoImage = data.logo?.image as MediaType | undefined
+  const logoText = data.logo?.text
+
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
+    <header className="container relative z-20" {...(theme ? { 'data-theme': theme } : {})}>
       <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+        <Link href="/" className="flex items-center gap-3">
+          {logoImage && typeof logoImage === 'object' && (
+            <div className="relative h-[34px] w-[34px]">
+              <Media
+                resource={logoImage}
+                imgClassName="object-contain invert dark:invert-0"
+                fill
+                priority
+              />
+            </div>
+          )}
+          {logoText && <span className="text-xl font-semibold text-primary">{logoText}</span>}
+          {!logoImage && !logoText && (
+            <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+          )}
         </Link>
         <HeaderNav data={data} />
       </div>
