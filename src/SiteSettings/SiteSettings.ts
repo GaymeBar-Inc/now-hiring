@@ -13,5 +13,15 @@ export const SiteSettings: GlobalConfig = {
       type: 'text',
       required: true,
     },
+    {
+      name: 'favicon',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Favicon',
+      required: false,
+      admin: {
+        description: 'Used as the site favicon (appears in browser tabs and bookmarks)',
+      },
+    },
   ],
 }

@@ -1706,6 +1706,10 @@ export interface Footer {
 export interface SiteSetting {
   id: number;
   siteName: string;
+  /**
+   * Used as the site favicon (appears in browser tabs and bookmarks)
+   */
+  favicon?: (number | null) | Media;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1767,6 +1771,7 @@ export interface FooterSelect<T extends boolean = true> {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
+  favicon?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
