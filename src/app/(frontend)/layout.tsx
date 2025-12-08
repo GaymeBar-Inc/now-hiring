@@ -20,12 +20,26 @@ import { getServerSideURL } from '@/utilities/getURL'
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
+  let faviconUrl = '/favicon.ico'
+
+  try {
+    const settings = await getSiteSettings()
+    if (settings?.favicon && typeof settings.favicon === 'object' && 'url' in settings.favicon) {
+      // Handle potential null/undefined url from Media type
+      const url = settings.favicon.url
+      if (typeof url === 'string') {
+        faviconUrl = url
+      }
+    }
+  } catch {
+    // Use default if site settings not available
+  }
+
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <link href={faviconUrl} rel="icon" sizes="32x32" />
       </head>
       <body>
         <Providers>

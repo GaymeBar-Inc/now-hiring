@@ -1711,6 +1711,10 @@ export interface SiteSetting {
    * Used when pages don't have their own OG image
    */
   ogImage?: (number | null) | Media;
+  /**
+   * Used as the site favicon (appears in browser tabs and bookmarks)
+   */
+  favicon?: (number | null) | Media;
   social?: {
     twitterCreator?: string | null;
   };
@@ -1777,6 +1781,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   siteDescription?: T;
   ogImage?: T;
+  favicon?: T;
   social?:
     | T
     | {

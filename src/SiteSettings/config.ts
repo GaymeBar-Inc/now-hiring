@@ -31,6 +31,16 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
+      name: 'favicon',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Favicon',
+      required: false,
+      admin: {
+        description: 'Used as the site favicon (appears in browser tabs and bookmarks)',
+      },
+    },
+    {
       type: 'group',
       name: 'social',
       label: 'Social Media',
@@ -50,4 +60,3 @@ export const SiteSettings: GlobalConfig = {
     afterChange: [revalidateSiteSettings],
   },
 }
-
