@@ -13,9 +13,27 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
+import { getSiteSettings } from '@/utilities/getSiteSettings'
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title}` : 'Payload Website Template'
+const generateTitle: GenerateTitle<Post | Page> = async ({ doc }) => {
+  // Get the site name from settings to use as prefix
+  let siteName = 'Payload Website Template'
+
+  try {
+    const settings = await getSiteSettings()
+    if (settings?.siteName) {
+      siteName = settings.siteName
+    }
+  } catch (error) {
+    // Use default if site settings not available
+  }
+
+  // If doc has a title, use it with the site name prefix; otherwise fallback to site name
+  if (doc?.title) {
+    return `${siteName} | ${doc.title}`
+  }
+
+  return siteName
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
