@@ -34,11 +34,13 @@ export const generateMeta = async (args: {
   const { doc, isHomepage = false } = args
 
   let siteName = 'My Website'
+  let siteDescription = ''
   try {
     const settings = await getSiteSettings()
     siteName = settings?.siteName || siteName
+    siteDescription = settings?.siteDescription || siteDescription
   } catch {
-    // Use default if site settings not available
+    // Use defaults if site settings not available
   }
 
   const ogImage = getImageURL(doc?.meta?.image)
@@ -50,9 +52,9 @@ export const generateMeta = async (args: {
   const title = isHomepage || !pageName ? siteName : `${siteName} | ${pageName}`
 
   return {
-    description: doc?.meta?.description,
+    description: doc?.meta?.description || siteDescription,
     openGraph: await mergeOpenGraph({
-      description: doc?.meta?.description || '',
+      description: doc?.meta?.description || siteDescription || '',
       images: ogImage
         ? [
             {
