@@ -82,13 +82,19 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = 'home' } = await paramsPromise
+  const isHomepage = slug === 'home'
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const page = await queryPageBySlug({
     slug: decodedSlug,
   })
 
-  return generateMeta({ doc: page })
+  // Fallback to static home if page not found
+  if (!page && slug === 'home') {
+    return generateMeta({ doc: homeStatic, isHomepage: true })
+  }
+
+  return generateMeta({ doc: page, isHomepage })
 }
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {

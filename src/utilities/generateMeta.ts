@@ -4,6 +4,7 @@ import type { Media, Page, Post, Config } from '../payload-types'
 
 import { mergeOpenGraph } from './mergeOpenGraph'
 import { getServerSideURL } from './getURL'
+import { getSiteSettings } from './getSiteSettings'
 
 const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   const serverUrl = getServerSideURL()
@@ -19,20 +20,38 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   return url
 }
 
+const capitalizeSlug = (slug: string): string => {
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
+  isHomepage?: boolean
 }): Promise<Metadata> => {
-  const { doc } = args
+  const { doc, isHomepage = false } = args
+
+  let siteName = 'My Website'
+  try {
+    const settings = await getSiteSettings()
+    siteName = settings?.siteName || siteName
+  } catch {
+    // Use default if site settings not available
+  }
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Payload Website Template'
-    : 'Payload Website Template'
+  // Determine the page name: use meta.title, then doc.title, then capitalize slug
+  const pageName = doc?.meta?.title || doc?.title || (doc?.slug ? capitalizeSlug(doc.slug) : null)
+
+  // Homepage: just siteName; other pages: siteName | pageName
+  const title = isHomepage || !pageName ? siteName : `${siteName} | ${pageName}`
 
   return {
     description: doc?.meta?.description,
-    openGraph: mergeOpenGraph({
+    openGraph: await mergeOpenGraph({
       description: doc?.meta?.description || '',
       images: ogImage
         ? [
@@ -44,6 +63,10 @@ export const generateMeta = async (args: {
       title,
       url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),
+    twitter: {
+      card: 'summary_large_image',
+      title,
+    },
     title,
   }
 }

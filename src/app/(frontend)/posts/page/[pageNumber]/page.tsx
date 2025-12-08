@@ -8,6 +8,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
+import { getSiteSettings } from '@/utilities/getSiteSettings'
 
 export const revalidate = 600
 
@@ -64,8 +65,19 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
+
+  let siteName = 'My Website'
+  try {
+    const settings = await getSiteSettings()
+    siteName = settings?.siteName || siteName
+  } catch {}
+
+  const title = `${siteName} | Posts Page ${pageNumber || ''}`
+
   return {
-    title: `Payload Website Template Posts Page ${pageNumber || ''}`,
+    title,
+    openGraph: { title },
+    twitter: { title },
   }
 }
 
