@@ -26,6 +26,7 @@ const generateTitle: GenerateTitle<Post | Page> = async ({ doc }) => {
     }
   } catch (error) {
     // Use default if site settings not available
+    console.log(error)
   }
 
   // If doc has a title, use it with the site name prefix; otherwise fallback to site name
