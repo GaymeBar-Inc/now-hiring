@@ -26,13 +26,11 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Payload Website Template'
-    : 'Payload Website Template'
+  const title = doc?.meta?.title || 'Payload Website Template'
 
   return {
     description: doc?.meta?.description,
-    openGraph: mergeOpenGraph({
+    openGraph: await mergeOpenGraph({
       description: doc?.meta?.description || '',
       images: ogImage
         ? [
@@ -44,6 +42,10 @@ export const generateMeta = async (args: {
       title,
       url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),
+    twitter: {
+      card: 'summary_large_image',
+      title,
+    },
     title,
   }
 }
