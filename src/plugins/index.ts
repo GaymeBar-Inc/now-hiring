@@ -6,7 +6,7 @@ import { searchPlugin } from '@payloadcms/plugin-search'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
-import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
+import { GenerateTitle, GenerateDescription, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
@@ -14,6 +14,22 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
+
+const generateDescription: GenerateDescription<Post> = ({ doc }) => {
+  if (!doc?.content?.root?.children) return ''
+
+  const extractText = (node: any): string => {
+    if (typeof node.text === 'string') return node.text
+    if (Array.isArray(node.children)) {
+      return node.children.map(extractText).join('')
+    }
+    return ''
+  }
+
+  const fullText = extractText(doc.content.root)
+  // Trim to 160 characters (ideal for SEO meta descriptions)
+  return fullText.substring(0, 160).trim()
+}
 
 const generateTitle: GenerateTitle<Post | Page> = async ({ doc }) => {
   // Get the site name from settings to use as prefix
@@ -78,6 +94,7 @@ export const plugins: Plugin[] = [
   }),
   seoPlugin({
     generateTitle,
+    generateDescription,
     generateURL,
   }),
   formBuilderPlugin({
