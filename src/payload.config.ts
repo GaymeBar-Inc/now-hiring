@@ -1,7 +1,8 @@
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import sharp from 'sharp'
 import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
+import { buildConfig } from 'payload'
+import type { Payload, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
@@ -15,9 +16,35 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { SiteSettings } from './SiteSettings/SiteSettings'
+import { subscribeForm } from './endpoints/seed/subscribe-form'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+async function ensureDefaultForms(payload: Payload) {
+  const defaults = [subscribeForm]
+
+  for (const form of defaults) {
+    const title = form?.title
+    if (!title) continue
+
+    const existing = await payload.find({
+      collection: 'forms',
+      where: { title: { equals: title } },
+      limit: 1,
+      depth: 0,
+      overrideAccess: true,
+    })
+
+    if (existing?.docs?.length) continue
+
+    await payload.create({
+      collection: 'forms',
+      data: form,
+      overrideAccess: true,
+    })
+  }
+}
 
 export default buildConfig({
   admin: {
@@ -68,6 +95,9 @@ export default buildConfig({
   globals: [Header, Footer, SiteSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
+  onInit: async (payload) => {
+    await ensureDefaultForms(payload)
+  },
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
