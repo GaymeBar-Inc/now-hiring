@@ -14,6 +14,7 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
+import { Resend } from 'resend'
 
 const generateDescription: GenerateDescription<Post> = ({ doc }) => {
   if (!doc?.content?.root?.children) return ''
@@ -57,6 +58,41 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
   const url = getServerSideURL()
 
   return doc?.slug ? `${url}/${doc.slug}` : url
+}
+
+const SUBSCRIBE_FORM_TITLE = 'Subscribe to Newsletter'
+
+function getResendClient() {
+  const apiKey = process.env.RESEND_API_KEY || process.env.RESEND_API
+  if (!apiKey) return null
+  return new Resend(apiKey)
+}
+
+async function createOrUpdateResendContact(email: string) {
+  const resend = getResendClient()
+  if (!resend) {
+    // Template-friendly: do not hard-fail if the user hasn't configured Resend yet.
+    console.warn('[Resend] Missing RESEND_API_KEY (or RESEND_API). Skipping contact creation.')
+    return
+  }
+
+  const { error } = await resend.contacts.create({
+    email,
+    unsubscribed: false,
+  })
+
+  // Treat errors as non-fatal so subscriptions still succeed.
+  if (error) {
+    const msg = typeof error === 'string' ? error : (error as any)?.message
+    console.warn('[Resend] contacts.create error:', msg || error)
+  }
+}
+
+function extractSubmittedEmail(submissionData: any): string | null {
+  if (!Array.isArray(submissionData)) return null
+  const emailEntry = submissionData.find((item) => item?.field === 'email')
+  const value = emailEntry?.value
+  return typeof value === 'string' ? value.trim() : null
 }
 
 export const plugins: Plugin[] = [
@@ -120,6 +156,43 @@ export const plugins: Plugin[] = [
           }
           return field
         })
+      },
+    },
+    formSubmissionOverrides: {
+      hooks: {
+        afterChange: [
+          async ({ doc, req }) => {
+            try {
+              // Only run on create
+              if (req?.method && req.method !== 'POST') return doc
+
+              const formValue: any = (doc as any)?.form
+              let formTitle: string | undefined
+
+              if (formValue && typeof formValue === 'object') {
+                formTitle = formValue?.title
+              } else if (formValue) {
+                const formDoc = await req.payload.findByID({
+                  collection: 'forms',
+                  id: formValue,
+                  depth: 0,
+                })
+                formTitle = (formDoc as any)?.title
+              }
+
+              if (formTitle !== SUBSCRIBE_FORM_TITLE) return doc
+
+              const email = extractSubmittedEmail((doc as any)?.submissionData)
+              if (!email) return doc
+
+              await createOrUpdateResendContact(email)
+            } catch (err) {
+              console.warn('[Resend] Failed to create contact from form submission:', err)
+            }
+
+            return doc
+          },
+        ],
       },
     },
   }),
