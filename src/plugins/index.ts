@@ -14,7 +14,7 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
-import { createResendContact } from '@/utilities/resend'
+import { handleNewsletterSubscribe } from '@/utilities/resend'
 
 const generateDescription: GenerateDescription<Post> = ({ doc }) => {
   if (!doc?.content?.root?.children) return ''
@@ -156,7 +156,7 @@ export const plugins: Plugin[] = [
               const email = typeof emailEntry?.value === 'string' ? emailEntry.value.trim() : null
               if (!email) return doc
 
-              await createResendContact(email)
+              await handleNewsletterSubscribe(email)
             } catch (err) {
               console.warn('[Resend] Failed to create contact from form submission:', err)
             }
