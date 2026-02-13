@@ -1,4 +1,6 @@
-import type { RequiredDataFromCollectionSlug } from 'payload'
+import { createResendContact } from '@/utilities/resend'
+
+const SUBSCRIBE_FORM_TITLE = 'Subscribe to Newsletter'
 
 export const subscribeForm: RequiredDataFromCollectionSlug<'forms'> = {
   title: 'Subscribe to Newsletter',
@@ -12,7 +14,7 @@ export const subscribeForm: RequiredDataFromCollectionSlug<'forms'> = {
           children: [
             {
               type: 'text',
-              text: 'Thanks for subscribing! Please check your inbox.',
+              text: 'Thanks! If you’re new, you’ll receive a welcome email shortly.',
               version: 1,
               detail: 0,
               format: 0,
@@ -35,44 +37,9 @@ export const subscribeForm: RequiredDataFromCollectionSlug<'forms'> = {
 
   submitButtonLabel: 'Subscribe',
 
-  // Optional: if your Form Builder is configured to send emails on submission,
-  // this will send a welcome email to the subscriber.
-  emails: [
-    {
-      emailFrom: '"Now Hiring" <news@yourdomain.com>',
-      emailTo: '{{email}}',
-      subject: 'Welcome to the newsletter!',
-      message: {
-        root: {
-          type: 'root',
-          children: [
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'text',
-                  text: 'You’re subscribed — thanks for joining!',
-                  version: 1,
-                  detail: 0,
-                  format: 0,
-                  mode: 'normal',
-                  style: '',
-                },
-              ],
-              version: 1,
-              direction: null,
-              format: '',
-              indent: 0,
-            },
-          ],
-          version: 1,
-          direction: null,
-          format: '',
-          indent: 0,
-        },
-      },
-    },
-  ],
+  // Welcome emails are sent in code after we attempt to create the subscriber in Resend.
+  // This prevents sending a welcome email repeatedly when someone re-subscribes or is already subscribed.
+  // See: `src/utilities/resend.ts` and the subscribe submission handler that calls `createResendContact()`.
 
   fields: [
     {

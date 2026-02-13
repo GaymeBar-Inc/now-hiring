@@ -14,7 +14,7 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
-import { Resend } from 'resend'
+import { createResendContact } from '@/utilities/resend'
 
 const generateDescription: GenerateDescription<Post> = ({ doc }) => {
   if (!doc?.content?.root?.children) return ''
@@ -61,39 +61,6 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
 }
 
 const SUBSCRIBE_FORM_TITLE = 'Subscribe to Newsletter'
-
-function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY || process.env.RESEND_API
-  if (!apiKey) return null
-  return new Resend(apiKey)
-}
-
-async function createOrUpdateResendContact(email: string) {
-  const resend = getResendClient()
-  if (!resend) {
-    // Template-friendly: do not hard-fail if the user hasn't configured Resend yet.
-    console.warn('[Resend] Missing RESEND_API_KEY (or RESEND_API). Skipping contact creation.')
-    return
-  }
-
-  const { error } = await resend.contacts.create({
-    email,
-    unsubscribed: false,
-  })
-
-  // Treat errors as non-fatal so subscriptions still succeed.
-  if (error) {
-    const msg = typeof error === 'string' ? error : (error as any)?.message
-    console.warn('[Resend] contacts.create error:', msg || error)
-  }
-}
-
-function extractSubmittedEmail(submissionData: any): string | null {
-  if (!Array.isArray(submissionData)) return null
-  const emailEntry = submissionData.find((item) => item?.field === 'email')
-  const value = emailEntry?.value
-  return typeof value === 'string' ? value.trim() : null
-}
 
 export const plugins: Plugin[] = [
   vercelBlobStorage({
@@ -182,10 +149,14 @@ export const plugins: Plugin[] = [
 
               if (formTitle !== SUBSCRIBE_FORM_TITLE) return doc
 
-              const email = extractSubmittedEmail((doc as any)?.submissionData)
+              const submissionData: any = (doc as any)?.submissionData
+              const emailEntry = Array.isArray(submissionData)
+                ? submissionData.find((item) => item?.field === 'email')
+                : null
+              const email = typeof emailEntry?.value === 'string' ? emailEntry.value.trim() : null
               if (!email) return doc
 
-              await createOrUpdateResendContact(email)
+              await createResendContact(email)
             } catch (err) {
               console.warn('[Resend] Failed to create contact from form submission:', err)
             }
