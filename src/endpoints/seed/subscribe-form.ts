@@ -1,4 +1,5 @@
 import { createResendContact } from '@/utilities/resend'
+import { RequiredDataFromCollectionSlug } from 'payload'
 
 const SUBSCRIBE_FORM_TITLE = 'Subscribe to Newsletter'
 
