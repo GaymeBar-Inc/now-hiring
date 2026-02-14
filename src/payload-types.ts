@@ -1709,6 +1709,29 @@ export interface SiteSetting {
    * Used as the site favicon (appears in browser tabs and bookmarks)
    */
   favicon?: (number | null) | Media;
+  /**
+   * Controls email display identity + behavior (welcome email, broadcasts, digests). Verified sender address stays in .env (RESEND_FROM_ADDRESS).
+   */
+  email?: {
+    /**
+     * Display name shown in the inbox. The actual sending address is configured via RESEND_FROM_ADDRESS in .env.
+     */
+    fromName?: string | null;
+    /**
+     * Optional. If set, replies will go to this address (recommended if your “from” address is a no-inbox sender).
+     */
+    replyTo?: string | null;
+    /**
+     * Optional label you can use in templates (“Newsletter”, “Updates”, etc.).
+     */
+    senderLabel?: string | null;
+    welcomeEmailEnabled?: boolean | null;
+    welcomeSubject?: string | null;
+    /**
+     * V1 uses a simple text body. Later we can upgrade this to a rich HTML template.
+     */
+    welcomeBody?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1771,6 +1794,16 @@ export interface FooterSelect<T extends boolean = true> {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   favicon?: T;
+  email?:
+    | T
+    | {
+        fromName?: T;
+        replyTo?: T;
+        senderLabel?: T;
+        welcomeEmailEnabled?: T;
+        welcomeSubject?: T;
+        welcomeBody?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
