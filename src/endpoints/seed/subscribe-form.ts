@@ -1,10 +1,14 @@
-import { createResendContact } from '@/utilities/resend'
 import { RequiredDataFromCollectionSlug } from 'payload'
 
 const SUBSCRIBE_FORM_TITLE = 'Subscribe to Newsletter'
 
 export const subscribeForm: RequiredDataFromCollectionSlug<'forms'> = {
-  title: 'Subscribe to Newsletter',
+  title: SUBSCRIBE_FORM_TITLE,
+
+  // 🚫 Disable Form Builder emails completely.
+  // Welcome emails are handled in code via `handleNewsletterSubscribe`.
+  emails: null,
+
   confirmationType: 'message',
   confirmationMessage: {
     root: {
@@ -40,7 +44,7 @@ export const subscribeForm: RequiredDataFromCollectionSlug<'forms'> = {
 
   // Welcome emails are sent in code after we attempt to create the subscriber in Resend.
   // This prevents sending a welcome email repeatedly when someone re-subscribes or is already subscribed.
-  // See: `src/utilities/resend.ts` and the subscribe submission handler that calls `createResendContact()`.
+  // See: `src/utilities/resend.ts` and the subscribe submission handler.
 
   fields: [
     {

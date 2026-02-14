@@ -156,7 +156,7 @@ export const plugins: Plugin[] = [
               const email = typeof emailEntry?.value === 'string' ? emailEntry.value.trim() : null
               if (!email) return doc
 
-              await handleNewsletterSubscribe(email)
+              await handleNewsletterSubscribe(req.payload, email)
             } catch (err) {
               console.warn('[Resend] Failed to create contact from form submission:', err)
             }
