@@ -107,6 +107,7 @@ export const plugins: Plugin[] = [
     formOverrides: {
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
+          // Upgrade the confirmation message editor
           if ('name' in field && field.name === 'confirmationMessage') {
             return {
               ...field,
@@ -121,8 +122,33 @@ export const plugins: Plugin[] = [
               }),
             }
           }
+
+          // Hide Form Builder "Emails" UI for the Subscribe form so welcome emails are only sent via Site Settings + Resend.
+          if ('name' in field && field.name === 'emails') {
+            return {
+              ...field,
+              admin: {
+                ...(field as any).admin,
+                condition: (data: any) => (data?.title as string) !== SUBSCRIBE_FORM_TITLE,
+                description:
+                  'Newsletter welcome emails are configured in Site Settings and sent via Resend. Form emails are disabled for this form to prevent duplicate sends.',
+              },
+            }
+          }
+
           return field
         })
+      },
+      hooks: {
+        beforeValidate: [
+          ({ data }) => {
+            // Hard safety: never allow Form Builder emails for the subscribe form
+            if ((data as any)?.title === SUBSCRIBE_FORM_TITLE) {
+              ;(data as any).emails = null
+            }
+            return data
+          },
+        ],
       },
     },
     formSubmissionOverrides: {
