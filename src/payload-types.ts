@@ -1728,9 +1728,23 @@ export interface SiteSetting {
     welcomeEmailEnabled?: boolean | null;
     welcomeSubject?: string | null;
     /**
-     * V1 uses a simple text body. Later we can upgrade this to a rich HTML template.
+     * WYSIWYG editor. Content is stored as Lexical JSON and converted to HTML when sending.
      */
-    welcomeBody?: string | null;
+    welcomeBody?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;

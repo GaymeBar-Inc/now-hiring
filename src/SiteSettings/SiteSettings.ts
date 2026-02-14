@@ -80,12 +80,30 @@ export const SiteSettings: GlobalConfig = {
         {
           name: 'welcomeBody',
           label: 'Welcome Email Body',
-          type: 'textarea',
-          defaultValue: `Thanks for subscribing 🎉\n\nYou’re on the list — we’ll send updates as we publish new posts.`,
+          type: 'richText', // Lexical / WYSIWYG,
+          defaultValue: [
+            {
+              type: 'paragraph',
+              children: [
+                {
+                  text: 'Thanks for subscribing 🎉',
+                },
+              ],
+            },
+            {
+              type: 'paragraph',
+              children: [
+                {
+                  text: 'You’re on the list — we’ll send updates as we publish new posts.',
+                },
+              ],
+            },
+          ],
+
           admin: {
             condition: (_, siblingData) => Boolean((siblingData as any)?.welcomeEmailEnabled),
             description:
-              'V1 uses a simple text body. Later we can upgrade this to a rich HTML template.',
+              'WYSIWYG editor. Content is stored as Lexical JSON and converted to HTML when sending.',
           },
         },
       ],

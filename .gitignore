@@ -23,6 +23,7 @@ dist/media/
 # Misc
 .DS_Store
 *.pem
+*.af~*
 
 # Debug logs
 npm-debug.log*
