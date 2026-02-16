@@ -14,6 +14,7 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
+import { handleNewsletterSubscribe } from '@/utilities/resend'
 
 const generateDescription: GenerateDescription<Post> = ({ doc }) => {
   if (!doc?.content?.root?.children) return ''
@@ -58,6 +59,8 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
 
   return doc?.slug ? `${url}/${doc.slug}` : url
 }
+
+const SUBSCRIBE_FORM_TITLE = 'Subscribe to Newsletter'
 
 export const plugins: Plugin[] = [
   vercelBlobStorage({
@@ -104,6 +107,7 @@ export const plugins: Plugin[] = [
     formOverrides: {
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
+          // Upgrade the confirmation message editor
           if ('name' in field && field.name === 'confirmationMessage') {
             return {
               ...field,
@@ -118,8 +122,74 @@ export const plugins: Plugin[] = [
               }),
             }
           }
+
+          // Hide Form Builder "Emails" UI for the Subscribe form so welcome emails are only sent via Site Settings + Resend.
+          if ('name' in field && field.name === 'emails') {
+            return {
+              ...field,
+              admin: {
+                ...(field as any).admin,
+                condition: (data: any) => (data?.title as string) !== SUBSCRIBE_FORM_TITLE,
+                description:
+                  'Newsletter welcome emails are configured in Site Settings and sent via Resend. Form emails are disabled for this form to prevent duplicate sends.',
+              },
+            }
+          }
+
           return field
         })
+      },
+      hooks: {
+        beforeValidate: [
+          ({ data }) => {
+            // Hard safety: never allow Form Builder emails for the subscribe form
+            if ((data as any)?.title === SUBSCRIBE_FORM_TITLE) {
+              ;(data as any).emails = null
+            }
+            return data
+          },
+        ],
+      },
+    },
+    formSubmissionOverrides: {
+      hooks: {
+        afterChange: [
+          async ({ doc, req }) => {
+            try {
+              // Only run on create
+              if (req?.method && req.method !== 'POST') return doc
+
+              const formValue: any = (doc as any)?.form
+              let formTitle: string | undefined
+
+              if (formValue && typeof formValue === 'object') {
+                formTitle = formValue?.title
+              } else if (formValue) {
+                const formDoc = await req.payload.findByID({
+                  collection: 'forms',
+                  id: formValue,
+                  depth: 0,
+                })
+                formTitle = (formDoc as any)?.title
+              }
+
+              if (formTitle !== SUBSCRIBE_FORM_TITLE) return doc
+
+              const submissionData: any = (doc as any)?.submissionData
+              const emailEntry = Array.isArray(submissionData)
+                ? submissionData.find((item) => item?.field === 'email')
+                : null
+              const email = typeof emailEntry?.value === 'string' ? emailEntry.value.trim() : null
+              if (!email) return doc
+
+              await handleNewsletterSubscribe(req.payload, email)
+            } catch (err) {
+              console.warn('[Resend] Failed to create contact from form submission:', err)
+            }
+
+            return doc
+          },
+        ],
       },
     },
   }),

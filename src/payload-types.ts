@@ -120,9 +120,7 @@ export interface Config {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
-  user: User & {
-    collection: 'users';
-  };
+  user: User;
   jobs: {
     tasks: {
       schedulePublish: TaskSchedulePublish;
@@ -438,6 +436,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -747,7 +746,7 @@ export interface Form {
     url: string;
   };
   /**
-   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
+   * Newsletter welcome emails are configured in Site Settings and sent via Resend. Form emails are disabled for this form to prevent duplicate sends.
    */
   emails?:
     | {
@@ -1710,6 +1709,43 @@ export interface SiteSetting {
    * Used as the site favicon (appears in browser tabs and bookmarks)
    */
   favicon?: (number | null) | Media;
+  /**
+   * Controls email display identity + behavior (welcome email, broadcasts, digests). Verified sender address stays in .env (RESEND_FROM_ADDRESS).
+   */
+  email?: {
+    /**
+     * Display name shown in the inbox. The actual sending address is configured via RESEND_FROM_ADDRESS in .env.
+     */
+    fromName?: string | null;
+    /**
+     * Optional. If set, replies will go to this address (recommended if your “from” address is a no-inbox sender).
+     */
+    replyTo?: string | null;
+    /**
+     * Optional label you can use in templates (“Newsletter”, “Updates”, etc.).
+     */
+    senderLabel?: string | null;
+    welcomeEmailEnabled?: boolean | null;
+    welcomeSubject?: string | null;
+    /**
+     * WYSIWYG editor. Content is stored as Lexical JSON and converted to HTML when sending.
+     */
+    welcomeBody?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1772,6 +1808,16 @@ export interface FooterSelect<T extends boolean = true> {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   favicon?: T;
+  email?:
+    | T
+    | {
+        fromName?: T;
+        replyTo?: T;
+        senderLabel?: T;
+        welcomeEmailEnabled?: T;
+        welcomeSubject?: T;
+        welcomeBody?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
