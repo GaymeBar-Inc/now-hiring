@@ -21,6 +21,7 @@ import { subscribeForm } from './endpoints/seed/subscribe-form'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const SUBSCRIBE_FORM_TITLE = 'Subscribe to Newsletter'
 
 async function ensureDefaultForms(payload: Payload) {
   const defaults = [subscribeForm]
@@ -37,17 +38,10 @@ async function ensureDefaultForms(payload: Payload) {
       overrideAccess: true,
     })
 
-    if (existing?.docs?.length) {
-      // Keep seeded default forms in sync with the repo (important for template users).
-      // This also ensures any removed fields (e.g. Form Builder `emails`) are cleared in the DB.
-      await payload.update({
-        collection: 'forms',
-        id: existing.docs[0].id,
-        data: form,
-        overrideAccess: true,
-      })
-      continue
-    }
+    // IMPORTANT: Avoid updating existing seeded forms during onInit.
+    // With the Drizzle adapter, updates can crash during write transforms when legacy/null values exist.
+    // We only seed the form if it does not exist.
+    if (existing?.docs?.length) continue
 
     await payload.create({
       collection: 'forms',
@@ -75,7 +69,6 @@ async function ensureDefaultSiteSettings(payload: Payload) {
       slug: 'site-settings',
       overrideAccess: true,
       data: {
-        ...(current as any),
         email: {
           ...email,
           welcomeBody: {
