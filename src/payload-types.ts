@@ -67,6 +67,7 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    broadcasts: Broadcast;
     pages: Page;
     posts: Post;
     media: Media;
@@ -89,6 +90,7 @@ export interface Config {
     };
   };
   collectionsSelect: {
+    broadcasts: BroadcastsSelect<false> | BroadcastsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -152,72 +154,71 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
+ * via the `definition` "broadcasts".
  */
-export interface Page {
+export interface Broadcast {
   id: number;
-  title: string;
-  hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    richText?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: number | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-            /**
-             * Choose how the link should be rendered.
-             */
-            appearance?: ('default' | 'outline') | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
-    media?: (number | null) | Media;
-  };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
   /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   * Internal label — appears in the admin list and maps to Resend's broadcast name
    */
-  generateSlug?: boolean | null;
-  slug: string;
+  title: string;
+  type: 'single_post' | 'weekly_digest' | 'custom';
+  /**
+   * Email subject line shown to recipients
+   */
+  subject: string;
+  /**
+   * Short snippet shown in the inbox before the email is opened
+   */
+  previewText?: string | null;
+  /**
+   * Admin-drafted copy — appears above post cards in every broadcast type
+   */
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Drives the auto-generated post card appended to this broadcast
+   */
+  post?: (number | null) | Post;
+  /**
+   * Curated list of posts — edit freely before sending
+   */
+  posts?: (number | Post)[] | null;
+  /**
+   * Managed by the system — updated after Resend API calls
+   */
+  status?: ('draft' | 'scheduled' | 'sent' | 'failed') | null;
+  /**
+   * ID returned by Resend after the broadcast is created
+   */
+  resendBroadcastId?: string | null;
+  /**
+   * Populated for scheduled sends
+   */
+  scheduledAt?: string | null;
+  /**
+   * Populated on successful send
+   */
+  sentAt?: string | null;
+  /**
+   * Populated on send failure — check here when status is "failed"
+   */
+  errorMessage?: string | null;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -437,6 +438,75 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  hero: {
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    richText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    media?: (number | null) | Media;
+  };
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -971,6 +1041,10 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'broadcasts';
+        value: number | Broadcast;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: number | Page;
       } | null)
@@ -1051,6 +1125,26 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "broadcasts_select".
+ */
+export interface BroadcastsSelect<T extends boolean = true> {
+  title?: T;
+  type?: T;
+  subject?: T;
+  previewText?: T;
+  body?: T;
+  post?: T;
+  posts?: T;
+  status?: T;
+  resendBroadcastId?: T;
+  scheduledAt?: T;
+  sentAt?: T;
+  errorMessage?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
