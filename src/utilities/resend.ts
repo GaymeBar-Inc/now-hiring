@@ -1,7 +1,13 @@
 // src/utilities/resend.ts
 import { Resend } from 'resend'
+import type { ErrorResponse } from 'resend'
 import type { Payload } from 'payload'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
+import type { SiteSetting } from '../payload-types'
+
+interface ResendEmailData {
+  id: string
+}
 
 const apiKey = process.env.RESEND_API_KEY
 if (!apiKey) {
@@ -17,12 +23,11 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-function isRateLimitError(err: any): boolean {
-  const status = err?.statusCode || err?.status
+function isRateLimitError(err: ErrorResponse): boolean {
   const name = (err?.name || '').toString().toLowerCase()
   const msg = (err?.message || '').toString().toLowerCase()
   return (
-    status === 429 ||
+    err?.statusCode === 429 ||
     name.includes('rate_limit') ||
     msg.includes('too many requests') ||
     msg.includes('rate limit')
@@ -30,13 +35,13 @@ function isRateLimitError(err: any): boolean {
 }
 
 async function retryResendCall<T>(
-  fn: () => Promise<{ data: T | null; error: any }>,
+  fn: () => Promise<{ data: T | null; error: ErrorResponse | null }>,
   opts: { attempts?: number; baseDelayMs?: number } = {},
-): Promise<{ data: T | null; error: any }> {
+): Promise<{ data: T | null; error: ErrorResponse | null }> {
   const attempts = opts.attempts ?? 4
   const baseDelayMs = opts.baseDelayMs ?? 650
 
-  let last: { data: T | null; error: any } = { data: null, error: null }
+  let last: { data: T | null; error: ErrorResponse | null } = { data: null, error: null }
 
   for (let i = 0; i < attempts; i++) {
     const res = await fn()
@@ -96,11 +101,11 @@ export async function addContactToResendSegment(
       depth: 0,
     })
 
-    const emailSettings: any = (siteSettings as any)?.email || {}
+    const emailSettings: NonNullable<SiteSetting['email']> = siteSettings?.email || {}
 
     // V1: we store this ID in Site Settings (currently named resendAudienceId)
     // because that's where users expect to paste the ID from Resend.
-    const segmentId: string | undefined = segmentIdOverride || emailSettings?.resendAudienceId
+    const segmentId: string | undefined = segmentIdOverride || (emailSettings?.resendAudienceId ?? undefined)
 
     if (!segmentId) {
       return {
@@ -208,7 +213,7 @@ export async function sendWelcomeEmail(
       depth: 0,
     })
 
-    const emailSettings: any = (siteSettings as any)?.email || {}
+    const emailSettings: NonNullable<SiteSetting['email']> = siteSettings?.email || {}
 
     if (emailSettings.welcomeEmailEnabled === false) {
       return { status: 'skipped', reason: 'disabled_in_settings' }
@@ -238,15 +243,14 @@ export async function sendWelcomeEmail(
       console.error('[Resend] Welcome email send failed', {
         to: normalizedTo,
         message: error.message,
-        name: (error as any)?.name,
-        statusCode: (error as any)?.statusCode,
-        type: (error as any)?.type,
+        name: error.name,
+        statusCode: error.statusCode,
       })
 
       return { status: 'error' as const, message: error.message || 'Resend send failed' }
     }
 
-    console.info('[Resend] Welcome email sent', { id: (data as any)?.id })
+    console.info('[Resend] Welcome email sent', { id: (data as ResendEmailData)?.id })
     return { status: 'sent' as const }
   } catch (err) {
     return {

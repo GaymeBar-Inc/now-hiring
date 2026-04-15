@@ -22,7 +22,6 @@ export const weeklyPostsHandler: PayloadHandler = async (req) => {
         { publishedAt: { greater_than_equal: sevenDaysAgo.toISOString() } },
       ],
     },
-    select: { id: true },
     sort: '-publishedAt',
     limit: 50,
   })

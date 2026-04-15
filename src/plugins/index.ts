@@ -11,7 +11,17 @@ import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
-import { Page, Post } from '@/payload-types'
+import { Form, FormSubmission, Page, Post } from '@/payload-types'
+
+interface LexicalNode {
+  text?: string
+  children?: LexicalNode[]
+  [k: string]: unknown
+}
+
+interface FieldWithAdmin {
+  admin?: Record<string, unknown>
+}
 import { getServerSideURL } from '@/utilities/getURL'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 import { handleNewsletterSubscribe } from '@/utilities/resend'
@@ -19,7 +29,7 @@ import { handleNewsletterSubscribe } from '@/utilities/resend'
 const generateDescription: GenerateDescription<Post> = ({ doc }) => {
   if (!doc?.content?.root?.children) return ''
 
-  const extractText = (node: any): string => {
+  const extractText = (node: LexicalNode): string => {
     if (typeof node.text === 'string') return node.text
     if (Array.isArray(node.children)) {
       return node.children.map(extractText).join('')
@@ -128,8 +138,8 @@ export const plugins: Plugin[] = [
             return {
               ...field,
               admin: {
-                ...(field as any).admin,
-                condition: (data: any) => (data?.title as string) !== SUBSCRIBE_FORM_TITLE,
+                ...(field as FieldWithAdmin).admin,
+                condition: (data: Record<string, unknown>) => data?.title !== SUBSCRIBE_FORM_TITLE,
                 description:
                   'Newsletter welcome emails are configured in Site Settings and sent via Resend. Form emails are disabled for this form to prevent duplicate sends.',
               },
@@ -143,8 +153,9 @@ export const plugins: Plugin[] = [
         beforeValidate: [
           ({ data }) => {
             // Hard safety: never allow Form Builder emails for the subscribe form
-            if ((data as any)?.title === SUBSCRIBE_FORM_TITLE) {
-              ;(data as any).emails = null
+            const formData = data as { title?: string; emails?: unknown }
+            if (formData?.title === SUBSCRIBE_FORM_TITLE) {
+              formData.emails = null
             }
             return data
           },
@@ -159,25 +170,27 @@ export const plugins: Plugin[] = [
               // Only run on create
               if (req?.method && req.method !== 'POST') return doc
 
+              const submission = doc as FormSubmission
+
               if (process.env.NODE_ENV !== 'production') {
                 console.info('[Forms] form-submission created', {
-                  id: (doc as any)?.id,
+                  id: submission.id,
                   method: req?.method,
                 })
               }
 
-              const formValue: any = (doc as any)?.form
+              const formValue: number | Form = submission.form
               let formTitle: string | undefined
 
               if (formValue && typeof formValue === 'object') {
-                formTitle = formValue?.title
+                formTitle = formValue.title
               } else if (formValue) {
                 const formDoc = await req.payload.findByID({
                   collection: 'forms',
                   id: formValue,
                   depth: 0,
                 })
-                formTitle = (formDoc as any)?.title
+                formTitle = formDoc.title
               }
 
               if (process.env.NODE_ENV !== 'production') {
@@ -187,7 +200,7 @@ export const plugins: Plugin[] = [
               // Tolerant comparison
               if ((formTitle || '').trim() !== SUBSCRIBE_FORM_TITLE) return doc
 
-              const submissionData: any = (doc as any)?.submissionData
+              const submissionData = submission.submissionData
 
               // Tolerant email extraction
               let email: string | null = null
@@ -206,7 +219,9 @@ export const plugins: Plugin[] = [
 
                 if (typeof loose?.value === 'string') email = loose.value.trim()
               } else if (submissionData && typeof submissionData === 'object') {
-                const v = (submissionData as any).email || (submissionData as any).Email
+                const v =
+                  (submissionData as Record<string, unknown>).email ||
+                  (submissionData as Record<string, unknown>).Email
                 if (typeof v === 'string') email = v.trim()
               }
 
