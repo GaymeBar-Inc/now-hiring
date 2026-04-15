@@ -18,7 +18,7 @@ export const weeklyPostsHandler: PayloadHandler = async (req) => {
     collection: 'posts',
     where: {
       and: [
-        { status: { equals: 'published' } },
+        { _status: { equals: 'published' } },
         { publishedAt: { greater_than_equal: sevenDaysAgo.toISOString() } },
       ],
     },
@@ -27,6 +27,13 @@ export const weeklyPostsHandler: PayloadHandler = async (req) => {
   })
 
   const postIds = result.docs.map((post) => post.id)
+
+  if (postIds.length === 0) {
+    return Response.json(
+      { postIds, total: 0, message: 'No published posts found in the last 7 days.' },
+      { status: 200 },
+    )
+  }
 
   return Response.json({ postIds, total: result.totalDocs })
 }
