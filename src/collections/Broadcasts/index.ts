@@ -38,14 +38,6 @@ export const Broadcasts: CollectionConfig = {
     // Shared fields — present on every broadcast type
     // -------------------------------------------------------------------------
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-      admin: {
-        description: "Internal label — appears in the admin list and maps to Resend's broadcast name",
-      },
-    },
-    {
       name: 'type',
       type: 'select',
       required: true,
@@ -55,6 +47,15 @@ export const Broadcasts: CollectionConfig = {
         { label: 'Weekly Digest', value: 'weekly_digest' },
         { label: 'Custom', value: 'custom' },
       ],
+    },
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+      admin: {
+        description:
+          "Internal label — appears in the admin list and maps to Resend's broadcast name",
+      },
     },
     {
       name: 'subject',

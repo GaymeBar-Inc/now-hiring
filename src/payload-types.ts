@@ -158,11 +158,11 @@ export interface UserAuthOperations {
  */
 export interface Broadcast {
   id: number;
+  type: 'single_post' | 'weekly_digest' | 'custom';
   /**
    * Internal label — appears in the admin list and maps to Resend's broadcast name
    */
   title: string;
-  type: 'single_post' | 'weekly_digest' | 'custom';
   /**
    * Email subject line shown to recipients
    */
@@ -1131,8 +1131,8 @@ export interface PayloadMigration {
  * via the `definition` "broadcasts_select".
  */
 export interface BroadcastsSelect<T extends boolean = true> {
-  title?: T;
   type?: T;
+  title?: T;
   subject?: T;
   previewText?: T;
   body?: T;
