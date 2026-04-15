@@ -4,9 +4,11 @@ import sharp from 'sharp'
 import path from 'path'
 import { buildConfig } from 'payload'
 import type { Payload, PayloadRequest } from 'payload'
+import type { SiteSetting } from './payload-types'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Broadcasts } from './collections/Broadcasts'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
@@ -21,7 +23,6 @@ import { subscribeForm } from './endpoints/seed/subscribe-form'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-const SUBSCRIBE_FORM_TITLE = 'Subscribe to Newsletter'
 
 async function ensureDefaultForms(payload: Payload) {
   const defaults = [subscribeForm]
@@ -59,7 +60,7 @@ async function ensureDefaultSiteSettings(payload: Payload) {
     overrideAccess: true,
   })
 
-  const email: any = (current as any)?.email || {}
+  const email: NonNullable<SiteSetting['email']> = current?.email || {}
   const welcomeBody = email?.welcomeBody
 
   // If this field used to be a textarea, the DB may contain a plain string.
@@ -146,7 +147,7 @@ export default buildConfig({
       connectionString: process.env.POSTGRES_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Broadcasts, Pages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   email: resendAdapter({
     apiKey: process.env.RESEND_API_KEY!,

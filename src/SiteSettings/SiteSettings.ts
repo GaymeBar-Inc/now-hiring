@@ -1,5 +1,9 @@
 import type { GlobalConfig } from 'payload'
 
+interface EmailSiblingData {
+  welcomeEmailEnabled?: boolean
+}
+
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Site Settings',
@@ -84,7 +88,7 @@ export const SiteSettings: GlobalConfig = {
           type: 'text',
           defaultValue: 'Welcome to the newsletter!',
           admin: {
-            condition: (_, siblingData) => Boolean((siblingData as any)?.welcomeEmailEnabled),
+            condition: (_, siblingData) => Boolean((siblingData as EmailSiblingData)?.welcomeEmailEnabled),
           },
         },
         {
@@ -131,7 +135,7 @@ export const SiteSettings: GlobalConfig = {
             },
           },
           admin: {
-            condition: (_, siblingData) => Boolean((siblingData as any)?.welcomeEmailEnabled),
+            condition: (_, siblingData) => Boolean((siblingData as EmailSiblingData)?.welcomeEmailEnabled),
             description:
               'WYSIWYG editor. Content is stored as Lexical JSON and converted to HTML when sending.',
           },
