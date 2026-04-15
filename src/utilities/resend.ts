@@ -247,7 +247,7 @@ export async function sendWelcomeEmail(
     }
 
     console.info('[Resend] Welcome email sent', { id: (data as any)?.id })
-    return { status: 'sent' as const, data }
+    return { status: 'sent' as const }
   } catch (err) {
     return {
       status: 'error',
