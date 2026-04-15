@@ -159,6 +159,13 @@ export const plugins: Plugin[] = [
               // Only run on create
               if (req?.method && req.method !== 'POST') return doc
 
+              if (process.env.NODE_ENV !== 'production') {
+                console.info('[Forms] form-submission created', {
+                  id: (doc as any)?.id,
+                  method: req?.method,
+                })
+              }
+
               const formValue: any = (doc as any)?.form
               let formTitle: string | undefined
 
@@ -173,16 +180,55 @@ export const plugins: Plugin[] = [
                 formTitle = (formDoc as any)?.title
               }
 
-              if (formTitle !== SUBSCRIBE_FORM_TITLE) return doc
+              if (process.env.NODE_ENV !== 'production') {
+                console.info('[Forms] resolved formTitle', { formTitle })
+              }
+
+              // Tolerant comparison
+              if ((formTitle || '').trim() !== SUBSCRIBE_FORM_TITLE) return doc
 
               const submissionData: any = (doc as any)?.submissionData
-              const emailEntry = Array.isArray(submissionData)
-                ? submissionData.find((item) => item?.field === 'email')
-                : null
-              const email = typeof emailEntry?.value === 'string' ? emailEntry.value.trim() : null
-              if (!email) return doc
 
-              await handleNewsletterSubscribe(req.payload, email)
+              // Tolerant email extraction
+              let email: string | null = null
+
+              if (Array.isArray(submissionData)) {
+                const exact = submissionData.find(
+                  (item) => typeof item?.field === 'string' && item.field.toLowerCase() === 'email',
+                )
+
+                const loose =
+                  exact ||
+                  submissionData.find(
+                    (item) =>
+                      typeof item?.field === 'string' && item.field.toLowerCase().includes('email'),
+                  )
+
+                if (typeof loose?.value === 'string') email = loose.value.trim()
+              } else if (submissionData && typeof submissionData === 'object') {
+                const v = (submissionData as any).email || (submissionData as any).Email
+                if (typeof v === 'string') email = v.trim()
+              }
+
+              if (!email) {
+                if (process.env.NODE_ENV !== 'production') {
+                  console.warn('[Forms] subscribe submission missing email; skipping', {
+                    submissionData,
+                  })
+                }
+                return doc
+              }
+
+              const result = await handleNewsletterSubscribe(req.payload, email)
+
+              if (process.env.NODE_ENV !== 'production') {
+                console.info('[Forms] newsletter subscribe result', {
+                  email,
+                  contact: result.contact?.status,
+                  segment: result.segment?.status,
+                  welcomeEmail: result.welcomeEmail?.status,
+                })
+              }
             } catch (err) {
               console.warn('[Resend] Failed to create contact from form submission:', err)
             }

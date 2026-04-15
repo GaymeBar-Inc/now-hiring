@@ -63,6 +63,16 @@ export const SiteSettings: GlobalConfig = {
           },
         },
         {
+          name: 'resendAudienceId',
+          label: 'Resend Audience ID',
+          type: 'text',
+          required: false,
+          admin: {
+            description:
+              'Used for Broadcasts. Find this in Resend Dashboard → Audiences → (select your audience) → Audience ID.',
+          },
+        },
+        {
           name: 'welcomeEmailEnabled',
           label: 'Send Welcome Email on Subscribe',
           type: 'checkbox',
@@ -81,25 +91,45 @@ export const SiteSettings: GlobalConfig = {
           name: 'welcomeBody',
           label: 'Welcome Email Body',
           type: 'richText', // Lexical / WYSIWYG,
-          defaultValue: [
-            {
-              type: 'paragraph',
+          defaultValue: {
+            root: {
+              type: 'root',
               children: [
                 {
-                  text: 'Thanks for subscribing 🎉',
+                  type: 'paragraph',
+                  children: [
+                    {
+                      type: 'text',
+                      text: 'Thanks for subscribing 🎉',
+                      version: 1,
+                    },
+                  ],
+                  direction: 'ltr',
+                  format: '',
+                  indent: 0,
+                  version: 1,
                 },
-              ],
-            },
-            {
-              type: 'paragraph',
-              children: [
                 {
-                  text: 'You’re on the list — we’ll send updates as we publish new posts.',
+                  type: 'paragraph',
+                  children: [
+                    {
+                      type: 'text',
+                      text: 'You’re on the list — we’ll send updates as we publish new posts.',
+                      version: 1,
+                    },
+                  ],
+                  direction: 'ltr',
+                  format: '',
+                  indent: 0,
+                  version: 1,
                 },
               ],
+              direction: 'ltr',
+              format: '',
+              indent: 0,
+              version: 1,
             },
-          ],
-
+          },
           admin: {
             condition: (_, siblingData) => Boolean((siblingData as any)?.welcomeEmailEnabled),
             description:

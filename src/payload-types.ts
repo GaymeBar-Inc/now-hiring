@@ -1725,6 +1725,10 @@ export interface SiteSetting {
      * Optional label you can use in templates (“Newsletter”, “Updates”, etc.).
      */
     senderLabel?: string | null;
+    /**
+     * Used for Broadcasts. Find this in Resend Dashboard → Audiences → (select your audience) → Audience ID.
+     */
+    resendAudienceId?: string | null;
     welcomeEmailEnabled?: boolean | null;
     welcomeSubject?: string | null;
     /**
@@ -1814,6 +1818,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         fromName?: T;
         replyTo?: T;
         senderLabel?: T;
+        resendAudienceId?: T;
         welcomeEmailEnabled?: T;
         welcomeSubject?: T;
         welcomeBody?: T;
