@@ -1,8 +1,9 @@
 // src/resend/newsletter.ts
 import type { Payload } from 'payload'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
-import type { EmailSetting } from '../payload-types'
+import type { EmailLayout, EmailSetting } from '../payload-types'
 import { getResendClient, retryResendCall } from './client'
+import { renderEmailTemplate } from './template'
 import { createResendContact, addContactToResendSegment } from './contacts'
 import type { CreateResendContactResult, AddToResendSegmentResult } from './contacts'
 
@@ -38,10 +39,10 @@ export async function sendWelcomeEmail(
   }
 
   try {
-    const emailSettings: EmailSetting = await payload.findGlobal({
-      slug: 'email-settings',
-      depth: 0,
-    })
+    const [emailSettings, emailLayout] = await Promise.all([
+      payload.findGlobal({ slug: 'email-settings', depth: 0 }) as Promise<EmailSetting>,
+      payload.findGlobal({ slug: 'email-layout', depth: 1 }) as Promise<EmailLayout>,
+    ])
 
     if (emailSettings.welcomeEmailEnabled === false) {
       return { status: 'skipped', reason: 'disabled_in_settings' }
@@ -52,9 +53,11 @@ export async function sendWelcomeEmail(
     const subject: string = emailSettings.welcomeSubject || 'Welcome to the newsletter!'
 
     const welcomeBodyLexical = emailSettings.welcomeBody
-    const htmlBody = welcomeBodyLexical
+    const bodyHtml = welcomeBodyLexical
       ? convertLexicalToHTML({ data: welcomeBodyLexical })
       : '<p>Thanks for subscribing 🎉</p>'
+
+    const htmlBody = renderEmailTemplate(bodyHtml, emailLayout)
 
     const { data, error } = await retryResendCall(() =>
       resend.emails.send({
