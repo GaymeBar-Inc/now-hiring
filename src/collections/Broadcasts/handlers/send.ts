@@ -1,4 +1,5 @@
 import type { PayloadHandler } from 'payload'
+import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
 import type { Broadcast } from '../../../payload-types'
 import { createAndSendResendBroadcast, buildFromAddress } from '../../../resend/broadcasts'
 
@@ -120,7 +121,10 @@ async function assembleBroadcastEmail(
   req: Parameters<PayloadHandler>[0],
   broadcast: Broadcast,
 ): Promise<string> {
-  // Placeholder — full implementation in the next build step
-  const subject = broadcast.subject
-  return `<p>${subject}</p>`
+  const bodyHtml = broadcast.body
+    ? convertLexicalToHTML({ data: broadcast.body })
+    : ''
+
+  // TODO: wrap with header/footer from email-layout global once built
+  return bodyHtml
 }
