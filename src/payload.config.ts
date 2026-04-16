@@ -4,7 +4,6 @@ import sharp from 'sharp'
 import path from 'path'
 import { buildConfig } from 'payload'
 import type { Payload, PayloadRequest } from 'payload'
-import type { SiteSetting } from './payload-types'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
@@ -19,6 +18,7 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { SiteSettings } from './SiteSettings/SiteSettings'
+import { EmailSettings } from './EmailSettings'
 import { subscribeForm } from './endpoints/seed/subscribe-form'
 
 const filename = fileURLToPath(import.meta.url)
@@ -52,56 +52,6 @@ async function ensureDefaultForms(payload: Payload) {
   }
 }
 
-// Migrate site-settings.email.welcomeBody from string to Lexical JSON object if necessary
-async function ensureDefaultSiteSettings(payload: Payload) {
-  const current = await payload.findGlobal({
-    slug: 'site-settings',
-    depth: 0,
-    overrideAccess: true,
-  })
-
-  const email: NonNullable<SiteSetting['email']> = current?.email || {}
-  const welcomeBody = email?.welcomeBody
-
-  // If this field used to be a textarea, the DB may contain a plain string.
-  // Lexical richText requires an object. Convert the old string into a minimal Lexical doc.
-  if (typeof welcomeBody === 'string') {
-    await payload.updateGlobal({
-      slug: 'site-settings',
-      overrideAccess: true,
-      data: {
-        email: {
-          ...email,
-          welcomeBody: {
-            root: {
-              type: 'root',
-              children: [
-                {
-                  type: 'paragraph',
-                  children: [
-                    {
-                      type: 'text',
-                      text: welcomeBody,
-                      version: 1,
-                    },
-                  ],
-                  direction: 'ltr',
-                  format: '',
-                  indent: 0,
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              format: '',
-              indent: 0,
-              version: 1,
-            },
-          },
-        },
-      },
-    })
-  }
-}
 
 export default buildConfig({
   admin: {
@@ -154,12 +104,11 @@ export default buildConfig({
     defaultFromAddress: process.env.RESEND_FROM_ADDRESS!,
     defaultFromName: process.env.RESEND_FROM_NAME!,
   }),
-  globals: [Header, Footer, SiteSettings],
+  globals: [Header, Footer, SiteSettings, EmailSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   onInit: async (payload) => {
     await ensureDefaultForms(payload)
-    await ensureDefaultSiteSettings(payload)
   },
   sharp,
   typescript: {

@@ -1,7 +1,7 @@
 // src/resend/newsletter.ts
 import type { Payload } from 'payload'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
-import type { SiteSetting } from '../payload-types'
+import type { EmailSetting } from '../payload-types'
 import { getResendClient, retryResendCall } from './client'
 import { createResendContact, addContactToResendSegment } from './contacts'
 import type { CreateResendContactResult, AddToResendSegmentResult } from './contacts'
@@ -38,12 +38,10 @@ export async function sendWelcomeEmail(
   }
 
   try {
-    const siteSettings = await payload.findGlobal({
-      slug: 'site-settings',
+    const emailSettings: EmailSetting = await payload.findGlobal({
+      slug: 'email-settings',
       depth: 0,
     })
-
-    const emailSettings: NonNullable<SiteSetting['email']> = siteSettings?.email || {}
 
     if (emailSettings.welcomeEmailEnabled === false) {
       return { status: 'skipped', reason: 'disabled_in_settings' }
