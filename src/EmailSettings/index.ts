@@ -57,9 +57,6 @@ export const EmailSettings: GlobalConfig = {
       },
     },
     {
-      type: 'separator',
-    },
-    {
       name: 'welcomeEmailEnabled',
       label: 'Send Welcome Email on Subscribe',
       type: 'checkbox',
