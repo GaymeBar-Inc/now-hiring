@@ -1,6 +1,17 @@
 // src/resend/broadcasts.ts
 import { getResendClient } from './client'
 
+/**
+ * Builds the RFC 5322 "From" string used by Resend.
+ * Falls back to RESEND_FROM_ADDRESS (the same env var used by the newsletter sender).
+ * Returns null if the address env var is missing so the caller can bail early.
+ */
+export function buildFromAddress(displayName: string): string | null {
+  const address = process.env.RESEND_FROM_ADDRESS
+  if (!address) return null
+  return `${displayName} <${address}>`
+}
+
 export type CreateAndSendBroadcastOptions = {
   audienceId: string
   from: string
