@@ -1,6 +1,6 @@
 import type { PayloadHandler } from 'payload'
 import type { Broadcast } from '../../../payload-types'
-import { createAndSendResendBroadcast } from '../../../resend/broadcasts'
+import { createAndSendResendBroadcast, buildFromAddress } from '../../../resend/broadcasts'
 
 export const sendBroadcastHandler: PayloadHandler = async (req) => {
   const id = req.routeParams?.id as string | undefined
@@ -40,8 +40,14 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
   }
 
   const fromName = siteSettings?.email?.fromName ?? 'Now Hiring'
-  const fromEmail = process.env.RESEND_FROM_ADDRESS!
-  const from = `${fromName} <${fromEmail}>`
+  const from = buildFromAddress(fromName)
+
+  if (!from) {
+    return Response.json(
+      { error: 'RESEND_FROM_ADDRESS is not configured.' },
+      { status: 500 },
+    )
+  }
 
   try {
     const html = await assembleBroadcastEmail(req, broadcast)
