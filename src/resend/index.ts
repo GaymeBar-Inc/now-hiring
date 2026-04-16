@@ -6,3 +6,4 @@ export type { SendWelcomeEmailResult, HandleNewsletterSubscribeResult } from './
 export { sendWelcomeEmail, handleNewsletterSubscribe } from './newsletter'
 export type { CreateAndSendBroadcastOptions, CreateAndSendBroadcastResult } from './broadcasts'
 export { createAndSendResendBroadcast, buildFromAddress } from './broadcasts'
+export { renderEmailTemplate } from './template'
