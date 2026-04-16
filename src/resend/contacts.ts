@@ -1,6 +1,6 @@
 // src/resend/contacts.ts
 import type { Payload } from 'payload'
-import type { SiteSetting } from '../payload-types'
+import type { EmailSetting } from '../payload-types'
 import { getResendClient, retryResendCall } from './client'
 
 export type CreateResendContactResult =
@@ -56,7 +56,7 @@ export async function createResendContact(email: string): Promise<CreateResendCo
  * Adds a contact (by email) to the configured Resend Segment.
  *
  * NOTE: Resend calls this a "segment". In many dashboards the default segment is "General".
- * We store the ID in Site Settings so template users can configure it without code changes.
+ * We store the ID in Email Settings so template users can configure it without code changes.
  */
 export async function addContactToResendSegment(
   payload: Payload,
@@ -69,15 +69,11 @@ export async function addContactToResendSegment(
   const normalizedEmail = email.trim().toLowerCase()
 
   try {
-    const siteSettings = await payload.findGlobal({
-      slug: 'site-settings',
+    const emailSettings: EmailSetting = await payload.findGlobal({
+      slug: 'email-settings',
       depth: 0,
     })
 
-    const emailSettings: NonNullable<SiteSetting['email']> = siteSettings?.email || {}
-
-    // V1: we store this ID in Site Settings (currently named resendAudienceId)
-    // because that's where users expect to paste the ID from Resend.
     const segmentId: string | undefined =
       segmentIdOverride || (emailSettings?.resendAudienceId ?? undefined)
 

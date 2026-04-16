@@ -115,11 +115,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     'site-settings': SiteSetting;
+    'email-settings': EmailSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'email-settings': EmailSettingsSelect<false> | EmailSettingsSelect<true>;
   };
   locale: null;
   user: User;
@@ -1803,47 +1805,53 @@ export interface SiteSetting {
    * Used as the site favicon (appears in browser tabs and bookmarks)
    */
   favicon?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Controls email identity and behavior (welcome email, broadcasts). Verified sender address stays in .env (RESEND_FROM_ADDRESS).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-settings".
+ */
+export interface EmailSetting {
+  id: number;
   /**
-   * Controls email display identity + behavior (welcome email, broadcasts, digests). Verified sender address stays in .env (RESEND_FROM_ADDRESS).
+   * Display name shown in the inbox. The actual sending address is configured via RESEND_FROM_ADDRESS in .env.
    */
-  email?: {
-    /**
-     * Display name shown in the inbox. The actual sending address is configured via RESEND_FROM_ADDRESS in .env.
-     */
-    fromName?: string | null;
-    /**
-     * Optional. If set, replies will go to this address (recommended if your “from” address is a no-inbox sender).
-     */
-    replyTo?: string | null;
-    /**
-     * Optional label you can use in templates (“Newsletter”, “Updates”, etc.).
-     */
-    senderLabel?: string | null;
-    /**
-     * Used for Broadcasts. Find this in Resend Dashboard → Audiences → (select your audience) → Audience ID.
-     */
-    resendAudienceId?: string | null;
-    welcomeEmailEnabled?: boolean | null;
-    welcomeSubject?: string | null;
-    /**
-     * WYSIWYG editor. Content is stored as Lexical JSON and converted to HTML when sending.
-     */
-    welcomeBody?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
+  fromName?: string | null;
+  /**
+   * Optional. If set, replies will go to this address (recommended if your "from" address is a no-inbox sender).
+   */
+  replyTo?: string | null;
+  /**
+   * Optional label you can use in templates ("Newsletter", "Updates", etc.).
+   */
+  senderLabel?: string | null;
+  /**
+   * Used for Broadcasts. Find this in Resend Dashboard → Audiences → (select your audience) → Audience ID.
+   */
+  resendAudienceId?: string | null;
+  welcomeEmailEnabled?: boolean | null;
+  welcomeSubject?: string | null;
+  /**
+   * WYSIWYG editor. Content is stored as Lexical JSON and converted to HTML when sending.
+   */
+  welcomeBody?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
         version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-  };
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1906,17 +1914,23 @@ export interface FooterSelect<T extends boolean = true> {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   favicon?: T;
-  email?:
-    | T
-    | {
-        fromName?: T;
-        replyTo?: T;
-        senderLabel?: T;
-        resendAudienceId?: T;
-        welcomeEmailEnabled?: T;
-        welcomeSubject?: T;
-        welcomeBody?: T;
-      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-settings_select".
+ */
+export interface EmailSettingsSelect<T extends boolean = true> {
+  fromName?: T;
+  replyTo?: T;
+  senderLabel?: T;
+  resendAudienceId?: T;
+  undefined?: T;
+  welcomeEmailEnabled?: T;
+  welcomeSubject?: T;
+  welcomeBody?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

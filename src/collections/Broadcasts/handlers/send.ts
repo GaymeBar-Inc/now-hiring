@@ -27,20 +27,20 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     return Response.json({ error: 'Broadcast has already been sent' }, { status: 400 })
   }
 
-  // Pull audience ID and from-name from the site-settings global.
+  // Pull audience ID and from-name from the email-settings global.
   // RESEND_FROM_ADDRESS (the verified sender address) stays in .env — only the
   // display name and audience ID are admin-configurable.
-  const siteSettings = await req.payload.findGlobal({ slug: 'site-settings' })
-  const audienceId = siteSettings?.email?.resendAudienceId ?? undefined
+  const emailSettings = await req.payload.findGlobal({ slug: 'email-settings' })
+  const audienceId = emailSettings?.resendAudienceId ?? undefined
 
   if (!audienceId) {
     return Response.json(
-      { error: 'Resend Audience ID is not configured in Site Settings.' },
+      { error: 'Resend Audience ID is not configured in Email Settings.' },
       { status: 500 },
     )
   }
 
-  const fromName = siteSettings?.email?.fromName ?? 'Now Hiring'
+  const fromName = emailSettings?.fromName ?? 'Now Hiring'
   const from = buildFromAddress(fromName)
 
   if (!from) {
