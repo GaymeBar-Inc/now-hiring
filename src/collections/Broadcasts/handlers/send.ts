@@ -1,7 +1,8 @@
 import type { PayloadHandler } from 'payload'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
-import type { Broadcast } from '../../../payload-types'
+import type { Broadcast, EmailLayout } from '../../../payload-types'
 import { createAndSendResendBroadcast, buildFromAddress } from '../../../resend/broadcasts'
+import { renderEmailTemplate } from '../../../resend/template'
 
 export const sendBroadcastHandler: PayloadHandler = async (req) => {
   const id = req.routeParams?.id as string | undefined
@@ -106,17 +107,6 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
   }
 }
 
-/**
- * Assembles the full HTML email.
- *
- * Assembly order (per spec):
- *   1. Header  — from email-layout global
- *   2. Body    — admin-drafted Lexical rich text
- *   3. Post card(s) — single_post and weekly_digest only
- *   4. Footer  — from email-layout global
- *
- * TODO: implement once the email-layout global is built.
- */
 async function assembleBroadcastEmail(
   req: Parameters<PayloadHandler>[0],
   broadcast: Broadcast,
@@ -125,6 +115,10 @@ async function assembleBroadcastEmail(
     ? convertLexicalToHTML({ data: broadcast.body })
     : ''
 
-  // TODO: wrap with header/footer from email-layout global once built
-  return bodyHtml
+  const layout = await req.payload.findGlobal({
+    slug: 'email-layout',
+    depth: 1,
+  }) as EmailLayout
+
+  return renderEmailTemplate(bodyHtml, layout)
 }
