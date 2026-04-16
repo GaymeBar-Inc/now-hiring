@@ -19,6 +19,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { SiteSettings } from './SiteSettings/SiteSettings'
 import { EmailSettings } from './EmailSettings'
+import { EmailLayout } from './EmailLayout'
 import { subscribeForm } from './endpoints/seed/subscribe-form'
 
 const filename = fileURLToPath(import.meta.url)
@@ -104,7 +105,7 @@ export default buildConfig({
     defaultFromAddress: process.env.RESEND_FROM_ADDRESS!,
     defaultFromName: process.env.RESEND_FROM_NAME!,
   }),
-  globals: [Header, Footer, SiteSettings, EmailSettings],
+  globals: [Header, Footer, SiteSettings, EmailSettings, EmailLayout],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   onInit: async (payload) => {

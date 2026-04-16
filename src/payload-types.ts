@@ -116,12 +116,14 @@ export interface Config {
     footer: Footer;
     'site-settings': SiteSetting;
     'email-settings': EmailSetting;
+    'email-layout': EmailLayout;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'email-settings': EmailSettingsSelect<false> | EmailSettingsSelect<true>;
+    'email-layout': EmailLayoutSelect<false> | EmailLayoutSelect<true>;
   };
   locale: null;
   user: User;
@@ -1856,6 +1858,67 @@ export interface EmailSetting {
   createdAt?: string | null;
 }
 /**
+ * Controls the visual design of all outgoing emails — header, footer, colors, and branding.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-layout".
+ */
+export interface EmailLayout {
+  id: number;
+  header?: {
+    /**
+     * Displayed at the top of every email. Recommended size: 200x60px.
+     */
+    logo?: (number | null) | Media;
+    /**
+     * Short line shown beneath the logo.
+     */
+    tagline?: string | null;
+    /**
+     * Hex color code for the header background (e.g. #ffffff).
+     */
+    bgColor?: string | null;
+    /**
+     * Hex color code for header text (e.g. #000000).
+     */
+    textColor?: string | null;
+  };
+  footer: {
+    /**
+     * Copyright line or short tagline shown in the footer (e.g. "© 2026 Now Hiring").
+     */
+    footerText?: string | null;
+    /**
+     * Required by CAN-SPAM law. Shown in every email footer.
+     */
+    mailingAddress: string;
+    /**
+     * Links shown as icons/text in the footer.
+     */
+    socialLinks?:
+      | {
+          platform: 'twitter' | 'instagram' | 'linkedin' | 'facebook' | 'youtube' | 'tiktok' | 'github' | 'website';
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Label for the unsubscribe link injected by Resend.
+     */
+    unsubscribeText?: string | null;
+    /**
+     * Hex color code for the footer background (e.g. #f4f4f4).
+     */
+    bgColor?: string | null;
+    /**
+     * Hex color code for footer text (e.g. #666666).
+     */
+    textColor?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -1927,10 +1990,42 @@ export interface EmailSettingsSelect<T extends boolean = true> {
   replyTo?: T;
   senderLabel?: T;
   resendAudienceId?: T;
-  undefined?: T;
   welcomeEmailEnabled?: T;
   welcomeSubject?: T;
   welcomeBody?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-layout_select".
+ */
+export interface EmailLayoutSelect<T extends boolean = true> {
+  header?:
+    | T
+    | {
+        logo?: T;
+        tagline?: T;
+        bgColor?: T;
+        textColor?: T;
+      };
+  footer?:
+    | T
+    | {
+        footerText?: T;
+        mailingAddress?: T;
+        socialLinks?:
+          | T
+          | {
+              platform?: T;
+              url?: T;
+              id?: T;
+            };
+        unsubscribeText?: T;
+        bgColor?: T;
+        textColor?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
