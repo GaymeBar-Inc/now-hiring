@@ -1871,6 +1871,10 @@ export interface EmailLayout {
      */
     logo?: (number | null) | Media;
     /**
+     * Direct URL to your logo image — overrides the upload above. Paste a Vercel Blob or CDN URL here to ensure the image is reachable by all email clients.
+     */
+    logoUrl?: string | null;
+    /**
      * Short line shown beneath the logo.
      */
     tagline?: string | null;
@@ -2006,6 +2010,7 @@ export interface EmailLayoutSelect<T extends boolean = true> {
     | T
     | {
         logo?: T;
+        logoUrl?: T;
         tagline?: T;
         bgColor?: T;
         textColor?: T;

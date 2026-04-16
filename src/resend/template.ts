@@ -13,12 +13,18 @@ const PLATFORM_LABELS: Record<string, string> = {
   website: 'Website',
 }
 
-function resolveLogoUrl(logo: ((number | null) | Media) | undefined | null): string | null {
+function resolveLogoUrl(
+  logo: ((number | null) | Media) | undefined | null,
+  logoUrl?: string | null,
+): string | null {
+  if (logoUrl?.trim()) return logoUrl.trim()
   if (!logo || typeof logo === 'number') return null
   const url = (logo as Media).url
   if (!url) return null
   if (url.startsWith('http://') || url.startsWith('https://')) return url
-  return `${getServerSideURL()}${url}`
+  const resolved = `${getServerSideURL()}${url}`
+  if (resolved.startsWith('http://localhost')) return null
+  return resolved
 }
 
 /**
@@ -38,7 +44,7 @@ export function renderEmailTemplate(bodyHtml: string, layout: EmailLayout): stri
   const footerBg = footer.bgColor ?? '#f4f4f4'
   const footerTextColor = footer.textColor ?? '#666666'
 
-  const logoUrl = resolveLogoUrl(header.logo)
+  const logoUrl = resolveLogoUrl(header.logo, header.logoUrl)
 
   const logoHtml = logoUrl
     ? `<img src="${logoUrl}" alt="Logo" width="200" style="max-width:200px;height:auto;display:block;margin:0 auto;" />`

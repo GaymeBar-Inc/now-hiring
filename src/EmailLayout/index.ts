@@ -27,6 +27,15 @@ export const EmailLayout: GlobalConfig = {
           },
         },
         {
+          name: 'logoUrl',
+          label: 'Logo URL',
+          type: 'text',
+          required: false,
+          admin: {
+            description: 'Direct URL to your logo image — overrides the upload above. Paste a Vercel Blob or CDN URL here to ensure the image is reachable by all email clients.',
+          },
+        },
+        {
           name: 'tagline',
           label: 'Tagline',
           type: 'text',
