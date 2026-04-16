@@ -76,45 +76,6 @@ export const EmailSettings: GlobalConfig = {
       name: 'welcomeBody',
       label: 'Welcome Email Body',
       type: 'richText',
-      defaultValue: {
-        root: {
-          type: 'root',
-          children: [
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'text',
-                  text: 'Thanks for subscribing 🎉',
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              format: '',
-              indent: 0,
-              version: 1,
-            },
-            {
-              type: 'paragraph',
-              children: [
-                {
-                  type: 'text',
-                  text: "You're on the list — we'll send updates as we publish new posts.",
-                  version: 1,
-                },
-              ],
-              direction: 'ltr',
-              format: '',
-              indent: 0,
-              version: 1,
-            },
-          ],
-          direction: 'ltr',
-          format: '',
-          indent: 0,
-          version: 1,
-        },
-      },
       admin: {
         condition: (_, siblingData) =>
           Boolean((siblingData as WelcomeEmailSiblingData)?.welcomeEmailEnabled),
