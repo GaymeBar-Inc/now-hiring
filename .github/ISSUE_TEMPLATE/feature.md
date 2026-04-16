@@ -1,13 +1,9 @@
-<!-- .github/ISSUE_TEMPLATE/feature.md -->
-
 ---
-
 name: Feature request
 about: Suggest a new idea or enhancement for this project
 title: "[Feature]: "
 labels: enhancement
 type: feature
-
 ---
 
 ## Summary

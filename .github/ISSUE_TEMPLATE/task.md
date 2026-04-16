@@ -1,12 +1,9 @@
-<!-- .github/ISSUE_TEMPLATE/task.md -->
 ---
-
 name: Task
 about: Track a small piece of work
 title: "[Task]: "
 labels: task
 type: task
-
 ---
 
 ## Description
