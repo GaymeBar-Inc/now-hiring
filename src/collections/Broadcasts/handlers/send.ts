@@ -1,6 +1,6 @@
 import type { PayloadHandler } from 'payload'
-import { Resend } from 'resend'
 import type { Broadcast } from '../../../payload-types'
+import { createAndSendResendBroadcast } from '../../../resend/broadcasts'
 
 export const sendBroadcastHandler: PayloadHandler = async (req) => {
   const id = req.routeParams?.id as string | undefined
@@ -9,7 +9,6 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     return Response.json({ error: 'Broadcast ID is required' }, { status: 400 })
   }
 
-  // Require authentication
   if (!req.user) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
@@ -44,36 +43,33 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
   const fromEmail = process.env.RESEND_FROM_EMAIL!
   const from = `${fromName} <${fromEmail}>`
 
-  const resend = new Resend(process.env.RESEND_API_KEY)
-
   try {
     const html = await assembleBroadcastEmail(req, broadcast)
 
-    const { data, error } = await resend.broadcasts.create({
+    const result = await createAndSendResendBroadcast({
       audienceId,
       from,
       name: broadcast.title as string,
       subject: broadcast.subject as string,
       ...(broadcast.previewText ? { previewText: broadcast.previewText as string } : {}),
       html,
-      // Uncomment to support scheduled sends:
-      // ...(broadcast.scheduledAt ? { scheduledAt: broadcast.scheduledAt as string } : {}),
     })
 
-    if (error || !data) {
+    if (result.status === 'error') {
       await req.payload.update({
         collection: 'broadcasts',
         id,
         data: {
           status: 'failed',
-          errorMessage: error?.message ?? 'Unknown error from Resend',
+          errorMessage: result.message,
         },
       })
-      return Response.json({ error: error?.message ?? 'Send failed' }, { status: 500 })
+      return Response.json({ error: result.message }, { status: 500 })
     }
 
-    // Send immediately after creation
-    await resend.broadcasts.send(data.id)
+    if (result.status === 'disabled') {
+      return Response.json({ error: 'Resend is not configured.' }, { status: 500 })
+    }
 
     const now = new Date().toISOString()
     const isScheduled = Boolean(broadcast.scheduledAt)
@@ -82,14 +78,14 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
       collection: 'broadcasts',
       id,
       data: {
-        resendBroadcastId: data.id,
+        resendBroadcastId: result.resendBroadcastId,
         status: isScheduled ? 'scheduled' : 'sent',
         ...(isScheduled ? {} : { sentAt: now }),
         errorMessage: '',
       },
     })
 
-    return Response.json({ success: true, resendBroadcastId: data.id })
+    return Response.json({ success: true, resendBroadcastId: result.resendBroadcastId })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unexpected error'
 
