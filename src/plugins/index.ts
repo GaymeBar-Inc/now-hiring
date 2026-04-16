@@ -24,7 +24,7 @@ interface FieldWithAdmin {
 }
 import { getServerSideURL } from '@/utilities/getURL'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
-import { handleNewsletterSubscribe } from '@/utilities/resend'
+import { handleNewsletterSubscribe } from '@/resend'
 
 const generateDescription: GenerateDescription<Post> = ({ doc }) => {
   if (!doc?.content?.root?.children) return ''
