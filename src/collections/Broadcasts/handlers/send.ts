@@ -27,7 +27,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
   }
 
   // Pull audience ID and from-name from the site-settings global.
-  // RESEND_FROM_EMAIL (the verified sender address) stays in .env — only the
+  // RESEND_FROM_ADDRESS (the verified sender address) stays in .env — only the
   // display name and audience ID are admin-configurable.
   const siteSettings = await req.payload.findGlobal({ slug: 'site-settings' })
   const audienceId = siteSettings?.email?.resendAudienceId ?? undefined
@@ -40,7 +40,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
   }
 
   const fromName = siteSettings?.email?.fromName ?? 'Now Hiring'
-  const fromEmail = process.env.RESEND_FROM_EMAIL!
+  const fromEmail = process.env.RESEND_FROM_ADDRESS!
   const from = `${fromName} <${fromEmail}>`
 
   try {
