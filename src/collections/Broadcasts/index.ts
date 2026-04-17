@@ -6,9 +6,14 @@ import { weeklyPostsHandler } from './handlers/weeklyPosts'
 
 export const Broadcasts: CollectionConfig = {
   slug: 'broadcasts',
+  versions: {
+    drafts: {
+      autosave: { interval: 100 },
+    },
+  },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'type', 'status', 'sentAt', 'updatedAt'],
+    defaultColumns: ['title', 'type', 'sendStatus', 'sentAt', 'updatedAt'],
     group: 'Email',
   },
   access: {
@@ -140,7 +145,7 @@ export const Broadcasts: CollectionConfig = {
       type: 'row',
       fields: [
         {
-          name: 'status',
+          name: 'sendStatus',
           type: 'select',
           defaultValue: 'draft',
           options: [

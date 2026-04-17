@@ -24,7 +24,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     return Response.json({ error: 'Broadcast not found' }, { status: 404 })
   }
 
-  if (broadcast.status === 'sent') {
+  if (broadcast.sendStatus === 'sent') {
     return Response.json({ error: 'Broadcast has already been sent' }, { status: 400 })
   }
 
@@ -68,7 +68,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
         collection: 'broadcasts',
         id,
         data: {
-          status: 'failed',
+          sendStatus: 'failed',
           errorMessage: result.message,
         },
       })
@@ -87,7 +87,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
       id,
       data: {
         resendBroadcastId: result.resendBroadcastId,
-        status: isScheduled ? 'scheduled' : 'sent',
+        sendStatus: isScheduled ? 'scheduled' : 'sent',
         ...(isScheduled ? {} : { sentAt: now }),
         errorMessage: '',
       },
@@ -100,7 +100,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     await req.payload.update({
       collection: 'broadcasts',
       id,
-      data: { status: 'failed', errorMessage: message },
+      data: { sendStatus: 'failed', errorMessage: message },
     })
 
     return Response.json({ error: message }, { status: 500 })
