@@ -204,7 +204,7 @@ export interface Broadcast {
   /**
    * Managed by the system — updated after Resend API calls
    */
-  status?: ('draft' | 'scheduled' | 'sent' | 'failed') | null;
+  sendStatus?: ('draft' | 'scheduled' | 'sent' | 'failed') | null;
   /**
    * ID returned by Resend after the broadcast is created
    */
@@ -223,6 +223,7 @@ export interface Broadcast {
   errorMessage?: string | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1142,13 +1143,14 @@ export interface BroadcastsSelect<T extends boolean = true> {
   body?: T;
   post?: T;
   posts?: T;
-  status?: T;
+  sendStatus?: T;
   resendBroadcastId?: T;
   scheduledAt?: T;
   sentAt?: T;
   errorMessage?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

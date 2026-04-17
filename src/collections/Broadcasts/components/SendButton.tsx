@@ -16,7 +16,7 @@ const SendButton: React.FC = () => {
 
   const { id, savedDocumentData } = useDocumentInfo()
 
-  const status = (savedDocumentData?.status ?? 'draft') as BroadcastStatus
+  const status = (savedDocumentData?.sendStatus ?? 'draft') as BroadcastStatus
   const resendBroadcastId = savedDocumentData?.resendBroadcastId as string | undefined
 
   const isSent = status === 'sent'
