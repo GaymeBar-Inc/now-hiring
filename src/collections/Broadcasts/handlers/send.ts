@@ -1,8 +1,9 @@
 import type { PayloadHandler } from 'payload'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
-import type { Broadcast, EmailLayout } from '../../../payload-types'
+import type { Broadcast, EmailLayout, Post } from '../../../payload-types'
 import { createAndSendResendBroadcast, buildFromAddress } from '../../../resend/broadcasts'
 import { renderEmailTemplate } from '../../../resend/template'
+import { renderPostCard } from '../../../resend/renderPostCard'
 
 export const sendBroadcastHandler: PayloadHandler = async (req) => {
   const id = req.routeParams?.id as string | undefined
@@ -18,6 +19,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
   const broadcast = await req.payload.findByID({
     collection: 'broadcasts',
     id,
+    depth: 2,
   })
 
   if (!broadcast) {
@@ -115,10 +117,31 @@ async function assembleBroadcastEmail(
     ? convertLexicalToHTML({ data: broadcast.body })
     : ''
 
+  const postCardsHtml = buildPostCardsHtml(broadcast)
+
   const layout = await req.payload.findGlobal({
     slug: 'email-layout',
     depth: 1,
   }) as EmailLayout
 
-  return renderEmailTemplate(bodyHtml, layout)
+  return renderEmailTemplate(bodyHtml + postCardsHtml, layout)
+}
+
+function buildPostCardsHtml(broadcast: Broadcast): string {
+  if (broadcast.type === 'single_post') {
+    const post = broadcast.post
+    if (!post || typeof post === 'number') return ''
+    return renderPostCard(post as Post)
+  }
+
+  if (broadcast.type === 'weekly_digest') {
+    const posts = broadcast.posts
+    if (!posts?.length) return ''
+    return posts
+      .filter((p): p is Post => typeof p !== 'number')
+      .map(renderPostCard)
+      .join('\n')
+  }
+
+  return ''
 }
