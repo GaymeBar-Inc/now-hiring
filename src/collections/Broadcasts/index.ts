@@ -103,6 +103,7 @@ export const Broadcasts: CollectionConfig = {
       admin: {
         condition: (data) => data?.type === 'single_post',
         description: 'Drives the auto-generated post card appended to this broadcast',
+        sortOptions: '-publishedAt',
       },
     },
 
@@ -117,6 +118,7 @@ export const Broadcasts: CollectionConfig = {
       admin: {
         condition: (data) => data?.type === 'weekly_digest',
         description: 'Curated list of posts — edit freely before sending',
+        sortOptions: '-publishedAt',
       },
     },
     {
