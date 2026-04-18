@@ -57,7 +57,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     const result = await createAndSendResendBroadcast({
       audienceId,
       from,
-      name: broadcast.title as string,
+      name: broadcast.subject as string,
       subject: broadcast.subject as string,
       ...(broadcast.previewText ? { previewText: broadcast.previewText as string } : {}),
       html,
