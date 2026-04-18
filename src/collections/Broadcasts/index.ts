@@ -18,7 +18,7 @@ export const Broadcasts: CollectionConfig = {
     group: 'Email',
     livePreview: {
       url: ({ data }) => {
-        if (!data?.id || data?.sendStatus === 'sent') return null
+        if (!data?.id) return null
         return `${getServerSideURL()}/broadcast-preview/${data.id}`
       },
     },
