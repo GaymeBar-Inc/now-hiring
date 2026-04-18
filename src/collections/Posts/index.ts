@@ -17,6 +17,8 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
+import { syncHeroToMetaImage } from './hooks/syncHeroToMetaImage'
+import { syncTitleToMetaTitle } from './hooks/syncTitleToMetaTitle'
 
 import {
   MetaDescriptionField,
@@ -70,6 +72,11 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'title',
       type: 'text',
       required: true,
+      admin: {
+        components: {
+          Field: '@/collections/Posts/components/PostTitleField',
+        },
+      },
     },
     {
       type: 'tabs',
@@ -217,8 +224,19 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     slugField(),
+    {
+      name: 'draftBroadcastButton',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/collections/Posts/components/DraftBroadcastButton',
+        },
+      },
+    },
   ],
   hooks: {
+    beforeChange: [syncHeroToMetaImage, syncTitleToMetaTitle],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],

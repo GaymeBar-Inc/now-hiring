@@ -1,12 +1,11 @@
 import type { Media, Post } from '../payload-types'
 import { getServerSideURL } from '../utilities/getURL'
 
-function resolveImageUrl(heroImage: Post['heroImage']): string | null {
-  if (!heroImage || typeof heroImage === 'number') return null
-  const media = heroImage as Media
-  if (!media.url) return null
-  if (media.url.startsWith('http://') || media.url.startsWith('https://')) return media.url
-  return `${getServerSideURL()}${media.url}`
+function resolveImageUrl(image: Media | number | null | undefined): string | null {
+  if (!image || typeof image === 'number') return null
+  if (!image.url) return null
+  if (image.url.startsWith('http://') || image.url.startsWith('https://')) return image.url
+  return `${getServerSideURL()}${image.url}`
 }
 
 function formatDate(iso: string): string {
@@ -19,7 +18,7 @@ function formatDate(iso: string): string {
 
 export function renderPostCard(post: Post): string {
   const postUrl = `${getServerSideURL()}/posts/${post.slug ?? ''}`
-  const imageUrl = resolveImageUrl(post.heroImage)
+  const imageUrl = resolveImageUrl(post.meta?.image as Media | number | null | undefined) ?? resolveImageUrl(post.heroImage)
   const description = post.meta?.description ?? null
   const publishedAt = post.publishedAt ? formatDate(post.publishedAt) : null
 
@@ -50,9 +49,6 @@ export function renderPostCard(post: Post): string {
         <a href="${postUrl}" style="color:#111111;text-decoration:none;">${post.title}</a>
       </h2>
       ${descriptionHtml}
-      <p style="margin:12px 0 0;">
-        <a href="${postUrl}" style="color:#0070f3;font-size:14px;font-family:Arial,Helvetica,sans-serif;text-decoration:underline;">Read more &rarr;</a>
-      </p>
     </td>
   </tr>
 </table>`
