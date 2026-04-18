@@ -88,6 +88,12 @@ export default buildConfig({
           width: 1440,
           height: 900,
         },
+        {
+          label: 'Email',
+          name: 'email',
+          width: 600,
+          height: 900,
+        },
       ],
     },
   },

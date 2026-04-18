@@ -3,6 +3,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { sendBroadcastHandler } from './handlers/send'
 import { weeklyPostsHandler } from './handlers/weeklyPosts'
+import { getServerSideURL } from '../../utilities/getURL'
 
 export const Broadcasts: CollectionConfig = {
   slug: 'broadcasts',
@@ -15,6 +16,12 @@ export const Broadcasts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'type', 'sendStatus', 'sentAt', 'updatedAt'],
     group: 'Email',
+    livePreview: {
+      url: ({ data }) => {
+        if (!data?.id || data?.sendStatus === 'sent') return null
+        return `${getServerSideURL()}/broadcast-preview/${data.id}`
+      },
+    },
   },
   access: {
     read: ({ req: { user } }) => Boolean(user),
