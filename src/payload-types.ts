@@ -164,10 +164,6 @@ export interface Broadcast {
   id: number;
   type: 'single_post' | 'weekly_digest' | 'custom';
   /**
-   * Internal label — appears in the admin list and maps to Resend's broadcast name
-   */
-  title: string;
-  /**
    * Email subject line shown to recipients
    */
   subject: string;
@@ -1137,7 +1133,6 @@ export interface PayloadMigration {
  */
 export interface BroadcastsSelect<T extends boolean = true> {
   type?: T;
-  title?: T;
   subject?: T;
   previewText?: T;
   body?: T;

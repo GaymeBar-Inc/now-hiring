@@ -13,8 +13,8 @@ export const Broadcasts: CollectionConfig = {
     },
   },
   admin: {
-    useAsTitle: 'title',
-    defaultColumns: ['title', 'type', 'sendStatus', 'sentAt', 'updatedAt'],
+    useAsTitle: 'subject',
+    defaultColumns: ['subject', 'type', 'sendStatus', 'sentAt', 'updatedAt'],
     group: 'Email',
     livePreview: {
       url: ({ data }) => {
@@ -59,15 +59,6 @@ export const Broadcasts: CollectionConfig = {
         { label: 'Weekly Digest', value: 'weekly_digest' },
         { label: 'Custom', value: 'custom' },
       ],
-    },
-    {
-      name: 'title',
-      type: 'text',
-      required: true,
-      admin: {
-        description:
-          "Internal label — appears in the admin list and maps to Resend's broadcast name",
-      },
     },
     {
       name: 'subject',
