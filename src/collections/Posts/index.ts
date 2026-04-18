@@ -19,6 +19,7 @@ import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 import { syncHeroToMetaImage } from './hooks/syncHeroToMetaImage'
 import { syncTitleToMetaTitle } from './hooks/syncTitleToMetaTitle'
+import { syncTitleToSlug } from './hooks/syncTitleToSlug'
 
 import {
   MetaDescriptionField,
@@ -28,6 +29,7 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from 'payload'
+import type { TextField } from 'payload'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -72,11 +74,6 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'title',
       type: 'text',
       required: true,
-      admin: {
-        components: {
-          Field: '@/collections/Posts/components/PostTitleField',
-        },
-      },
     },
     {
       type: 'tabs',
@@ -223,7 +220,21 @@ export const Posts: CollectionConfig<'posts'> = {
         },
       ],
     },
-    slugField(),
+    slugField({
+      overrides: (field) => {
+        const slugTextField = field.fields[1] as TextField
+        slugTextField.admin = {
+          ...slugTextField.admin,
+          components: {
+            Field: {
+              clientProps: { useAsSlug: 'title' },
+              path: '@/collections/Posts/components/PostSlugField',
+            },
+          },
+        }
+        return field
+      },
+    }),
     {
       name: 'draftBroadcastButton',
       type: 'ui',
@@ -236,7 +247,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   ],
   hooks: {
-    beforeChange: [syncHeroToMetaImage, syncTitleToMetaTitle],
+    beforeChange: [syncHeroToMetaImage, syncTitleToMetaTitle, syncTitleToSlug],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
