@@ -1,7 +1,7 @@
 'use client'
 
 import { FieldLabel, TextInput, useField } from '@payloadcms/ui'
-import { useEffect, useState } from 'react'
+import { type ChangeEvent, useEffect, useState } from 'react'
 import { useDebounce } from '@/utilities/useDebounce'
 
 type Props = {
@@ -24,7 +24,7 @@ const PostTitleField: React.FC<Props> = ({ field, path, readOnly }) => {
     if (debouncedValue !== formValue) {
       setValue(debouncedValue)
     }
-  }, [debouncedValue])
+  }, [debouncedValue, formValue, setValue])
 
   return (
     <div>
@@ -34,7 +34,7 @@ const PostTitleField: React.FC<Props> = ({ field, path, readOnly }) => {
         required={field.required}
       />
       <TextInput
-        onChange={(e) => setLocalValue(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => setLocalValue(e.target.value)}
         path={resolvedPath}
         readOnly={readOnly}
         value={localValue}
