@@ -13,11 +13,7 @@ const PLATFORM_LABELS: Record<string, string> = {
   website: 'Website',
 }
 
-function resolveLogoUrl(
-  logo: ((number | null) | Media) | undefined | null,
-  logoUrl?: string | null,
-): string | null {
-  if (logoUrl?.trim()) return logoUrl.trim()
+function resolveLogoUrl(logo: ((number | null) | Media) | undefined | null): string | null {
   return resolvePayloadImageUrl(logo as Media | number | null | undefined)
 }
 
@@ -38,7 +34,7 @@ export function renderEmailTemplate(bodyHtml: string, layout: EmailLayout): stri
   const footerBg = footer.bgColor ?? '#f4f4f4'
   const footerTextColor = footer.textColor ?? '#666666'
 
-  const logoUrl = resolveLogoUrl(header.logo, header.logoUrl)
+  const logoUrl = resolveLogoUrl(header.logo)
 
   const logoHtml = logoUrl
     ? `<img src="${logoUrl}" alt="Logo" width="200" style="max-width:200px;height:auto;display:block;margin:0 auto;" />`
