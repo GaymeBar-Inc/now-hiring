@@ -52,7 +52,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'broadcasts', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
@@ -242,6 +242,18 @@ export const Posts: CollectionConfig<'posts'> = {
         position: 'sidebar',
         components: {
           Field: '@/collections/Posts/components/DraftBroadcastButton',
+        },
+      },
+    },
+    {
+      name: 'broadcasts',
+      type: 'join',
+      collection: 'broadcasts',
+      on: 'posts',
+      admin: {
+        hidden: true,
+        components: {
+          Cell: '@/collections/Posts/components/BroadcastCell',
         },
       },
     },

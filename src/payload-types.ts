@@ -85,6 +85,9 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
+    posts: {
+      broadcasts: 'broadcasts';
+    };
     'payload-folders': {
       documentsAndFolders: 'payload-folders' | 'media';
     };
@@ -190,11 +193,7 @@ export interface Broadcast {
     [k: string]: unknown;
   } | null;
   /**
-   * Drives the auto-generated post card appended to this broadcast
-   */
-  post?: (number | null) | Post;
-  /**
-   * Curated list of posts — edit freely before sending
+   * For single_post: select one post. For weekly_digest: curate multiple posts.
    */
   posts?: (number | Post)[] | null;
   /**
@@ -267,6 +266,11 @@ export interface Post {
    */
   generateSlug?: boolean | null;
   slug: string;
+  broadcasts?: {
+    docs?: (number | Broadcast)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1136,7 +1140,6 @@ export interface BroadcastsSelect<T extends boolean = true> {
   subject?: T;
   previewText?: T;
   body?: T;
-  post?: T;
   posts?: T;
   sendStatus?: T;
   resendBroadcastId?: T;
@@ -1309,6 +1312,7 @@ export interface PostsSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  broadcasts?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
