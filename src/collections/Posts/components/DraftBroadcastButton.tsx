@@ -38,7 +38,9 @@ const DraftBroadcastButton: React.FC = () => {
     const controller = new AbortController()
     fetch(`/api/broadcasts?where[posts][in]=${id}&depth=0&limit=10`, { signal: controller.signal })
       .then((res) => res.json())
-      .then((json: BroadcastListResponse) => { setExistingBroadcasts(json.docs ?? []) })
+      .then((json: BroadcastListResponse) => {
+        setExistingBroadcasts(json.docs ?? [])
+      })
       .catch(() => {})
     return () => controller.abort()
   }, [id])
@@ -85,7 +87,7 @@ const DraftBroadcastButton: React.FC = () => {
         marginTop: '8px',
       }}
     >
-      <h4 style={{ marginBottom: '10px', fontSize: '14px', fontWeight: 600 }}>Broadcast</h4>
+      <h4 style={{ marginBottom: '10px', fontSize: '16px', fontWeight: 600 }}>Broadcast</h4>
 
       <div
         title={
@@ -93,28 +95,28 @@ const DraftBroadcastButton: React.FC = () => {
             ? 'Publish this post before drafting a broadcast'
             : 'Create a new draft broadcast for this post'
         }
-        style={{ display: 'inline-block' }}
+        style={{ display: 'flex', alignItems: 'center' }}
       >
         <button
           type="button"
           onClick={handleDraftBroadcast}
           disabled={!isPublished || loading}
           className="btn btn--style-secondary btn--size-medium"
-          style={
-            !isPublished
+          style={{
+            margin: '1rem 2rem 1rem 0',
+            ...(!isPublished
               ? { opacity: 0.45, cursor: 'not-allowed', pointerEvents: 'none' }
-              : undefined
-          }
+              : {}),
+          }}
         >
           {loading ? 'Creating…' : 'Draft Broadcast'}
         </button>
+        {!isPublished && (
+          <p style={{ fontSize: '12px', color: 'var(--theme-text-dim)' }}>
+            Publish this post to enable
+          </p>
+        )}
       </div>
-
-      {!isPublished && (
-        <p style={{ marginTop: '8px', fontSize: '12px', color: 'var(--theme-text-dim)' }}>
-          Publish this post to enable
-        </p>
-      )}
 
       {error && (
         <p style={{ marginTop: '8px', fontSize: '13px', color: 'var(--theme-error-500)' }}>
@@ -124,15 +126,19 @@ const DraftBroadcastButton: React.FC = () => {
 
       {existingBroadcasts.length > 0 && (
         <div style={{ marginTop: '12px' }}>
-          <p style={{ fontSize: '12px', color: 'var(--theme-text-dim)', marginBottom: '4px' }}>
+          <h5 style={{ fontSize: '14px', color: 'var(--theme-text-dim)', marginBottom: '4px' }}>
             Sent in:
-          </p>
+          </h5>
           <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             {existingBroadcasts.map((b) => (
               <li key={b.id} style={{ marginBottom: '4px' }}>
                 <a
                   href={`/admin/collections/broadcasts/${b.id}`}
-                  style={{ fontSize: '13px', color: 'var(--theme-link-color)', textDecoration: 'none' }}
+                  style={{
+                    fontSize: '13px',
+                    color: 'var(--theme-link-color)',
+                    textDecoration: 'none',
+                  }}
                 >
                   {b.subject}
                   {b.sendStatus === 'sent' && (
