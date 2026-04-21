@@ -243,8 +243,8 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (number | Post)[] | null;
   categories?: (number | Category)[] | null;
+  relatedPosts?: (number | Post)[] | null;
   meta?: {
     title?: string | null;
     /**
@@ -1293,8 +1293,8 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
   content?: T;
-  relatedPosts?: T;
   categories?: T;
+  relatedPosts?: T;
   meta?:
     | T
     | {
