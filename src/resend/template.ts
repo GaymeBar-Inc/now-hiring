@@ -1,6 +1,6 @@
 // src/resend/template.ts
 import type { EmailLayout, Media } from '../payload-types'
-import { getServerSideURL } from '../utilities/getURL'
+import { resolvePayloadImageUrl } from '../utilities/blobUrl'
 
 const PLATFORM_LABELS: Record<string, string> = {
   twitter: 'Twitter',
@@ -18,13 +18,7 @@ function resolveLogoUrl(
   logoUrl?: string | null,
 ): string | null {
   if (logoUrl?.trim()) return logoUrl.trim()
-  if (!logo || typeof logo === 'number') return null
-  const url = (logo as Media).url
-  if (!url) return null
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  const resolved = `${getServerSideURL()}${url}`
-  if (resolved.startsWith('http://localhost')) return null
-  return resolved
+  return resolvePayloadImageUrl(logo as Media | number | null | undefined)
 }
 
 /**

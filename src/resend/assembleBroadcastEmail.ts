@@ -14,7 +14,7 @@ export async function assembleBroadcastEmail(
   options: AssembleOptions = {},
 ): Promise<string> {
   const bodyHtml = broadcast.body ? convertLexicalToHTML({ data: broadcast.body }) : ''
-  const postCardsHtml = buildPostCardsHtml(broadcast)
+  const postCardsHtml = buildPostCardsHtml(broadcast, options.preview ?? false)
 
   const layout = (await payload.findGlobal({
     slug: 'email-layout',
@@ -33,11 +33,11 @@ export async function assembleBroadcastEmail(
   return html
 }
 
-function buildPostCardsHtml(broadcast: Broadcast): string {
+function buildPostCardsHtml(broadcast: Broadcast, preview: boolean): string {
   if (broadcast.type === 'single_post') {
     const post = broadcast.posts?.[0]
     if (!post || typeof post === 'number') return ''
-    return renderPostCard(post as Post)
+    return renderPostCard(post as Post, preview)
   }
 
   if (broadcast.type === 'weekly_digest') {
@@ -45,7 +45,7 @@ function buildPostCardsHtml(broadcast: Broadcast): string {
     if (!posts?.length) return ''
     return posts
       .filter((p): p is Post => typeof p !== 'number')
-      .map(renderPostCard)
+      .map((p) => renderPostCard(p, preview))
       .join('\n')
   }
 

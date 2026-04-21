@@ -1,12 +1,6 @@
 import type { Media, Post } from '../payload-types'
 import { getServerSideURL } from '../utilities/getURL'
-
-function resolveImageUrl(image: Media | number | null | undefined): string | null {
-  if (!image || typeof image === 'number') return null
-  if (!image.url) return null
-  if (image.url.startsWith('http://') || image.url.startsWith('https://')) return image.url
-  return `${getServerSideURL()}${image.url}`
-}
+import { resolvePayloadImageUrl } from '../utilities/blobUrl'
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', {
@@ -16,9 +10,14 @@ function formatDate(iso: string): string {
   })
 }
 
-export function renderPostCard(post: Post): string {
+export function renderPostCard(post: Post, preview = false): string {
   const postUrl = `${getServerSideURL()}/posts/${post.slug ?? ''}`
-  const imageUrl = resolveImageUrl(post.meta?.image as Media | number | null | undefined) ?? resolveImageUrl(post.heroImage)
+  const imageUrl =
+    resolvePayloadImageUrl(post.meta?.image as Media | number | null | undefined, {
+      preferSmall: true,
+      preview,
+    }) ??
+    resolvePayloadImageUrl(post.heroImage, { preferSmall: true, preview })
   const description = post.meta?.description ?? null
   const publishedAt = post.publishedAt ? formatDate(post.publishedAt) : null
 
