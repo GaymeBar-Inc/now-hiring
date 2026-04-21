@@ -1,12 +1,23 @@
 'use client'
 
 import { useDocumentInfo } from '@payloadcms/ui'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type CreateBroadcastResponse = {
   doc?: { id: string }
   errors?: unknown[]
   message?: string
+}
+
+type BroadcastSummary = {
+  id: string
+  subject: string
+  sendStatus?: string | null
+}
+
+type BroadcastListResponse = {
+  docs?: BroadcastSummary[]
+  totalDocs?: number
 }
 
 /**
@@ -18,8 +29,19 @@ type CreateBroadcastResponse = {
 const DraftBroadcastButton: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [existingBroadcasts, setExistingBroadcasts] = useState<BroadcastSummary[]>([])
 
   const { id, savedDocumentData } = useDocumentInfo()
+
+  useEffect(() => {
+    if (!id) return
+    const controller = new AbortController()
+    fetch(`/api/broadcasts?where[posts][in]=${id}&depth=0&limit=10`, { signal: controller.signal })
+      .then((res) => res.json())
+      .then((json: BroadcastListResponse) => { setExistingBroadcasts(json.docs ?? []) })
+      .catch(() => {})
+    return () => controller.abort()
+  }, [id])
 
   const isNewDoc = !id
   const isPublished = savedDocumentData?._status === 'published'
@@ -37,11 +59,7 @@ const DraftBroadcastButton: React.FC = () => {
       const res = await fetch('/api/broadcasts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'single_post',
-          subject: postTitle,
-          post: id,
-        }),
+        body: JSON.stringify({ type: 'single_post', subject: postTitle, posts: [id] }),
       })
 
       const json = (await res.json()) as CreateBroadcastResponse
@@ -102,6 +120,29 @@ const DraftBroadcastButton: React.FC = () => {
         <p style={{ marginTop: '8px', fontSize: '13px', color: 'var(--theme-error-500)' }}>
           {error}
         </p>
+      )}
+
+      {existingBroadcasts.length > 0 && (
+        <div style={{ marginTop: '12px' }}>
+          <p style={{ fontSize: '12px', color: 'var(--theme-text-dim)', marginBottom: '4px' }}>
+            Sent in:
+          </p>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+            {existingBroadcasts.map((b) => (
+              <li key={b.id} style={{ marginBottom: '4px' }}>
+                <a
+                  href={`/admin/collections/broadcasts/${b.id}`}
+                  style={{ fontSize: '13px', color: 'var(--theme-link-color)', textDecoration: 'none' }}
+                >
+                  {b.subject}
+                  {b.sendStatus === 'sent' && (
+                    <span style={{ marginLeft: '6px', color: 'var(--theme-success-500)' }}>✓</span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   )

@@ -85,21 +85,7 @@ export const Broadcasts: CollectionConfig = {
     },
 
     // -------------------------------------------------------------------------
-    // Conditional: single_post
-    // -------------------------------------------------------------------------
-    {
-      name: 'post',
-      type: 'relationship',
-      relationTo: 'posts',
-      admin: {
-        condition: (data) => data?.type === 'single_post',
-        description: 'Drives the auto-generated post card appended to this broadcast',
-        sortOptions: '-publishedAt',
-      },
-    },
-
-    // -------------------------------------------------------------------------
-    // Conditional: weekly_digest
+    // Conditional: single_post + weekly_digest
     // -------------------------------------------------------------------------
     {
       name: 'posts',
@@ -107,8 +93,8 @@ export const Broadcasts: CollectionConfig = {
       relationTo: 'posts',
       hasMany: true,
       admin: {
-        condition: (data) => data?.type === 'weekly_digest',
-        description: 'Curated list of posts — edit freely before sending',
+        condition: (data) => data?.type === 'single_post' || data?.type === 'weekly_digest',
+        description: 'For single_post: select one post. For weekly_digest: curate multiple posts.',
         sortOptions: '-publishedAt',
       },
     },

@@ -35,7 +35,7 @@ export async function assembleBroadcastEmail(
 
 function buildPostCardsHtml(broadcast: Broadcast): string {
   if (broadcast.type === 'single_post') {
-    const post = broadcast.post
+    const post = broadcast.posts?.[0]
     if (!post || typeof post === 'number') return ''
     return renderPostCard(post as Post)
   }
