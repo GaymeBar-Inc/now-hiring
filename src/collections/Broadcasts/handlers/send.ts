@@ -14,11 +14,11 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const broadcast = await req.payload.findByID({
+  const broadcast = (await req.payload.findByID({
     collection: 'broadcasts',
     id,
     depth: 2,
-  })
+  })) as Broadcast
 
   if (!broadcast) {
     return Response.json({ error: 'Broadcast not found' }, { status: 404 })
