@@ -101,7 +101,7 @@ const DraftBroadcastButton: React.FC = () => {
           type="button"
           onClick={handleDraftBroadcast}
           disabled={!isPublished || loading}
-          className="btn btn--style-secondary btn--size-medium"
+          className="btn btn--style-primary btn--size-medium"
           style={{
             margin: '1rem 2rem 1rem 0',
             ...(!isPublished
@@ -131,7 +131,7 @@ const DraftBroadcastButton: React.FC = () => {
           </h5>
           <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             {existingBroadcasts.map((b) => (
-              <li key={b.id} style={{ marginBottom: '4px' }}>
+              <li key={b.id} style={{ marginBottom: '4px', textDecoration: 'underline' }}>
                 <a
                   href={`/admin/collections/broadcasts/${b.id}`}
                   style={{
