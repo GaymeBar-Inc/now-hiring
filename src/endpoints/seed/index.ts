@@ -22,7 +22,7 @@ const collections: CollectionSlug[] = [
 
 const globals: GlobalSlug[] = ['header', 'footer']
 
-const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
+const categories = ['Engineering', 'Design', 'Software', 'Technology', 'Self Help', 'Finance']
 
 // Next.js revalidation errors are normal when seeding the database without a server running
 // i.e. running `yarn seed` locally instead of using the admin UI within an active app
