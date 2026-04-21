@@ -74,6 +74,11 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'title',
       type: 'text',
       required: true,
+      admin: {
+        components: {
+          Field: '@/collections/Posts/components/PostTitleField',
+        },
+      },
     },
     {
       type: 'tabs',
