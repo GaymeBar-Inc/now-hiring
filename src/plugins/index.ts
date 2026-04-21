@@ -13,33 +13,17 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 import { Form, FormSubmission, Page, Post } from '@/payload-types'
 
-interface LexicalNode {
-  text?: string
-  children?: LexicalNode[]
-  [k: string]: unknown
-}
-
 interface FieldWithAdmin {
   admin?: Record<string, unknown>
 }
 import { getServerSideURL } from '@/utilities/getURL'
 import { getSiteSettings } from '@/utilities/getSiteSettings'
 import { handleNewsletterSubscribe } from '@/resend'
+import { extractLexicalText } from '@/utilities/extractLexicalText'
 
 const generateDescription: GenerateDescription<Post> = ({ doc }) => {
   if (!doc?.content?.root?.children) return ''
-
-  const extractText = (node: LexicalNode): string => {
-    if (typeof node.text === 'string') return node.text
-    if (Array.isArray(node.children)) {
-      return node.children.map(extractText).join('')
-    }
-    return ''
-  }
-
-  const fullText = extractText(doc.content.root)
-  // Trim to 160 characters (ideal for SEO meta descriptions)
-  return fullText.substring(0, 160).trim()
+  return extractLexicalText(doc.content.root).substring(0, 160).trim()
 }
 
 const generateTitle: GenerateTitle<Post | Page> = async ({ doc }) => {
