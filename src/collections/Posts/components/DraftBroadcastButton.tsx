@@ -3,21 +3,12 @@
 import { useDocumentInfo } from '@payloadcms/ui'
 import { useState, useEffect } from 'react'
 
+import { fetchBroadcastsForPost, type BroadcastSummary } from '../utils/fetchBroadcastsForPost'
+
 type CreateBroadcastResponse = {
   doc?: { id: string }
   errors?: unknown[]
   message?: string
-}
-
-type BroadcastSummary = {
-  id: string
-  subject: string
-  sendStatus?: string | null
-}
-
-type BroadcastListResponse = {
-  docs?: BroadcastSummary[]
-  totalDocs?: number
 }
 
 /**
@@ -36,11 +27,8 @@ const DraftBroadcastButton: React.FC = () => {
   useEffect(() => {
     if (!id) return
     const controller = new AbortController()
-    fetch(`/api/broadcasts?where[posts][in]=${id}&depth=0&limit=10`, { signal: controller.signal })
-      .then((res) => res.json())
-      .then((json: BroadcastListResponse) => {
-        setExistingBroadcasts(json.docs ?? [])
-      })
+    fetchBroadcastsForPost(id, controller.signal)
+      .then(setExistingBroadcasts)
       .catch(() => {})
     return () => controller.abort()
   }, [id])

@@ -258,7 +258,7 @@ export const Posts: CollectionConfig<'posts'> = {
       collection: 'broadcasts',
       on: 'posts',
       admin: {
-        hidden: true,
+        condition: () => false,
         components: {
           Cell: '@/collections/Posts/components/BroadcastCell',
         },
