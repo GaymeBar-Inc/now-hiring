@@ -48,8 +48,10 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
   // fall back to whatever is already saved on the document.
   let bodyScheduledAt: string | null = null
   try {
-    const body = (await req.json()) as { scheduledAt?: string } | null
-    if (typeof body?.scheduledAt === 'string') bodyScheduledAt = body.scheduledAt
+    if (typeof req.json === 'function') {
+      const body = (await req.json()) as { scheduledAt?: string } | null
+      if (typeof body?.scheduledAt === 'string') bodyScheduledAt = body.scheduledAt
+    }
   } catch {
     // No body or non-JSON — fine, proceed without it
   }
