@@ -18,6 +18,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     collection: 'broadcasts',
     id,
     depth: 2,
+    draft: true,
   })) as Broadcast
 
   if (!broadcast) {
@@ -26,6 +27,41 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
 
   if (broadcast.sendStatus === 'sent') {
     return Response.json({ error: 'Broadcast has already been sent' }, { status: 400 })
+  }
+
+  if (broadcast.sendStatus === 'scheduled') {
+    return Response.json({ error: 'Broadcast is already scheduled in Resend' }, { status: 400 })
+  }
+
+  if (broadcast.type === 'single_post' || broadcast.type === 'weekly_digest') {
+    const posts = broadcast.posts ?? []
+    if (posts.length === 0) {
+      const label = broadcast.type === 'single_post' ? 'Single Post' : 'Weekly Digest'
+      return Response.json(
+        { error: `A ${label} broadcast requires at least one post before sending.` },
+        { status: 400 },
+      )
+    }
+  }
+
+  // scheduledAt from the POST body takes precedence (set by the UI component);
+  // fall back to whatever is already saved on the document.
+  let bodyScheduledAt: string | null = null
+  try {
+    if (typeof req.json === 'function') {
+      const body = (await req.json()) as { scheduledAt?: string } | null
+      if (typeof body?.scheduledAt === 'string') bodyScheduledAt = body.scheduledAt
+    }
+  } catch {
+    // No body or non-JSON — fine, proceed without it
+  }
+  const scheduledAt = bodyScheduledAt ?? (broadcast.scheduledAt as string | null | undefined) ?? null
+
+  if (scheduledAt && new Date(scheduledAt) <= new Date()) {
+    return Response.json(
+      { error: 'Scheduled time must be in the future.' },
+      { status: 400 },
+    )
   }
 
   // Pull audience ID and from-name from the email-settings global.
@@ -61,6 +97,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
       subject: broadcast.subject as string,
       ...(broadcast.previewText ? { previewText: broadcast.previewText as string } : {}),
       html,
+      ...(scheduledAt ? { scheduledAt } : {}),
     })
 
     if (result.status === 'error') {
@@ -80,7 +117,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     }
 
     const now = new Date().toISOString()
-    const isScheduled = Boolean(broadcast.scheduledAt)
+    const isScheduled = result.status === 'scheduled'
 
     await req.payload.update({
       collection: 'broadcasts',
@@ -88,7 +125,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
       data: {
         resendBroadcastId: result.resendBroadcastId,
         sendStatus: isScheduled ? 'scheduled' : 'sent',
-        ...(isScheduled ? {} : { sentAt: now }),
+        ...(isScheduled ? { scheduledAt } : { sentAt: now }),
         errorMessage: '',
       },
     })

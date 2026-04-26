@@ -204,9 +204,6 @@ export interface Broadcast {
    * ID returned by Resend after the broadcast is created
    */
   resendBroadcastId?: string | null;
-  /**
-   * Populated for scheduled sends
-   */
   scheduledAt?: string | null;
   /**
    * Populated on successful send

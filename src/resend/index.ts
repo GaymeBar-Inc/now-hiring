@@ -4,6 +4,10 @@ export type { CreateResendContactResult, AddToResendSegmentResult } from './cont
 export { createResendContact, addContactToResendSegment } from './contacts'
 export type { SendWelcomeEmailResult, HandleNewsletterSubscribeResult } from './newsletter'
 export { sendWelcomeEmail, handleNewsletterSubscribe } from './newsletter'
-export type { CreateAndSendBroadcastOptions, CreateAndSendBroadcastResult } from './broadcasts'
-export { createAndSendResendBroadcast, buildFromAddress } from './broadcasts'
+export type {
+  CreateAndSendBroadcastOptions,
+  CreateAndSendBroadcastResult,
+  CancelResendBroadcastResult,
+} from './broadcasts'
+export { createAndSendResendBroadcast, cancelResendBroadcast, buildFromAddress } from './broadcasts'
 export { renderEmailTemplate } from './template'
