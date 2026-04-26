@@ -23,6 +23,11 @@ export const Broadcasts: CollectionConfig = {
         return `${getServerSideURL()}/broadcast-preview/${data.id}`
       },
     },
+    components: {
+      edit: {
+        PublishButton: '@/collections/Broadcasts/components/SendBroadcastButton#SendBroadcastButton',
+      },
+    },
   },
   access: {
     read: ({ req: { user } }) => Boolean(user),
@@ -120,32 +125,6 @@ export const Broadcasts: CollectionConfig = {
     },
 
     // -------------------------------------------------------------------------
-    // Schedule — user-editable, read by the send handler
-    // -------------------------------------------------------------------------
-    {
-      name: 'scheduledAt',
-      type: 'date',
-      admin: {
-        date: { pickerAppearance: 'dayAndTime' },
-        description: 'Leave blank to send immediately. Must be a future date/time.',
-        condition: (data) => data?.sendStatus !== 'sent',
-      },
-    },
-
-    // -------------------------------------------------------------------------
-    // Send action — visible on all types once saved
-    // -------------------------------------------------------------------------
-    {
-      name: 'sendBroadcast',
-      type: 'ui',
-      admin: {
-        components: {
-          Field: '@/collections/Broadcasts/components/SendButton',
-        },
-      },
-    },
-
-    // -------------------------------------------------------------------------
     // Resend sync fields — readOnly, system writes only
     // -------------------------------------------------------------------------
     {
@@ -175,6 +154,13 @@ export const Broadcasts: CollectionConfig = {
           },
         },
       ],
+    },
+    {
+      name: 'scheduledAt',
+      type: 'date',
+      admin: {
+        condition: () => false,
+      },
     },
     {
       name: 'sentAt',

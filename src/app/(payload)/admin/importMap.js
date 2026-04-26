@@ -22,7 +22,7 @@ import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997e
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_191cb1926c3feb1c6d1605e63ae9d82a } from '@/collections/Broadcasts/components/PullPostsButton'
-import { default as default_22bd1f65984c0248fed090d58d3b678f } from '@/collections/Broadcasts/components/SendButton'
+import { SendBroadcastButton as SendBroadcastButton_970dbf8133349bf9279462360316f316 } from '@/collections/Broadcasts/components/SendBroadcastButton'
 import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { OverviewComponent as OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
@@ -72,7 +72,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/collections/Broadcasts/components/PullPostsButton#default": default_191cb1926c3feb1c6d1605e63ae9d82a,
-  "@/collections/Broadcasts/components/SendButton#default": default_22bd1f65984c0248fed090d58d3b678f,
+  "@/collections/Broadcasts/components/SendBroadcastButton#SendBroadcastButton": SendBroadcastButton_970dbf8133349bf9279462360316f316,
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,

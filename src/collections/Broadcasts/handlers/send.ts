@@ -18,6 +18,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     collection: 'broadcasts',
     id,
     depth: 2,
+    draft: true,
   })) as Broadcast
 
   if (!broadcast) {
@@ -43,7 +44,17 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     }
   }
 
-  const scheduledAt = broadcast.scheduledAt as string | null | undefined
+  // scheduledAt from the POST body takes precedence (set by the UI component);
+  // fall back to whatever is already saved on the document.
+  let bodyScheduledAt: string | null = null
+  try {
+    const body = (await req.json()) as { scheduledAt?: string } | null
+    if (typeof body?.scheduledAt === 'string') bodyScheduledAt = body.scheduledAt
+  } catch {
+    // No body or non-JSON — fine, proceed without it
+  }
+  const scheduledAt = bodyScheduledAt ?? (broadcast.scheduledAt as string | null | undefined) ?? null
+
   if (scheduledAt && new Date(scheduledAt) <= new Date()) {
     return Response.json(
       { error: 'Scheduled time must be in the future.' },
@@ -112,7 +123,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
       data: {
         resendBroadcastId: result.resendBroadcastId,
         sendStatus: isScheduled ? 'scheduled' : 'sent',
-        ...(isScheduled ? {} : { sentAt: now }),
+        ...(isScheduled ? { scheduledAt } : { sentAt: now }),
         errorMessage: '',
       },
     })
