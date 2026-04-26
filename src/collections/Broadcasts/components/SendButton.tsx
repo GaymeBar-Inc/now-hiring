@@ -5,10 +5,24 @@ import { useState } from 'react'
 
 type BroadcastStatus = 'draft' | 'scheduled' | 'sent' | 'failed'
 
+function formatScheduledAt(iso: string): string {
+  return new Date(iso).toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  })
+}
+
 /**
  * UI field rendered at the bottom of every broadcast form.
- * Posts to /api/broadcasts/:id/send, then reloads the page to reflect
- * the updated status, sentAt, and resendBroadcastId fields.
+ *
+ * - No scheduledAt set → "Send Now" button (immediate send)
+ * - scheduledAt set, status draft/failed → "Schedule for [date]" button
+ * - status === 'scheduled' → shows scheduled time + "Cancel Schedule" button
+ * - status === 'sent' → shows confirmation with Resend ID
  */
 const SendButton: React.FC = () => {
   const [loading, setLoading] = useState(false)
@@ -18,17 +32,21 @@ const SendButton: React.FC = () => {
 
   const status = (savedDocumentData?.sendStatus ?? 'draft') as BroadcastStatus
   const resendBroadcastId = savedDocumentData?.resendBroadcastId as string | undefined
+  const scheduledAt = savedDocumentData?.scheduledAt as string | undefined | null
 
   const isSent = status === 'sent'
   const isScheduled = status === 'scheduled'
   const isNewDoc = !id
+  const isWillSchedule = Boolean(scheduledAt) && !isSent && !isScheduled
 
   const handleSend = async () => {
     if (!id || isSent || isScheduled) return
 
-    const confirmed = window.confirm(
-      'Send this broadcast to all subscribers? This cannot be undone.',
-    )
+    const label = isWillSchedule
+      ? `Schedule this broadcast for ${formatScheduledAt(scheduledAt!)}? It will be sent automatically at that time.`
+      : 'Send this broadcast to all subscribers now? This cannot be undone.'
+
+    const confirmed = window.confirm(label)
     if (!confirmed) return
 
     setLoading(true)
@@ -50,7 +68,33 @@ const SendButton: React.FC = () => {
     }
   }
 
-  // Don't render anything until the doc has been saved at least once
+  const handleCancel = async () => {
+    if (!id || !isScheduled) return
+
+    const confirmed = window.confirm(
+      'Cancel this scheduled broadcast? It will be removed from Resend and reset to draft.',
+    )
+    if (!confirmed) return
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      const res = await fetch(`/api/broadcasts/${id}/cancel`, { method: 'POST' })
+      const json = (await res.json()) as { success?: boolean; error?: string }
+
+      if (json.success) {
+        window.location.reload()
+      } else {
+        setError(json.error ?? 'Cancel failed — try again.')
+      }
+    } catch {
+      setError('Request failed — check your network and try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   if (isNewDoc) return null
 
   return (
@@ -71,10 +115,25 @@ const SendButton: React.FC = () => {
         </p>
       )}
 
-      {isScheduled && (
-        <p style={{ color: 'var(--theme-text)', fontSize: '14px' }}>
-          Scheduled — Resend ID: {resendBroadcastId}
-        </p>
+      {isScheduled && scheduledAt && (
+        <div>
+          <p style={{ color: 'var(--theme-text)', fontSize: '14px', marginBottom: '10px' }}>
+            ⏱ Scheduled for {formatScheduledAt(scheduledAt)}
+            {resendBroadcastId && (
+              <span style={{ color: 'var(--theme-text-dim)', fontSize: '12px', display: 'block', marginTop: '2px' }}>
+                Resend ID: {resendBroadcastId}
+              </span>
+            )}
+          </p>
+          <button
+            type="button"
+            onClick={handleCancel}
+            disabled={loading}
+            className="btn btn--style-error btn--size-medium"
+          >
+            {loading ? 'Cancelling…' : 'Cancel Schedule'}
+          </button>
+        </div>
       )}
 
       {!isSent && !isScheduled && (
@@ -91,7 +150,11 @@ const SendButton: React.FC = () => {
             disabled={loading}
             className="btn btn--style-primary btn--size-medium"
           >
-            {loading ? 'Sending…' : 'Send Now'}
+            {loading
+              ? isWillSchedule ? 'Scheduling…' : 'Sending…'
+              : isWillSchedule
+                ? `Schedule for ${formatScheduledAt(scheduledAt!)}`
+                : 'Send Now'}
           </button>
 
           {error && (

@@ -197,6 +197,10 @@ export interface Broadcast {
    */
   posts?: (number | Post)[] | null;
   /**
+   * Leave blank to send immediately. Must be a future date/time.
+   */
+  scheduledAt?: string | null;
+  /**
    * Managed by the system — updated after Resend API calls
    */
   sendStatus?: ('draft' | 'scheduled' | 'sent' | 'failed') | null;
@@ -204,10 +208,6 @@ export interface Broadcast {
    * ID returned by Resend after the broadcast is created
    */
   resendBroadcastId?: string | null;
-  /**
-   * Populated for scheduled sends
-   */
-  scheduledAt?: string | null;
   /**
    * Populated on successful send
    */
@@ -1141,9 +1141,9 @@ export interface BroadcastsSelect<T extends boolean = true> {
   previewText?: T;
   body?: T;
   posts?: T;
+  scheduledAt?: T;
   sendStatus?: T;
   resendBroadcastId?: T;
-  scheduledAt?: T;
   sentAt?: T;
   errorMessage?: T;
   updatedAt?: T;

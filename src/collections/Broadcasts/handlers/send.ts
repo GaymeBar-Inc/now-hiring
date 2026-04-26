@@ -43,6 +43,14 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     }
   }
 
+  const scheduledAt = broadcast.scheduledAt as string | null | undefined
+  if (scheduledAt && new Date(scheduledAt) <= new Date()) {
+    return Response.json(
+      { error: 'Scheduled time must be in the future.' },
+      { status: 400 },
+    )
+  }
+
   // Pull audience ID and from-name from the email-settings global.
   // RESEND_FROM_ADDRESS (the verified sender address) stays in .env — only the
   // display name and audience ID are admin-configurable.
@@ -76,6 +84,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
       subject: broadcast.subject as string,
       ...(broadcast.previewText ? { previewText: broadcast.previewText as string } : {}),
       html,
+      ...(scheduledAt ? { scheduledAt } : {}),
     })
 
     if (result.status === 'error') {
@@ -95,14 +104,15 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     }
 
     const now = new Date().toISOString()
+    const isScheduled = result.status === 'scheduled'
 
     await req.payload.update({
       collection: 'broadcasts',
       id,
       data: {
         resendBroadcastId: result.resendBroadcastId,
-        sendStatus: 'sent',
-        sentAt: now,
+        sendStatus: isScheduled ? 'scheduled' : 'sent',
+        ...(isScheduled ? {} : { sentAt: now }),
         errorMessage: '',
       },
     })

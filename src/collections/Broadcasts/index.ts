@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { sendBroadcastHandler } from './handlers/send'
+import { cancelBroadcastHandler } from './handlers/cancel'
 import { weeklyPostsHandler } from './handlers/weeklyPosts'
 import { getServerSideURL } from '../../utilities/getURL'
 
@@ -43,6 +44,13 @@ export const Broadcasts: CollectionConfig = {
       path: '/:id/send',
       method: 'post',
       handler: sendBroadcastHandler,
+    },
+    {
+      // POST /api/broadcasts/:id/cancel
+      // Cancels a scheduled broadcast in Resend and resets status to draft
+      path: '/:id/cancel',
+      method: 'post',
+      handler: cancelBroadcastHandler,
     },
   ],
   fields: [
@@ -112,6 +120,19 @@ export const Broadcasts: CollectionConfig = {
     },
 
     // -------------------------------------------------------------------------
+    // Schedule — user-editable, read by the send handler
+    // -------------------------------------------------------------------------
+    {
+      name: 'scheduledAt',
+      type: 'date',
+      admin: {
+        date: { pickerAppearance: 'dayAndTime' },
+        description: 'Leave blank to send immediately. Must be a future date/time.',
+        condition: (data) => data?.sendStatus !== 'sent',
+      },
+    },
+
+    // -------------------------------------------------------------------------
     // Send action — visible on all types once saved
     // -------------------------------------------------------------------------
     {
@@ -156,27 +177,13 @@ export const Broadcasts: CollectionConfig = {
       ],
     },
     {
-      type: 'row',
-      fields: [
-        {
-          name: 'scheduledAt',
-          type: 'date',
-          admin: {
-            readOnly: true,
-            date: { pickerAppearance: 'dayAndTime' },
-            description: 'Populated for scheduled sends',
-          },
-        },
-        {
-          name: 'sentAt',
-          type: 'date',
-          admin: {
-            readOnly: true,
-            date: { pickerAppearance: 'dayAndTime' },
-            description: 'Populated on successful send',
-          },
-        },
-      ],
+      name: 'sentAt',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        date: { pickerAppearance: 'dayAndTime' },
+        description: 'Populated on successful send',
+      },
     },
     {
       name: 'errorMessage',
