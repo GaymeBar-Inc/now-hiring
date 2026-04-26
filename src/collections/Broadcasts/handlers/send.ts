@@ -28,6 +28,21 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     return Response.json({ error: 'Broadcast has already been sent' }, { status: 400 })
   }
 
+  if (broadcast.sendStatus === 'scheduled') {
+    return Response.json({ error: 'Broadcast is already scheduled in Resend' }, { status: 400 })
+  }
+
+  if (broadcast.type === 'single_post' || broadcast.type === 'weekly_digest') {
+    const posts = broadcast.posts ?? []
+    if (posts.length === 0) {
+      const label = broadcast.type === 'single_post' ? 'Single Post' : 'Weekly Digest'
+      return Response.json(
+        { error: `A ${label} broadcast requires at least one post before sending.` },
+        { status: 400 },
+      )
+    }
+  }
+
   // Pull audience ID and from-name from the email-settings global.
   // RESEND_FROM_ADDRESS (the verified sender address) stays in .env — only the
   // display name and audience ID are admin-configurable.
@@ -80,15 +95,14 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     }
 
     const now = new Date().toISOString()
-    const isScheduled = Boolean(broadcast.scheduledAt)
 
     await req.payload.update({
       collection: 'broadcasts',
       id,
       data: {
         resendBroadcastId: result.resendBroadcastId,
-        sendStatus: isScheduled ? 'scheduled' : 'sent',
-        ...(isScheduled ? {} : { sentAt: now }),
+        sendStatus: 'sent',
+        sentAt: now,
         errorMessage: '',
       },
     })
