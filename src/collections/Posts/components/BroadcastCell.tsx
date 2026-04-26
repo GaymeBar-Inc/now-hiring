@@ -71,7 +71,10 @@ const BroadcastCell: React.FC<BroadcastCellProps> = ({ rowData }) => {
   }
 
   return (
-    <span style={{ color: 'var(--theme-text-dim)', fontSize: '16px', lineHeight: 1 }} title="No broadcasts">
+    <span
+      style={{ color: 'var(--theme-text-dim)', fontSize: '16px', lineHeight: 1 }}
+      title="No broadcasts"
+    >
       —
     </span>
   )
