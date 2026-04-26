@@ -13,6 +13,13 @@ type ResolveOptions = {
    * browser can reach localhost. Leave false (default) for sent emails.
    */
   preview?: boolean
+  /**
+   * Serve images through the /media/ proxy route so URLs align with the
+   * sending domain (updates.jasontoups.com) rather than the Vercel Blob CDN.
+   * Automatically ignored on localhost where the proxy URL is unreachable
+   * for external email clients.
+   */
+  email?: boolean
 }
 
 function getVercelBlobUrl(filename: string): string | null {
@@ -41,10 +48,17 @@ export function resolvePayloadImageUrl(
 ): string | null {
   if (!image || typeof image === 'number') return null
 
-  const { preferSmall = false, preview = false } = options
+  const { preferSmall = false, preview = false, email = false } = options
 
   const url = (preferSmall ? image.sizes?.small?.url : null) ?? image.url
   const filename = (preferSmall ? image.sizes?.small?.filename : null) ?? image.filename
+
+  const serverUrl = getServerSideURL()
+  const useProxy = email && !serverUrl.includes('localhost')
+
+  if (useProxy && filename) {
+    return `${serverUrl}/media/${encodeURIComponent(filename)}`
+  }
 
   if (url) {
     if (url.startsWith('https://')) return url
@@ -62,7 +76,7 @@ export function resolvePayloadImageUrl(
 
   // Final fallback — prepend server URL, block if localhost unless preview
   if (!url) return null
-  const resolved = `${getServerSideURL()}${url}`
+  const resolved = `${serverUrl}${url}`
   if (resolved.startsWith('http://localhost') && !preview) return null
   return resolved
 }

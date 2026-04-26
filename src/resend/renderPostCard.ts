@@ -16,8 +16,9 @@ export function renderPostCard(post: Post, preview = false): string {
     resolvePayloadImageUrl(post.meta?.image as Media | number | null | undefined, {
       preferSmall: true,
       preview,
+      email: !preview,
     }) ??
-    resolvePayloadImageUrl(post.heroImage, { preferSmall: true, preview })
+    resolvePayloadImageUrl(post.heroImage, { preferSmall: true, preview, email: !preview })
   const description = post.meta?.description ?? null
   const publishedAt = post.publishedAt ? formatDate(post.publishedAt) : null
 
