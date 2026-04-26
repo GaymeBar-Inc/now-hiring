@@ -14,7 +14,7 @@ const PLATFORM_LABELS: Record<string, string> = {
 }
 
 function resolveLogoUrl(logo: ((number | null) | Media) | undefined | null): string | null {
-  return resolvePayloadImageUrl(logo as Media | number | null | undefined)
+  return resolvePayloadImageUrl(logo as Media | number | null | undefined, { email: true })
 }
 
 /**
