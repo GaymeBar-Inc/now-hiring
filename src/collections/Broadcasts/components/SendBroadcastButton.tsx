@@ -169,7 +169,7 @@ export const SendBroadcastButton: React.FC = () => {
   }
 
   return (
-    <>
+    <div style={{ position: 'relative' }}>
       <FormSubmit
         buttonId="action-send-broadcast"
         buttonStyle="primary"
@@ -183,17 +183,45 @@ export const SendBroadcastButton: React.FC = () => {
         {buttonLabel}
       </FormSubmit>
       {error && (
-        <p
+        <div
           style={{
+            background: 'var(--theme-elevation-100)',
+            border: '1px solid var(--theme-error-500)',
+            borderRadius: '4px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
             color: 'var(--theme-error-500)',
             fontSize: '12px',
-            marginTop: '4px',
+            left: 0,
+            marginTop: '6px',
+            padding: '8px 32px 8px 10px',
             position: 'absolute',
+            top: '100%',
+            width: '260px',
+            zIndex: 10,
           }}
         >
+          <button
+            aria-label="Dismiss error"
+            onClick={() => setError(null)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--theme-error-500)',
+              cursor: 'pointer',
+              fontSize: '14px',
+              lineHeight: 1,
+              padding: '2px 4px',
+              position: 'absolute',
+              right: '4px',
+              top: '4px',
+            }}
+            type="button"
+          >
+            ×
+          </button>
           {error}
-        </p>
+        </div>
       )}
-    </>
+    </div>
   )
 }
