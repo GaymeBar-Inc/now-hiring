@@ -4,6 +4,7 @@ import { DatePicker, FormSubmit, PopupList, useDocumentInfo } from '@payloadcms/
 import { useState } from 'react'
 
 type BroadcastStatus = 'draft' | 'failed' | 'scheduled' | 'sent'
+type SendPhase = 'idle' | 'confirming' | 'sending' | 'sent'
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleString('en-US', {
@@ -22,37 +23,44 @@ export const SendBroadcastButton: React.FC = () => {
   const status = (savedDocumentData?.sendStatus ?? 'draft') as BroadcastStatus
   const scheduledAt = savedDocumentData?.scheduledAt as string | null | undefined
 
-  const [loading, setLoading] = useState(false)
+  const [sendPhase, setSendPhase] = useState<SendPhase>('idle')
+  const [scheduleLoading, setScheduleLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pickedDate, setPickedDate] = useState<Date | null>(null)
 
-  const isSent = status === 'sent'
+  const isSent = status === 'sent' || sendPhase === 'sent'
   const isScheduled = status === 'scheduled'
-  const canSend = !isSent && !isScheduled && !loading
+  const isConfirming = sendPhase === 'confirming'
+  const isSending = sendPhase === 'sending'
+  const canSend = !isSent && !isScheduled && !scheduleLoading && sendPhase === 'idle'
 
   if (!id) return null
 
-  const handleSendNow = async () => {
+  const handleSendClick = () => {
     if (!canSend) return
-    if (!window.confirm('Send this broadcast to all subscribers now? This cannot be undone.'))
-      return
+    setSendPhase('confirming')
+  }
 
-    setLoading(true)
+  const handleConfirmSend = async () => {
+    setSendPhase('sending')
     setError(null)
     try {
       const res = await fetch(`/api/broadcasts/${id}/send`, { method: 'POST' })
       const json = (await res.json()) as { success?: boolean; error?: string }
       if (json.success) {
-        window.location.reload()
+        setSendPhase('sent')
+        setTimeout(() => window.location.reload(), 1500)
       } else {
+        setSendPhase('idle')
         setError(json.error ?? 'Send failed — try again.')
       }
     } catch {
+      setSendPhase('idle')
       setError('Request failed — check your network and try again.')
-    } finally {
-      setLoading(false)
     }
   }
+
+  const handleCancelConfirm = () => setSendPhase('idle')
 
   const handleSchedule = async (close: () => void) => {
     if (!pickedDate) return
@@ -61,7 +69,7 @@ export const SendBroadcastButton: React.FC = () => {
       return
     }
     close()
-    setLoading(true)
+    setScheduleLoading(true)
     setError(null)
     try {
       const res = await fetch(`/api/broadcasts/${id}/send`, {
@@ -78,7 +86,7 @@ export const SendBroadcastButton: React.FC = () => {
     } catch {
       setError('Request failed — check your network and try again.')
     } finally {
-      setLoading(false)
+      setScheduleLoading(false)
     }
   }
 
@@ -90,7 +98,7 @@ export const SendBroadcastButton: React.FC = () => {
     )
       return
     close()
-    setLoading(true)
+    setScheduleLoading(true)
     setError(null)
     try {
       const res = await fetch(`/api/broadcasts/${id}/cancel`, { method: 'POST' })
@@ -103,17 +111,21 @@ export const SendBroadcastButton: React.FC = () => {
     } catch {
       setError('Request failed — check your network and try again.')
     } finally {
-      setLoading(false)
+      setScheduleLoading(false)
     }
   }
 
   const buttonLabel = isSent
-    ? '✓ Sent'
-    : isScheduled
-      ? `⏱ Scheduled`
-      : loading
-        ? '…'
-        : 'Send Broadcast'
+    ? '✓ Broadcast Sent'
+    : isConfirming
+      ? 'Confirming Send'
+      : isSending
+        ? 'Sending Broadcast'
+        : isScheduled
+          ? '⏱ Scheduled'
+          : scheduleLoading
+            ? '…'
+            : 'Send Broadcast'
 
   const subMenuContent = ({ close }: { close: () => void }): React.ReactNode => {
     if (isSent) return null
@@ -154,7 +166,7 @@ export const SendBroadcastButton: React.FC = () => {
         />
         <button
           className="btn btn--style-primary btn--size-small"
-          disabled={!pickedDate || loading}
+          disabled={!pickedDate || scheduleLoading}
           onClick={() => handleSchedule(close)}
           style={{ marginTop: '10px', width: '100%' }}
           type="button"
@@ -183,12 +195,76 @@ export const SendBroadcastButton: React.FC = () => {
 
   return (
     <div style={{ position: 'relative' }}>
+      {isConfirming && (
+        <div
+          style={{
+            alignItems: 'center',
+            background: 'rgba(0, 0, 0, 0.5)',
+            bottom: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            left: 0,
+            position: 'fixed',
+            right: 0,
+            top: 0,
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              background: 'var(--theme-elevation-0)',
+              borderRadius: '8px',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.24)',
+              maxWidth: '420px',
+              padding: '28px 28px 24px',
+              width: '90%',
+            }}
+          >
+            <p
+              style={{
+                color: 'var(--theme-text)',
+                fontSize: '15px',
+                fontWeight: 600,
+                marginBottom: '8px',
+              }}
+            >
+              Send Broadcast
+            </p>
+            <p
+              style={{
+                color: 'var(--theme-text-dim)',
+                fontSize: '13px',
+                lineHeight: 1.5,
+                marginBottom: '24px',
+              }}
+            >
+              Send this broadcast to all subscribers now? This cannot be undone.
+            </p>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <button
+                className="btn btn--style-secondary btn--size-medium"
+                onClick={handleCancelConfirm}
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn--style-primary btn--size-medium"
+                onClick={handleConfirmSend}
+                type="button"
+              >
+                Confirm Send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <FormSubmit
         buttonId="action-send-broadcast"
         buttonStyle="primary"
         disabled={!canSend}
-        enableSubMenu={!isSent}
-        onClick={canSend ? handleSendNow : undefined}
+        enableSubMenu={!isSent && sendPhase === 'idle'}
+        onClick={canSend ? handleSendClick : undefined}
         size="medium"
         SubMenuPopupContent={subMenuContent}
         type="button"
