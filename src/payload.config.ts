@@ -7,6 +7,7 @@ import type { Payload, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Keywords } from './collections/Keywords'
 import { Broadcasts } from './collections/Broadcasts'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -104,7 +105,7 @@ export default buildConfig({
       connectionString: process.env.POSTGRES_URL || '',
     },
   }),
-  collections: [Broadcasts, Pages, Posts, Media, Categories, Users],
+  collections: [Broadcasts, Pages, Posts, Media, Categories, Keywords, Users],
   cors: [getServerSideURL()].filter(Boolean),
   email: resendAdapter({
     apiKey: process.env.RESEND_API_KEY!,

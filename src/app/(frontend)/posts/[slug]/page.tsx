@@ -12,6 +12,7 @@ import type { Post } from '@/payload-types'
 
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getRelatedPostsByKeywords } from '@/utilities/getRelatedPostsByKeywords'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -51,6 +52,15 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  const keywordIds = (post.keywords ?? []).map((k) =>
+    typeof k === 'object' ? k.id : k,
+  )
+
+  const relatedByKeywords =
+    keywordIds.length > 0
+      ? await getRelatedPostsByKeywords({ keywordIds, currentPostId: post.id })
+      : []
+
   return (
     <article className="pt-16 pb-16">
       <PageClient />
@@ -65,11 +75,11 @@ export default async function Post({ params: paramsPromise }: Args) {
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
           <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
-            <RelatedPosts
-              className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
-            />
+          {relatedByKeywords.length > 0 && (
+            <div className="mt-12 max-w-[52rem] mx-auto">
+              <h2 className="text-xl font-semibold mb-6">Related Posts</h2>
+              <RelatedPosts docs={relatedByKeywords} />
+            </div>
           )}
         </div>
       </div>

@@ -253,6 +253,28 @@ export const Posts: CollectionConfig<'posts'> = {
       },
     },
     {
+      name: 'keywords',
+      type: 'relationship',
+      relationTo: 'keywords',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/collections/Posts/components/KeywordsInputField',
+        },
+      },
+    },
+    {
+      name: 'keywordFrequency',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: '@/collections/Posts/components/KeywordFrequencyField',
+        },
+      },
+    },
+    {
       name: 'broadcasts',
       type: 'join',
       collection: 'broadcasts',

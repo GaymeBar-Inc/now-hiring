@@ -34,6 +34,8 @@ import { default as default_df7eb999ede7363ee297ab1263291c5c } from '@/collectio
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_000ace4bf1f9ff748ac15c677b9ef3f5 } from '@/collections/Posts/components/PostSlugField'
 import { default as default_72de2780787708611145fd8a30acae54 } from '@/collections/Posts/components/DraftBroadcastButton'
+import { default as default_b49834c38af02a233bd8ffd68317c41f } from '@/collections/Posts/components/KeywordsInputField'
+import { default as default_af9113d48444c00bb4919c8ae754b46f } from '@/collections/Posts/components/KeywordFrequencyField'
 import { default as default_9a0786c1d342d6df4705248ae531b25d } from '@/collections/Posts/components/BroadcastCell'
 import { FolderTableCell as FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { FolderField as FolderField_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
@@ -84,6 +86,8 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/collections/Posts/components/PostSlugField#default": default_000ace4bf1f9ff748ac15c677b9ef3f5,
   "@/collections/Posts/components/DraftBroadcastButton#default": default_72de2780787708611145fd8a30acae54,
+  "@/collections/Posts/components/KeywordsInputField#default": default_b49834c38af02a233bd8ffd68317c41f,
+  "@/collections/Posts/components/KeywordFrequencyField#default": default_af9113d48444c00bb4919c8ae754b46f,
   "@/collections/Posts/components/BroadcastCell#default": default_9a0786c1d342d6df4705248ae531b25d,
   "@payloadcms/next/rsc#FolderTableCell": FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/next/rsc#FolderField": FolderField_f9c02e79a4aed9a3924487c0cd4cafb1,

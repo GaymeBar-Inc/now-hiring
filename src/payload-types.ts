@@ -72,6 +72,7 @@ export interface Config {
     posts: Post;
     media: Media;
     categories: Category;
+    keywords: Keyword;
     users: User;
     redirects: Redirect;
     forms: Form;
@@ -98,6 +99,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    keywords: KeywordsSelect<false> | KeywordsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -263,6 +265,7 @@ export interface Post {
    */
   generateSlug?: boolean | null;
   slug: string;
+  keywords?: (number | Keyword)[] | null;
   broadcasts?: {
     docs?: (number | Broadcast)[];
     hasNextPage?: boolean;
@@ -440,6 +443,16 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "keywords".
+ */
+export interface Keyword {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1063,6 +1076,10 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
+        relationTo: 'keywords';
+        value: number | Keyword;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -1309,6 +1326,7 @@ export interface PostsSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  keywords?: T;
   broadcasts?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1425,6 +1443,15 @@ export interface CategoriesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "keywords_select".
+ */
+export interface KeywordsSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
 }
