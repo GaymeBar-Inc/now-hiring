@@ -32,7 +32,7 @@ export async function sendWelcomeEmail(
 
   const normalizedTo = to.trim().toLowerCase()
 
-  const fromAddress = process.env.RESEND_FROM_ADDRESS
+  const fromAddress = process.env.RESEND_FROM_ADDRESS?.replace(/^["']|["']$/g, '')
   if (!fromAddress) {
     console.warn('[Resend] Missing RESEND_FROM_ADDRESS. Skipping welcome email.')
     return { status: 'skipped', reason: 'missing_from_address' }

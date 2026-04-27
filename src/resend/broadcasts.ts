@@ -7,7 +7,7 @@ import { getResendClient } from './client'
  * Returns null if the address env var is missing so the caller can bail early.
  */
 export function buildFromAddress(displayName: string): string | null {
-  const address = process.env.RESEND_FROM_ADDRESS
+  const address = process.env.RESEND_FROM_ADDRESS?.replace(/^["']|["']$/g, '')
   if (!address) return null
   return `${displayName} <${address}>`
 }
