@@ -34,7 +34,8 @@ export const SendBroadcastButton: React.FC = () => {
 
   const handleSendNow = async () => {
     if (!canSend) return
-    if (!window.confirm('Send this broadcast to all subscribers now? This cannot be undone.')) return
+    if (!window.confirm('Send this broadcast to all subscribers now? This cannot be undone.'))
+      return
 
     setLoading(true)
     setError(null)
@@ -82,7 +83,12 @@ export const SendBroadcastButton: React.FC = () => {
   }
 
   const handleCancelSchedule = async (close: () => void) => {
-    if (!window.confirm('Cancel this scheduled broadcast? It will be removed from Resend and reset to draft.')) return
+    if (
+      !window.confirm(
+        'Cancel this scheduled broadcast? It will be removed from Resend and reset to draft.',
+      )
+    )
+      return
     close()
     setLoading(true)
     setError(null)
@@ -131,7 +137,14 @@ export const SendBroadcastButton: React.FC = () => {
 
     return (
       <div style={{ padding: '12px 16px 16px', minWidth: '270px' }}>
-        <p style={{ fontSize: '13px', fontWeight: 600, marginBottom: '10px', color: 'var(--theme-text)' }}>
+        <p
+          style={{
+            fontSize: '13px',
+            fontWeight: 600,
+            marginBottom: '10px',
+            color: 'var(--theme-text)',
+          }}
+        >
           Schedule Broadcast
         </p>
         <DatePicker
@@ -191,7 +204,7 @@ export const SendBroadcastButton: React.FC = () => {
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
             color: 'var(--theme-error-500)',
             fontSize: '12px',
-            left: 0,
+            right: 0,
             marginTop: '6px',
             padding: '8px 32px 8px 10px',
             position: 'absolute',
