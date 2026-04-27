@@ -115,17 +115,16 @@ export const SendBroadcastButton: React.FC = () => {
     }
   }
 
-  const buttonLabel = isSent
-    ? '✓ Broadcast Sent'
-    : isConfirming
-      ? 'Confirming Send'
-      : isSending
-        ? 'Sending Broadcast'
-        : isScheduled
-          ? '⏱ Scheduled'
-          : scheduleLoading
-            ? '…'
-            : 'Send Broadcast'
+  const buttonLabel = (() => {
+    switch (true) {
+      case isSent: return '✓ Broadcast Sent'
+      case isConfirming: return 'Confirming Send'
+      case isSending: return 'Sending Broadcast'
+      case isScheduled: return '⏱ Scheduled'
+      case scheduleLoading: return '…'
+      default: return 'Send Broadcast'
+    }
+  })()
 
   const subMenuContent = ({ close }: { close: () => void }): React.ReactNode => {
     if (isSent) return null
