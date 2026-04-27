@@ -117,12 +117,18 @@ export const SendBroadcastButton: React.FC = () => {
 
   const buttonLabel = (() => {
     switch (true) {
-      case isSent: return '✓ Broadcast Sent'
-      case isConfirming: return 'Confirming Send'
-      case isSending: return 'Sending Broadcast'
-      case isScheduled: return '⏱ Scheduled'
-      case scheduleLoading: return '…'
-      default: return 'Send Broadcast'
+      case isSent:
+        return '✓ Broadcast Sent'
+      case isConfirming:
+        return 'Confirming Send'
+      case isSending:
+        return 'Sending Broadcast'
+      case isScheduled:
+        return '⏱ Scheduled'
+      case scheduleLoading:
+        return 'Loading'
+      default:
+        return 'Send Broadcast'
     }
   })()
 
