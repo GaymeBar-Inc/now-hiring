@@ -52,12 +52,8 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
-  const keywordIds = (post.keywords ?? []).map((k) =>
-    typeof k === 'object' ? k.id : k,
-  )
-  const categoryIds = (post.categories ?? []).map((k) =>
-    typeof k === 'object' ? k.id : k,
-  )
+  const keywordIds = (post.keywords ?? []).map((k) => (typeof k === 'object' ? k.id : k))
+  const categoryIds = (post.categories ?? []).map((k) => (typeof k === 'object' ? k.id : k))
 
   const relatedPosts = await getRelatedPostsByKeywords({
     keywordIds,
@@ -77,15 +73,13 @@ export default async function Post({ params: paramsPromise }: Args) {
       <PostHero post={post} />
 
       <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
-          {relatedPosts.length > 0 && (
-            <div className="mt-12 max-w-[52rem] mx-auto">
-              <h2 className="text-xl font-semibold mb-6">Related Posts</h2>
-              <RelatedPosts docs={relatedPosts} />
-            </div>
-          )}
-        </div>
+        <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
+        {relatedPosts.length > 0 && (
+          <section className="w-full">
+            <h2 className="text-xl font-semibold mb-6">Related Posts</h2>
+            <RelatedPosts docs={relatedPosts} />
+          </section>
+        )}
       </div>
     </article>
   )
