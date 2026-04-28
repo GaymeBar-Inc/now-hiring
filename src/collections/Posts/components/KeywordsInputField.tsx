@@ -3,6 +3,8 @@
 import { useField } from '@payloadcms/ui'
 import { useEffect, useRef, useState } from 'react'
 
+import { SideBarSection } from '@/components/ui/sidebarSections'
+
 type KeywordDoc = {
   id: string | number
   name: string
@@ -179,18 +181,7 @@ const KeywordsInputField: React.FC = () => {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <label
-        style={{
-          color: 'var(--theme-text)',
-          display: 'block',
-          fontSize: '13px',
-          fontWeight: 600,
-        }}
-      >
-        Keywords
-      </label>
-
+    <SideBarSection title="Keywords">
       {/* Chips + text input */}
       <div
         onClick={() => inputRef.current?.focus()}
@@ -215,7 +206,7 @@ const KeywordsInputField: React.FC = () => {
               borderRadius: '3px',
               color: 'var(--theme-text)',
               display: 'inline-flex',
-              fontSize: '12px',
+              fontSize: '16px',
               gap: '4px',
               padding: '2px 6px',
             }}
@@ -232,7 +223,7 @@ const KeywordsInputField: React.FC = () => {
                 border: 'none',
                 color: 'var(--theme-text-dim)',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: '16px',
                 lineHeight: 1,
                 padding: '0 2px',
               }}
@@ -289,8 +280,7 @@ const KeywordsInputField: React.FC = () => {
               }}
               onMouseEnter={() => setHighlightIndex(i)}
               style={{
-                background:
-                  i === highlightIndex ? 'var(--theme-elevation-100)' : 'transparent',
+                background: i === highlightIndex ? 'var(--theme-elevation-100)' : 'transparent',
                 color: 'var(--theme-text)',
                 cursor: 'pointer',
                 fontSize: '13px',
@@ -302,11 +292,10 @@ const KeywordsInputField: React.FC = () => {
           ))}
         </ul>
       )}
-
-      <p style={{ color: 'var(--theme-text-dim)', fontSize: '11px', margin: 0 }}>
+      <label style={{ color: 'var(--theme-text-dim)', fontSize: '14px', margin: '0 0 8px' }}>
         Separate keywords by commas.
-      </p>
-    </div>
+      </label>
+    </SideBarSection>
   )
 }
 

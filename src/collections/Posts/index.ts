@@ -288,7 +288,13 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   ],
   hooks: {
-    beforeChange: [syncHeroToMetaImage, syncTitleToMetaTitle, syncCategoriesToMetaTitle, syncContentToMetaDescription, syncTitleToSlug],
+    beforeChange: [
+      syncHeroToMetaImage,
+      syncTitleToMetaTitle,
+      syncCategoriesToMetaTitle,
+      syncContentToMetaDescription,
+      syncTitleToSlug,
+    ],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],

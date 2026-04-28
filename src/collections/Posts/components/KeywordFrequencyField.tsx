@@ -4,9 +4,10 @@ import { useField } from '@payloadcms/ui'
 import { useEffect, useRef, useState } from 'react'
 
 import { extractLexicalText } from '@/utilities/extractLexicalText'
+import { SideBarSubSection } from '@/components/ui/sidebarSections'
 
 type KeywordEntry = {
-  id: string
+  id: string | number
   name: string
   count: number
 }
@@ -32,14 +33,15 @@ function getThreshold(count: number): ThresholdResult {
   return { color: '#f97316', label: 'High' }
 }
 
-function extractIds(fieldValue: unknown): string[] {
+function extractIds(fieldValue: unknown): (string | number)[] {
   if (!Array.isArray(fieldValue)) return []
   return fieldValue.flatMap((item) => {
     if (typeof item === 'string') return [item]
+    if (typeof item === 'number') return [item]
     if (typeof item === 'object' && item !== null) {
       const obj = item as Record<string, unknown>
       const id = obj.value ?? obj.id
-      if (typeof id === 'string') return [id]
+      if (typeof id === 'string' || typeof id === 'number') return [id]
     }
     return []
   })
@@ -50,7 +52,7 @@ const KeywordFrequencyField: React.FC = () => {
   const { value: keywordsRaw } = useField<unknown>({ path: 'keywords' })
 
   const [entries, setEntries] = useState<KeywordEntry[]>([])
-  const nameCache = useRef<Record<string, string>>({})
+  const nameCache = useRef<Record<string | number, string>>({})
 
   const keywordIds = extractIds(keywordsRaw)
 
@@ -65,9 +67,7 @@ const KeywordFrequencyField: React.FC = () => {
     const compute = async () => {
       if (uncached.length > 0) {
         try {
-          const res = await fetch(
-            `/api/keywords?where[id][in]=${uncached.join(',')}&limit=50`,
-          )
+          const res = await fetch(`/api/keywords?where[id][in]=${uncached.join(',')}&limit=50`)
           if (res.ok) {
             const data = (await res.json()) as { docs: Array<{ id: string; name: string }> }
             for (const kw of data.docs) {
@@ -101,20 +101,8 @@ const KeywordFrequencyField: React.FC = () => {
   if (!entries.length) return null
 
   return (
-    <div style={{ marginTop: '8px', marginBottom: '4px' }}>
-      <p
-        style={{
-          color: 'var(--theme-text-dim)',
-          fontSize: '11px',
-          fontWeight: 600,
-          letterSpacing: '0.05em',
-          marginBottom: '6px',
-          textTransform: 'uppercase',
-        }}
-      >
-        Keyword Frequency
-      </p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <SideBarSubSection title="Keyword Frequency">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {entries.map(({ id, name, count }) => {
           const { color, label } = getThreshold(count)
           return (
@@ -123,7 +111,7 @@ const KeywordFrequencyField: React.FC = () => {
               style={{
                 alignItems: 'center',
                 display: 'flex',
-                fontSize: '12px',
+                fontSize: '18px',
                 justifyContent: 'space-between',
               }}
             >
@@ -139,14 +127,13 @@ const KeywordFrequencyField: React.FC = () => {
                 {name}
               </span>
               <span style={{ color, flexShrink: 0, fontWeight: 600 }}>
-                {count}×{' '}
-                <span style={{ fontSize: '11px', fontWeight: 400 }}>{label}</span>
+                {count}× <span style={{ fontSize: '16px', fontWeight: 400 }}>{label}</span>
               </span>
             </div>
           )
         })}
       </div>
-    </div>
+    </SideBarSubSection>
   )
 }
 
