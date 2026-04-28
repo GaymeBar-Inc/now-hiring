@@ -145,6 +145,7 @@ export const Posts: CollectionConfig<'posts'> = {
               name: 'relatedPosts',
               type: 'relationship',
               admin: {
+                sortOptions: '-createdAt',
                 description:
                   'Manually select related posts. If left empty, related posts are chosen automatically by keyword and category.',
                 position: 'sidebar',
