@@ -4,14 +4,14 @@ import { cn } from '@/utilities/ui'
 import * as React from 'react'
 
 type SideBarSectionProps = {
-  title: string
+  title?: string
   children: React.ReactNode
   className?: string
   style?: React.CSSProperties
 }
 
 type SideBarSubSectionProps = {
-  title: string
+  title?: string
   children: React.ReactNode
   className?: string
   style?: React.CSSProperties
@@ -56,7 +56,15 @@ export const SideBarSubSection: React.FC<SideBarSubSectionProps> = ({
 }) => {
   const headingId = React.useId()
   return (
-    <div role="group" aria-labelledby={headingId} className={cn(className)} style={style}>
+    <div
+      role="group"
+      aria-labelledby={headingId}
+      className={cn(className)}
+      style={{
+        marginBottom: '1rem',
+        ...style,
+      }}
+    >
       <h5
         id={headingId}
         style={{

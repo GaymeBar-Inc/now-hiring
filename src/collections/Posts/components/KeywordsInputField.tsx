@@ -181,8 +181,9 @@ const KeywordsInputField: React.FC = () => {
   }
 
   return (
-    <SideBarSection title="Keywords">
+    <SideBarSection>
       {/* Chips + text input */}
+      <label>Keywords</label>
       <div
         onClick={() => inputRef.current?.focus()}
         style={{

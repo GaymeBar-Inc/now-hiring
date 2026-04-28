@@ -248,15 +248,6 @@ export interface Post {
    * Manually select related posts. If left empty, related posts are chosen automatically by keyword and category.
    */
   relatedPosts?: (number | Post)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
   authors?: (number | User)[] | null;
   populatedAuthors?:
     | {
@@ -269,6 +260,15 @@ export interface Post {
    */
   generateSlug?: boolean | null;
   slug: string;
+  publishedAt?: string | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
   broadcasts?: {
     docs?: (number | Broadcast)[];
     hasNextPage?: boolean;
@@ -1313,14 +1313,6 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   keywords?: T;
   relatedPosts?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
   authors?: T;
   populatedAuthors?:
     | T
@@ -1330,6 +1322,14 @@ export interface PostsSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  publishedAt?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   broadcasts?: T;
   updatedAt?: T;
   createdAt?: T;

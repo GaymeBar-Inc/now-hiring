@@ -206,8 +206,18 @@ const KeywordFrequencyField: React.FC = () => {
   if (!entries.length) return null
 
   return (
-    <SideBarSubSection title="Keyword Frequency">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <SideBarSubSection>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          marginBottom: '2rem',
+          paddingBottom: '1rem',
+          borderBottom: '1px solid var(--theme-border-color)',
+        }}
+      >
+        <label>Keyword Frequency</label>
         {entries.map(({ id, name, count }) => {
           const { color, backgroundColor, label, tooltip } = getThreshold(count)
           return (
@@ -229,7 +239,7 @@ const KeywordFrequencyField: React.FC = () => {
                   whiteSpace: 'nowrap',
                 }}
               >
-                {name}
+                - {name}
               </span>
               <span style={{ alignItems: 'center', display: 'flex', flexShrink: 0, gap: '6px' }}>
                 <span style={{ color: 'var(--theme-text-dim)', fontWeight: 600 }}>{count}×</span>

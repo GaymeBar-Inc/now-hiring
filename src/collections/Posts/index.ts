@@ -141,11 +141,6 @@ export const Posts: CollectionConfig<'posts'> = {
                 },
               },
             },
-          ],
-          label: 'Content',
-        },
-        {
-          fields: [
             {
               name: 'relatedPosts',
               type: 'relationship',
@@ -164,8 +159,76 @@ export const Posts: CollectionConfig<'posts'> = {
               hasMany: true,
               relationTo: 'posts',
             },
+            {
+              name: 'authors',
+              type: 'relationship',
+              admin: {
+                position: 'sidebar',
+              },
+              hasMany: true,
+              relationTo: 'users',
+            },
+            // This field is only used to populate the user data via the `populateAuthors` hook
+            // This is because the `user` collection has access control locked to protect user privacy
+            // GraphQL will also not return mutated user data that differs from the underlying schema
+            {
+              name: 'populatedAuthors',
+              type: 'array',
+              access: {
+                update: () => false,
+              },
+              admin: {
+                disabled: true,
+                readOnly: true,
+              },
+              fields: [
+                {
+                  name: 'id',
+                  type: 'text',
+                },
+                {
+                  name: 'name',
+                  type: 'text',
+                },
+              ],
+            },
+            slugField({
+              overrides: (field) => {
+                const slugTextField = field.fields[1] as TextField
+                slugTextField.admin = {
+                  ...slugTextField.admin,
+                  components: {
+                    Field: {
+                      clientProps: { useAsSlug: 'title' },
+                      path: '@/collections/Posts/components/PostSlugField',
+                    },
+                  },
+                }
+                return field
+              },
+            }),
+            {
+              name: 'publishedAt',
+              type: 'date',
+              admin: {
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                },
+                position: 'sidebar',
+              },
+              hooks: {
+                beforeChange: [
+                  ({ siblingData, value }) => {
+                    if (siblingData._status === 'published' && !value) {
+                      return new Date()
+                    }
+                    return value
+                  },
+                ],
+              },
+            },
           ],
-          label: 'Meta',
+          label: 'Content',
         },
         {
           name: 'meta',
@@ -196,97 +259,34 @@ export const Posts: CollectionConfig<'posts'> = {
             }),
           ],
         },
-      ],
-    },
-    {
-      name: 'publishedAt',
-      type: 'date',
-      admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
-        position: 'sidebar',
-      },
-      hooks: {
-        beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData._status === 'published' && !value) {
-              return new Date()
-            }
-            return value
-          },
-        ],
-      },
-    },
-    {
-      name: 'authors',
-      type: 'relationship',
-      admin: {
-        position: 'sidebar',
-      },
-      hasMany: true,
-      relationTo: 'users',
-    },
-    // This field is only used to populate the user data via the `populateAuthors` hook
-    // This is because the `user` collection has access control locked to protect user privacy
-    // GraphQL will also not return mutated user data that differs from the underlying schema
-    {
-      name: 'populatedAuthors',
-      type: 'array',
-      access: {
-        update: () => false,
-      },
-      admin: {
-        disabled: true,
-        readOnly: true,
-      },
-      fields: [
         {
-          name: 'id',
-          type: 'text',
-        },
-        {
-          name: 'name',
-          type: 'text',
-        },
-      ],
-    },
-    slugField({
-      overrides: (field) => {
-        const slugTextField = field.fields[1] as TextField
-        slugTextField.admin = {
-          ...slugTextField.admin,
-          components: {
-            Field: {
-              clientProps: { useAsSlug: 'title' },
-              path: '@/collections/Posts/components/PostSlugField',
+          fields: [
+            {
+              name: 'draftBroadcastButton',
+              type: 'ui',
+              admin: {
+                position: 'sidebar',
+                components: {
+                  Field: '@/collections/Posts/components/DraftBroadcastButton',
+                },
+              },
             },
-          },
-        }
-        return field
-      },
-    }),
-    {
-      name: 'draftBroadcastButton',
-      type: 'ui',
-      admin: {
-        position: 'sidebar',
-        components: {
-          Field: '@/collections/Posts/components/DraftBroadcastButton',
+            {
+              name: 'broadcasts',
+              type: 'join',
+              collection: 'broadcasts',
+              on: 'posts',
+              admin: {
+                condition: () => false,
+                components: {
+                  Cell: '@/collections/Posts/components/BroadcastCell',
+                },
+              },
+            },
+          ],
+          label: 'Broadcast',
         },
-      },
-    },
-    {
-      name: 'broadcasts',
-      type: 'join',
-      collection: 'broadcasts',
-      on: 'posts',
-      admin: {
-        condition: () => false,
-        components: {
-          Cell: '@/collections/Posts/components/BroadcastCell',
-        },
-      },
+      ],
     },
   ],
   hooks: {
