@@ -19,6 +19,7 @@ type LexicalData = {
 
 type ThresholdResult = {
   color: string
+  backgroundColor: string
   label: string
 }
 
@@ -27,10 +28,13 @@ function escapeRegex(str: string): string {
 }
 
 function getThreshold(count: number): ThresholdResult {
-  if (count === 0) return { color: 'var(--theme-text-dim)', label: 'Missing' }
-  if (count <= 2) return { color: '#f59e0b', label: 'Low' }
-  if (count <= 5) return { color: '#22c55e', label: 'Optimal' }
-  return { color: '#f97316', label: 'High' }
+  if (count === 0)
+    return { color: '#ffffff', backgroundColor: '#6b7280', label: 'Missing' }
+  if (count <= 2)
+    return { color: '#ffffff', backgroundColor: '#d97706', label: 'Low' }
+  if (count <= 5)
+    return { color: '#ffffff', backgroundColor: '#16a34a', label: 'Optimal' }
+  return { color: '#ffffff', backgroundColor: '#ea580c', label: 'High' }
 }
 
 function extractIds(fieldValue: unknown): (string | number)[] {
@@ -104,21 +108,21 @@ const KeywordFrequencyField: React.FC = () => {
     <SideBarSubSection title="Keyword Frequency">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {entries.map(({ id, name, count }) => {
-          const { color, label } = getThreshold(count)
+          const { color, backgroundColor, label } = getThreshold(count)
           return (
             <div
               key={id}
               style={{
                 alignItems: 'center',
                 display: 'flex',
-                fontSize: '18px',
+                fontSize: '16px',
                 justifyContent: 'space-between',
               }}
             >
               <span
                 style={{
                   color: 'var(--theme-text)',
-                  maxWidth: '60%',
+                  maxWidth: '55%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -126,8 +130,21 @@ const KeywordFrequencyField: React.FC = () => {
               >
                 {name}
               </span>
-              <span style={{ color, flexShrink: 0, fontWeight: 600 }}>
-                {count}× <span style={{ fontSize: '16px', fontWeight: 400 }}>{label}</span>
+              <span style={{ alignItems: 'center', display: 'flex', flexShrink: 0, gap: '6px' }}>
+                <span style={{ color: 'var(--theme-text-dim)', fontWeight: 600 }}>{count}×</span>
+                <span
+                  style={{
+                    backgroundColor,
+                    borderRadius: '9999px',
+                    color,
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em',
+                    padding: '2px 8px',
+                  }}
+                >
+                  {label}
+                </span>
               </span>
             </div>
           )
