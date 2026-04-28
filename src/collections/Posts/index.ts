@@ -257,6 +257,15 @@ export const Posts: CollectionConfig<'posts'> = {
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
+            {
+              name: 'socialPreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/collections/Posts/components/SocialPreviewField',
+                },
+              },
+            },
           ],
         },
         {
