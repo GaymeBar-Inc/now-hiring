@@ -226,6 +226,7 @@ export interface Broadcast {
 export interface Post {
   id: number;
   title: string;
+  categories?: (number | Category)[] | null;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -242,7 +243,10 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  categories?: (number | Category)[] | null;
+  keywords?: (number | Keyword)[] | null;
+  /**
+   * Manually select related posts. If left empty, related posts are chosen automatically by keyword and category.
+   */
   relatedPosts?: (number | Post)[] | null;
   meta?: {
     title?: string | null;
@@ -265,7 +269,6 @@ export interface Post {
    */
   generateSlug?: boolean | null;
   slug: string;
-  keywords?: (number | Keyword)[] | null;
   broadcasts?: {
     docs?: (number | Broadcast)[];
     hasNextPage?: boolean;
@@ -274,6 +277,30 @@ export interface Post {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  parent?: (number | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -396,25 +423,11 @@ export interface FolderInterface {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "keywords".
  */
-export interface Category {
+export interface Keyword {
   id: number;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  name: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -443,16 +456,6 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "keywords".
- */
-export interface Keyword {
-  id: number;
-  name: string;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1305,9 +1308,10 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  categories?: T;
   heroImage?: T;
   content?: T;
-  categories?: T;
+  keywords?: T;
   relatedPosts?: T;
   meta?:
     | T
@@ -1326,7 +1330,6 @@ export interface PostsSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
-  keywords?: T;
   broadcasts?: T;
   updatedAt?: T;
   createdAt?: T;

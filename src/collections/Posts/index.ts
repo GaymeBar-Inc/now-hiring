@@ -88,6 +88,15 @@ export const Posts: CollectionConfig<'posts'> = {
         {
           fields: [
             {
+              name: 'categories',
+              type: 'relationship',
+              admin: {
+                position: 'sidebar',
+              },
+              hasMany: true,
+              relationTo: 'categories',
+            },
+            {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
@@ -110,24 +119,39 @@ export const Posts: CollectionConfig<'posts'> = {
               label: false,
               required: true,
             },
+            {
+              name: 'keywords',
+              type: 'relationship',
+              relationTo: 'keywords',
+              hasMany: true,
+              admin: {
+                position: 'sidebar',
+                components: {
+                  Field: '@/collections/Posts/components/KeywordsInputField',
+                },
+              },
+            },
+            {
+              name: 'keywordFrequency',
+              type: 'ui',
+              admin: {
+                position: 'sidebar',
+                components: {
+                  Field: '@/collections/Posts/components/KeywordFrequencyField',
+                },
+              },
+            },
           ],
           label: 'Content',
         },
         {
           fields: [
             {
-              name: 'categories',
-              type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              hasMany: true,
-              relationTo: 'categories',
-            },
-            {
               name: 'relatedPosts',
               type: 'relationship',
               admin: {
+                description:
+                  'Manually select related posts. If left empty, related posts are chosen automatically by keyword and category.',
                 position: 'sidebar',
               },
               filterOptions: ({ id }) => {
@@ -249,28 +273,6 @@ export const Posts: CollectionConfig<'posts'> = {
         position: 'sidebar',
         components: {
           Field: '@/collections/Posts/components/DraftBroadcastButton',
-        },
-      },
-    },
-    {
-      name: 'keywords',
-      type: 'relationship',
-      relationTo: 'keywords',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-        components: {
-          Field: '@/collections/Posts/components/KeywordsInputField',
-        },
-      },
-    },
-    {
-      name: 'keywordFrequency',
-      type: 'ui',
-      admin: {
-        position: 'sidebar',
-        components: {
-          Field: '@/collections/Posts/components/KeywordFrequencyField',
         },
       },
     },
