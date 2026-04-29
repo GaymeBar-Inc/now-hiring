@@ -10,13 +10,17 @@ import {
   useServerFunctions,
   useTranslation,
 } from '@payloadcms/ui'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 type Props = {
   field: { label?: string; name: string }
   path: string
   readOnly?: boolean
   useAsSlug?: string
+}
+
+type SlugCheckResponse = {
+  totalDocs: number
 }
 
 /**
@@ -31,11 +35,49 @@ const PostSlugField: React.FC<Props> = ({
 }) => {
   const { label } = field
   const { t } = useTranslation()
-  const { collectionSlug, globalSlug } = useDocumentInfo()
+  const { collectionSlug, globalSlug, id: documentId } = useDocumentInfo()
   const { slugify } = useServerFunctions()
   const { setValue, value, showError, errorMessage } = useField<string>({ path: path || field.name })
   const { getData, getDataByPath } = useForm()
   const [isLocked, setIsLocked] = useState(false)
+  const [duplicateWarning, setDuplicateWarning] = useState<string | null>(null)
+
+  // Real-time duplicate slug check — fires 600ms after the slug stops changing.
+  // Field-level `validate` only runs at publish time in Payload's draft mode,
+  // so this surfaces the conflict earlier while the editor is still writing.
+  useEffect(() => {
+    if (!value) {
+      setDuplicateWarning(null)
+      return
+    }
+
+    const params = new URLSearchParams({
+      'where[slug][equals]': value,
+      'where[_status][equals]': 'published',
+      depth: '0',
+      limit: '1',
+    })
+    if (documentId) params.append('where[id][not_equals]', String(documentId))
+
+    const timer = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/posts?${params.toString()}`, {
+          credentials: 'include',
+        })
+        if (!response.ok) return
+        const result = (await response.json()) as SlugCheckResponse
+        setDuplicateWarning(
+          result.totalDocs > 0
+            ? `Slug "${value}" is already used by a published post. Edit it before publishing.`
+            : null,
+        )
+      } catch {
+        // Silent fail — field validate still catches duplicates at publish time.
+      }
+    }, 600)
+
+    return () => clearTimeout(timer)
+  }, [value, documentId])
 
   const handleGenerate = useCallback(
     async (e: React.MouseEvent) => {
@@ -64,6 +106,8 @@ const PostSlugField: React.FC<Props> = ({
     setIsLocked((prev) => !prev)
   }, [])
 
+  const errorToDisplay = showError && errorMessage ? errorMessage : duplicateWarning
+
   return (
     <div className="field-type slug-field-component">
       <div className="label-wrapper">
@@ -85,12 +129,12 @@ const PostSlugField: React.FC<Props> = ({
         showError={false}
         value={value}
       />
-      {showError && errorMessage && (
+      {errorToDisplay && (
         <p
           role="alert"
           style={{ color: '#dc2626', fontSize: '1rem', marginTop: '0.25rem' }}
         >
-          {errorMessage}
+          {errorToDisplay}
         </p>
       )}
     </div>
