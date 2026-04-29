@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/pagination'
 import { cn } from '@/utilities/ui'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export const Pagination: React.FC<{
   basePath?: string
@@ -26,6 +26,11 @@ export const Pagination: React.FC<{
 
   const hasExtraPrevPages = page - 1 > 1
   const hasExtraNextPages = page + 1 < totalPages
+
+  useEffect(() => {
+    if (hasNextPage) router.prefetch(`${basePath}/${page + 1}`)
+    if (hasPrevPage) router.prefetch(`${basePath}/${page - 1}`)
+  }, [basePath, page, hasNextPage, hasPrevPage, router])
 
   return (
     <div className={cn('my-12', className)}>
