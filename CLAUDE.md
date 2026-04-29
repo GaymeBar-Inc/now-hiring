@@ -95,9 +95,21 @@ This template implements comprehensive SEO and metadata handling:
 
 ## Important Files and Functions
 
+### Metadata Generation
 1. **Metadata generation**: `/src/utilities/generateMeta.ts`
 2. **Open Graph merging**: `/src/utilities/mergeOpenGraph.ts`
 3. **Site settings retrieval**: `/src/utilities/getSiteSettings.ts`
+
+### Post Collection Hooks (`src/collections/Posts/hooks/`)
+- **`syncTitleToSlug.ts`**: Auto-generates slug from title on every save; respects manual overrides
+- **`validateSlug.ts`**: Validates slug uniqueness against published posts (throws error on duplicate)
+- **`syncTitleToMetaTitle.ts`**: Syncs post title + site name to meta.title (cached for 5 min)
+- **`syncCategoriesToMetaTitle.ts`**: Appends category names to meta.title
+- **`syncContentToMetaDescription.ts`**: Auto-generates meta.description from post content
+- **`populateAuthors.ts`**: Fetches user data for authors (privacy protection)
+- **`revalidatePost.ts`**: Revalidates cached pages on post changes
+
+### Main Configuration
 4. **Main site configuration**: `src/payload.config.ts`
 5. **Page metadata handling**: `src/app/(frontend)/[slug]/page.tsx`
 
@@ -107,3 +119,9 @@ The system follows a standard Payload CMS template architecture where:
 - Pages are generated from collections with layout builders
 - Metadata is managed both globally (site-wide defaults) and per-document
 - Next.js handles static generation with proper meta tags for SEO
+
+## Design System
+
+Whenever we are building new features, or evaluating current ones, we need to comply by the latest developments in accessibility. This is our prime directive. We should never include text below 16px. We should always use semantic HTML and ARIA.
+
+We should always favor building reusable components instead of relying only on bespoke solutions.
