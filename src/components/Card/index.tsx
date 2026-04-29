@@ -7,8 +7,9 @@ import React, { Fragment } from 'react'
 import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { KeywordPill } from '@/components/ui/keyword-pill'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'>
+export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'keywords'>
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -21,10 +22,11 @@ export const Card: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
 
-  const { slug, categories, meta, title } = doc || {}
+  const { slug, categories, keywords, meta, title } = doc || {}
   const { description, image: metaImage } = meta || {}
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
+  const hasKeywords = keywords && Array.isArray(keywords) && keywords.length > 0
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`
@@ -37,9 +39,15 @@ export const Card: React.FC<{
       )}
       ref={card.ref}
     >
-      <div className="relative w-full ">
-        {!metaImage && <div className="">No image</div>}
-        {metaImage && typeof metaImage !== 'string' && <Media resource={metaImage} size="33vw" />}
+      <div className="relative w-full aspect-video overflow-hidden">
+        {!metaImage && <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">No image</div>}
+        {metaImage && typeof metaImage !== 'string' && (
+          <Media
+            resource={metaImage}
+            size="33vw"
+            imgClassName="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        )}
       </div>
       <div className="p-4">
         {showCategories && hasCategories && (
@@ -78,6 +86,16 @@ export const Card: React.FC<{
           </div>
         )}
         {description && <div className="mt-2">{description && <p>{sanitizedDescription}</p>}</div>}
+        {hasKeywords && (
+          <div
+            className="flex flex-wrap gap-1.5 mt-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {keywords!.map((kw) =>
+              typeof kw === 'object' ? <KeywordPill key={kw.id} keyword={kw} /> : null,
+            )}
+          </div>
+        )}
       </div>
     </article>
   )

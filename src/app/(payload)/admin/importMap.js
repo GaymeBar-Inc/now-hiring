@@ -32,7 +32,10 @@ import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 }
 import { SlugField as SlugField_2b8867833a34864a02ddf429b0728a40 } from '@payloadcms/next/client'
 import { default as default_df7eb999ede7363ee297ab1263291c5c } from '@/collections/Posts/components/PostTitleField'
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { default as default_b49834c38af02a233bd8ffd68317c41f } from '@/collections/Posts/components/KeywordsInputField'
+import { default as default_af9113d48444c00bb4919c8ae754b46f } from '@/collections/Posts/components/KeywordFrequencyField'
 import { default as default_000ace4bf1f9ff748ac15c677b9ef3f5 } from '@/collections/Posts/components/PostSlugField'
+import { default as default_89f405e955f669bee627473ef93dbd1b } from '@/collections/Posts/components/SocialPreviewField'
 import { default as default_72de2780787708611145fd8a30acae54 } from '@/collections/Posts/components/DraftBroadcastButton'
 import { default as default_9a0786c1d342d6df4705248ae531b25d } from '@/collections/Posts/components/BroadcastCell'
 import { FolderTableCell as FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
@@ -82,7 +85,10 @@ export const importMap = {
   "@payloadcms/next/client#SlugField": SlugField_2b8867833a34864a02ddf429b0728a40,
   "@/collections/Posts/components/PostTitleField#default": default_df7eb999ede7363ee297ab1263291c5c,
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@/collections/Posts/components/KeywordsInputField#default": default_b49834c38af02a233bd8ffd68317c41f,
+  "@/collections/Posts/components/KeywordFrequencyField#default": default_af9113d48444c00bb4919c8ae754b46f,
   "@/collections/Posts/components/PostSlugField#default": default_000ace4bf1f9ff748ac15c677b9ef3f5,
+  "@/collections/Posts/components/SocialPreviewField#default": default_89f405e955f669bee627473ef93dbd1b,
   "@/collections/Posts/components/DraftBroadcastButton#default": default_72de2780787708611145fd8a30acae54,
   "@/collections/Posts/components/BroadcastCell#default": default_9a0786c1d342d6df4705248ae531b25d,
   "@payloadcms/next/rsc#FolderTableCell": FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1,

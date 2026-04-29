@@ -3,6 +3,7 @@
 import { useDocumentInfo } from '@payloadcms/ui'
 import { useState, useEffect } from 'react'
 
+import { SideBarSection, SideBarSubSection } from '@/components/ui/sidebarSections'
 import { fetchBroadcastsForPost, type BroadcastSummary } from '../utils/fetchBroadcastsForPost'
 
 type CreateBroadcastResponse = {
@@ -68,15 +69,9 @@ const DraftBroadcastButton: React.FC = () => {
   }
 
   return (
-    <div
-      style={{
-        padding: '12px 0',
-        borderTop: '1px solid var(--theme-border-color)',
-        marginTop: '8px',
-      }}
+    <SideBarSection
+      title="Broadcast"
     >
-      <h4 style={{ marginBottom: '10px', fontSize: '16px', fontWeight: 600 }}>Broadcast</h4>
-
       <div
         title={
           !isPublished
@@ -113,10 +108,7 @@ const DraftBroadcastButton: React.FC = () => {
       )}
 
       {existingBroadcasts.length > 0 && (
-        <div style={{ marginTop: '12px' }}>
-          <h5 style={{ fontSize: '14px', color: 'var(--theme-text-dim)', marginBottom: '4px' }}>
-            Sent in:
-          </h5>
+        <SideBarSubSection title="Sent in:" style={{ marginTop: '12px' }}>
           <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
             {existingBroadcasts.map((b) => (
               <li key={b.id} style={{ marginBottom: '4px', textDecoration: 'underline' }}>
@@ -136,9 +128,9 @@ const DraftBroadcastButton: React.FC = () => {
               </li>
             ))}
           </ul>
-        </div>
+        </SideBarSubSection>
       )}
-    </div>
+    </SideBarSection>
   )
 }
 

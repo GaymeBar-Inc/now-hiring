@@ -72,6 +72,7 @@ export interface Config {
     posts: Post;
     media: Media;
     categories: Category;
+    keywords: Keyword;
     users: User;
     redirects: Redirect;
     forms: Form;
@@ -98,6 +99,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    keywords: KeywordsSelect<false> | KeywordsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -224,6 +226,7 @@ export interface Broadcast {
 export interface Post {
   id: number;
   title: string;
+  categories?: (number | Category)[] | null;
   heroImage?: (number | null) | Media;
   content: {
     root: {
@@ -240,17 +243,11 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  categories?: (number | Category)[] | null;
+  keywords?: (number | Keyword)[] | null;
+  /**
+   * Manually select related posts. If left empty, related posts are chosen automatically by keyword and category.
+   */
   relatedPosts?: (number | Post)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
   authors?: (number | User)[] | null;
   populatedAuthors?:
     | {
@@ -263,6 +260,15 @@ export interface Post {
    */
   generateSlug?: boolean | null;
   slug: string;
+  publishedAt?: string | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
   broadcasts?: {
     docs?: (number | Broadcast)[];
     hasNextPage?: boolean;
@@ -271,6 +277,30 @@ export interface Post {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  parent?: (number | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -393,25 +423,11 @@ export interface FolderInterface {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "keywords".
  */
-export interface Category {
+export interface Keyword {
   id: number;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  name: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1063,6 +1079,10 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
+        relationTo: 'keywords';
+        value: number | Keyword;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -1288,18 +1308,11 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  categories?: T;
   heroImage?: T;
   content?: T;
-  categories?: T;
+  keywords?: T;
   relatedPosts?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
   authors?: T;
   populatedAuthors?:
     | T
@@ -1309,6 +1322,14 @@ export interface PostsSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  publishedAt?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   broadcasts?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1425,6 +1446,15 @@ export interface CategoriesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "keywords_select".
+ */
+export interface KeywordsSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
 }

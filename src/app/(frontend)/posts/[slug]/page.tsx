@@ -12,6 +12,7 @@ import type { Post } from '@/payload-types'
 
 import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getRelatedPostsByKeywords } from '@/utilities/getRelatedPostsByKeywords'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -51,6 +52,18 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  const manualRelatedPosts = (post.relatedPosts ?? []).filter(
+    (r): r is Post => typeof r === 'object',
+  )
+
+  const keywordIds = (post.keywords ?? []).map((k) => (typeof k === 'object' ? k.id : k))
+  const categoryIds = (post.categories ?? []).map((k) => (typeof k === 'object' ? k.id : k))
+
+  const relatedPosts =
+    manualRelatedPosts.length > 0
+      ? manualRelatedPosts
+      : await getRelatedPostsByKeywords({ keywordIds, categoryIds, currentPostId: post.id })
+
   return (
     <article className="pt-16 pb-16">
       <PageClient />
@@ -62,16 +75,14 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       <PostHero post={post} />
 
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
-            <RelatedPosts
-              className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
-            />
-          )}
-        </div>
+      <div className="flex flex-col items-center gap-4 px-8 py-6">
+        <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
+        {relatedPosts.length > 0 && (
+          <section className="w-full">
+            <h2 className="text-xl font-semibold mb-6">Related Posts</h2>
+            <RelatedPosts docs={relatedPosts} />
+          </section>
+        )}
       </div>
     </article>
   )
@@ -93,6 +104,7 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
 
   const result = await payload.find({
     collection: 'posts',
+    depth: 1,
     draft,
     limit: 1,
     overrideAccess: draft,
