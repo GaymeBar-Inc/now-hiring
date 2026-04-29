@@ -4,12 +4,13 @@ import React from 'react'
 import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { KeywordPill } from '@/components/ui/keyword-pill'
 import { formatAuthors } from '@/utilities/formatAuthors'
 
 export const PostHero: React.FC<{
   post: Post
 }> = ({ post }) => {
-  const { categories, heroImage, populatedAuthors, publishedAt, title } = post
+  const { categories, heroImage, keywords, populatedAuthors, publishedAt, title } = post
 
   const hasAuthors =
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
@@ -57,6 +58,19 @@ export const PostHero: React.FC<{
                 <p className="text-sm">Date Published</p>
 
                 <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
+              </div>
+            )}
+            {keywords && keywords.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 items-start">
+                {keywords.map((kw) =>
+                  typeof kw === 'object' ? (
+                    <KeywordPill
+                      key={kw.id}
+                      keyword={kw}
+                      className="border border-white/40 bg-white/10 hover:bg-white/20 text-white"
+                    />
+                  ) : null,
+                )}
               </div>
             )}
           </div>
