@@ -17,10 +17,9 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
-import { syncCategoriesToMetaTitle } from './hooks/syncCategoriesToMetaTitle'
 import { syncContentToMetaDescription } from './hooks/syncContentToMetaDescription'
 import { syncHeroToMetaImage } from './hooks/syncHeroToMetaImage'
-import { syncTitleToMetaTitle } from './hooks/syncTitleToMetaTitle'
+import { syncMetaTitle } from './hooks/syncMetaTitle'
 import { syncTitleToSlug } from './hooks/syncTitleToSlug'
 import { validateSlug } from './hooks/validateSlug'
 
@@ -305,8 +304,7 @@ export const Posts: CollectionConfig<'posts'> = {
   hooks: {
     beforeChange: [
       syncHeroToMetaImage,
-      syncTitleToMetaTitle,
-      syncCategoriesToMetaTitle,
+      syncMetaTitle,
       syncContentToMetaDescription,
       syncTitleToSlug,
     ],

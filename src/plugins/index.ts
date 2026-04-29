@@ -11,7 +11,7 @@ import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
-import { Form, FormSubmission, Page, Post } from '@/payload-types'
+import { Form, FormSubmission, Keyword, Page, Post } from '@/payload-types'
 
 interface FieldWithAdmin {
   admin?: Record<string, unknown>
@@ -22,8 +22,20 @@ import { handleNewsletterSubscribe } from '@/resend'
 import { extractLexicalText } from '@/utilities/extractLexicalText'
 
 const generateDescription: GenerateDescription<Post> = ({ doc }) => {
-  if (!doc?.content?.root?.children) return ''
-  return extractLexicalText(doc.content.root).substring(0, 160).trim()
+  if (!doc?.content?.root) return ''
+  const contentText = extractLexicalText(doc.content.root)
+  if (!contentText) return ''
+
+  // In the admin form, relationship fields arrive as populated objects.
+  const firstKeyword = doc.keywords?.[0]
+  const keywordName =
+    firstKeyword && typeof firstKeyword === 'object' && 'name' in firstKeyword
+      ? (firstKeyword as Keyword).name
+      : null
+
+  const prefix = keywordName ? `${keywordName} — ` : ''
+  const available = 155 - prefix.length
+  return `${prefix}${contentText.substring(0, available > 0 ? available : 155).trim()}`
 }
 
 const generateTitle: GenerateTitle<Post | Page> = async ({ doc }) => {
