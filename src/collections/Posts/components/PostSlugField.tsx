@@ -33,7 +33,7 @@ const PostSlugField: React.FC<Props> = ({
   const { t } = useTranslation()
   const { collectionSlug, globalSlug } = useDocumentInfo()
   const { slugify } = useServerFunctions()
-  const { setValue, value } = useField<string>({ path: path || field.name })
+  const { setValue, value, showError, errorMessage } = useField<string>({ path: path || field.name })
   const { getData, getDataByPath } = useForm()
   const [isLocked, setIsLocked] = useState(false)
 
@@ -78,11 +78,21 @@ const PostSlugField: React.FC<Props> = ({
         </Button>
       </div>
       <TextInput
+        Error={null}
         onChange={setValue}
         path={path || field.name}
         readOnly={Boolean(readOnlyFromProps || isLocked)}
+        showError={false}
         value={value}
       />
+      {showError && errorMessage && (
+        <p
+          role="alert"
+          style={{ color: '#dc2626', fontSize: '1rem', marginTop: '0.25rem' }}
+        >
+          {errorMessage}
+        </p>
+      )}
     </div>
   )
 }

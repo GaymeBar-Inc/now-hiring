@@ -22,6 +22,7 @@ import { syncContentToMetaDescription } from './hooks/syncContentToMetaDescripti
 import { syncHeroToMetaImage } from './hooks/syncHeroToMetaImage'
 import { syncTitleToMetaTitle } from './hooks/syncTitleToMetaTitle'
 import { syncTitleToSlug } from './hooks/syncTitleToSlug'
+import { validateSlug } from './hooks/validateSlug'
 
 import {
   MetaDescriptionField,
@@ -206,6 +207,7 @@ export const Posts: CollectionConfig<'posts'> = {
                     },
                   },
                 }
+                slugTextField.validate = validateSlug
                 return field
               },
             }),
