@@ -35,9 +35,15 @@ export default async function Page({ params: paramsPromise }: Args) {
     collection: 'posts',
     depth: 1,
     limit: 12,
+    page: 1,
     overrideAccess: false,
     sort: '-publishedAt',
-    where: { keywords: { in: [keyword.id] } },
+    where: {
+      and: [
+        { keywords: { in: [keyword.id] } },
+        { _status: { equals: 'published' } },
+      ],
+    },
   })
 
   const basePath = `/keywords/${name}/page`
@@ -63,8 +69,8 @@ export default async function Page({ params: paramsPromise }: Args) {
       <CollectionArchive posts={posts.docs} />
 
       <div className="container">
-        {posts.totalPages > 1 && posts.page && (
-          <Pagination basePath={basePath} page={posts.page} totalPages={posts.totalPages} />
+        {posts.totalPages > 1 && (
+          <Pagination basePath={basePath} page={posts.page ?? 1} totalPages={posts.totalPages} />
         )}
       </div>
     </div>

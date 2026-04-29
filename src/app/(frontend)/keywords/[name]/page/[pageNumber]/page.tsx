@@ -42,7 +42,12 @@ export default async function Page({ params: paramsPromise }: Args) {
     page: sanitizedPageNumber,
     overrideAccess: false,
     sort: '-publishedAt',
-    where: { keywords: { in: [keyword.id] } },
+    where: {
+      and: [
+        { keywords: { in: [keyword.id] } },
+        { _status: { equals: 'published' } },
+      ],
+    },
   })
 
   const basePath = `/keywords/${name}/page`
