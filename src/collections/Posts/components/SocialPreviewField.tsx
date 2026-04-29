@@ -1,6 +1,7 @@
 'use client'
 
 import { useField } from '@payloadcms/ui'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 import { getMediaUrl } from '@/utilities/getMediaUrl'
@@ -82,14 +83,14 @@ const SocialPreviewField: React.FC = () => {
           }}
         >
           {imageUrl ? (
-            <img
+            <Image
               alt={title || 'preview'}
               src={imageUrl}
+              fill
+              unoptimized
               style={{
-                height: '100%',
                 objectFit: 'cover',
                 objectPosition: 'center',
-                width: '100%',
               }}
             />
           ) : (
