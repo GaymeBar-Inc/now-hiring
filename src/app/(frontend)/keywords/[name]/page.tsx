@@ -1,5 +1,6 @@
 import type { Metadata } from 'next/types'
 
+import { BackLink } from '@/components/ui/back-link'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
@@ -47,6 +48,7 @@ export default async function Page({ params: paramsPromise }: Args) {
         <div className="prose dark:prose-invert max-w-none">
           <h1>{keyword.name}</h1>
         </div>
+        <BackLink />
       </div>
 
       <div className="container mb-8">
