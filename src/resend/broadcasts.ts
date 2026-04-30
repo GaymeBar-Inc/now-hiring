@@ -14,6 +14,7 @@ export function buildFromAddress(displayName: string): string | null {
 
 export type CreateAndSendBroadcastOptions = {
   audienceId: string
+  topicId?: string
   from: string
   name: string
   subject: string
@@ -34,7 +35,7 @@ export async function createAndSendResendBroadcast(
   const resend = getResendClient()
   if (!resend) return { status: 'disabled' }
 
-  const { audienceId, from, name, subject, previewText, html, scheduledAt } = options
+  const { audienceId, topicId, from, name, subject, previewText, html, scheduledAt } = options
 
   const { data, error } = await resend.broadcasts.create({
     audienceId,
@@ -43,6 +44,7 @@ export async function createAndSendResendBroadcast(
     subject,
     ...(previewText ? { previewText } : {}),
     html,
+    ...(topicId ? { topicId } : {}),
   })
 
   if (error || !data) {

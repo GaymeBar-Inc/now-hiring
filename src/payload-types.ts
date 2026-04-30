@@ -167,6 +167,10 @@ export interface UserAuthOperations {
  */
 export interface Broadcast {
   id: number;
+  /**
+   * Target a specific topic (Post Category). Leave empty to send to the full audience.
+   */
+  audienceTopic?: (number | null) | Category;
   type: 'single_post' | 'weekly_digest' | 'custom';
   /**
    * Email subject line shown to recipients
@@ -218,6 +222,38 @@ export interface Broadcast {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  /**
+   * Shown on the Resend unsubscribe page to help subscribers understand this topic.
+   */
+  description?: string | null;
+  /**
+   * Synced automatically from Resend Topics API — do not edit manually.
+   */
+  resendTopicId?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  parent?: (number | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -277,30 +313,6 @@ export interface Post {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: number;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1153,6 +1165,7 @@ export interface PayloadMigration {
  * via the `definition` "broadcasts_select".
  */
 export interface BroadcastsSelect<T extends boolean = true> {
+  audienceTopic?: T;
   type?: T;
   subject?: T;
   previewText?: T;
@@ -1435,6 +1448,8 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
+  resendTopicId?: T;
   generateSlug?: T;
   slug?: T;
   parent?: T;

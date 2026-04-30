@@ -63,6 +63,18 @@ export const Broadcasts: CollectionConfig = {
     // Shared fields — present on every broadcast type
     // -------------------------------------------------------------------------
     {
+      name: 'audienceTopic',
+      label: 'Audience Topic',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: false,
+      required: false,
+      admin: {
+        description:
+          'Target a specific topic (Post Category). Leave empty to send to the full audience.',
+      },
+    },
+    {
       name: 'type',
       type: 'select',
       required: true,
