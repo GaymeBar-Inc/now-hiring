@@ -1,11 +1,12 @@
 import type { CollectionBeforeChangeHook } from 'payload'
-import type { Category } from '../../../payload-types'
-import { createResendTopic, updateResendTopic } from '../../../resend/topics'
+import type { Category, EmailSetting } from '../../../payload-types'
+import { createResendTopic, updateResendTopic, subscribeAllAudienceContactsToTopic } from '../../../resend/topics'
 
 export const syncToResendTopic: CollectionBeforeChangeHook<Category> = async ({
   data,
   operation,
   originalDoc,
+  req,
 }) => {
   try {
     if (operation === 'create') {
@@ -16,7 +17,25 @@ export const syncToResendTopic: CollectionBeforeChangeHook<Category> = async ({
         data.title as string,
         data.description as string | undefined,
       )
-      if (topicId) data.resendTopicId = topicId
+      if (topicId) {
+        data.resendTopicId = topicId
+        // Fire-and-forget: subscribe all existing audience contacts to the new topic.
+        // Not awaited so the Category save is not delayed by the bulk operation.
+        void (async () => {
+          try {
+            const emailSettings = (await req.payload.findGlobal({
+              slug: 'email-settings',
+              depth: 0,
+            })) as EmailSetting
+            const audienceId = emailSettings.resendAudienceId
+            if (audienceId) {
+              await subscribeAllAudienceContactsToTopic(audienceId, topicId)
+            }
+          } catch (err) {
+            console.error('[Categories] Bulk subscribe to new topic failed', err)
+          }
+        })()
+      }
     } else if (operation === 'update' && originalDoc?.resendTopicId) {
       const titleChanged = data.title !== undefined && data.title !== originalDoc?.title
       const descriptionChanged =

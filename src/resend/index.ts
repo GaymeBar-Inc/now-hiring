@@ -16,4 +16,5 @@ export {
   updateResendTopic,
   deleteResendTopic,
   subscribeContactToTopic,
+  subscribeAllAudienceContactsToTopic,
 } from './topics'
