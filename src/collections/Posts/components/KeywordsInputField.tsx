@@ -1,6 +1,7 @@
 'use client'
 
 import { useField } from '@payloadcms/ui'
+import { Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 import { SideBarSection } from '@/components/ui/sidebarSections'
@@ -146,6 +147,9 @@ const KeywordsInputField: React.FC = () => {
         if (suggestions.length > 0) {
           e.preventDefault()
           addKeyword(suggestions[highlightIndex].id, suggestions[highlightIndex].name)
+        } else if (inputText.trim()) {
+          e.preventDefault()
+          void createOrFindKeyword(inputText)
         }
         break
       case 'Enter':
@@ -247,7 +251,7 @@ const KeywordsInputField: React.FC = () => {
             border: 'none',
             color: 'var(--theme-text)',
             flex: '1 1 80px',
-            fontSize: '13px',
+            fontSize: '16px',
             minWidth: '80px',
             outline: 'none',
             padding: '2px 4px',
@@ -255,6 +259,28 @@ const KeywordsInputField: React.FC = () => {
           type="text"
           value={inputText}
         />
+
+        {inputText.trim() && !isCreating && (
+          <button
+            aria-label={`Add keyword "${inputText.trim()}"`}
+            onMouseDown={(e) => {
+              e.preventDefault()
+              void createOrFindKeyword(inputText).then(() => inputRef.current?.focus())
+            }}
+            style={{
+              alignSelf: 'center',
+              background: 'none',
+              border: 'none',
+              color: 'var(--theme-text-dim)',
+              cursor: 'pointer',
+              display: 'flex',
+              padding: '2px',
+            }}
+            type="button"
+          >
+            <Plus size={18} />
+          </button>
+        )}
       </div>
 
       {/* Autocomplete dropdown */}
@@ -284,7 +310,7 @@ const KeywordsInputField: React.FC = () => {
                 background: i === highlightIndex ? 'var(--theme-elevation-100)' : 'transparent',
                 color: 'var(--theme-text)',
                 cursor: 'pointer',
-                fontSize: '13px',
+                fontSize: '16px',
                 padding: '6px 12px',
               }}
             >
@@ -293,8 +319,8 @@ const KeywordsInputField: React.FC = () => {
           ))}
         </ul>
       )}
-      <label style={{ color: 'var(--theme-text-dim)', fontSize: '14px', margin: '0 0 8px' }}>
-        Separate keywords by commas.
+      <label style={{ color: 'var(--theme-text-dim)', fontSize: '16px', margin: '0 0 8px' }}>
+        Press , Tab, or Enter to add a keyword.
       </label>
     </SideBarSection>
   )
