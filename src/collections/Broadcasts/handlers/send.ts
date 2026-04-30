@@ -87,6 +87,12 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
     )
   }
 
+  // Resolve the audienceTopic relationship to a Resend topicId (depth: 2 already populated it)
+  const topicId =
+    broadcast.audienceTopic && typeof broadcast.audienceTopic === 'object'
+      ? (broadcast.audienceTopic.resendTopicId ?? undefined)
+      : undefined
+
   try {
     const html = await assembleBroadcastEmail(req.payload, broadcast)
 
@@ -98,6 +104,7 @@ export const sendBroadcastHandler: PayloadHandler = async (req) => {
       ...(broadcast.previewText ? { previewText: broadcast.previewText as string } : {}),
       html,
       ...(scheduledAt ? { scheduledAt } : {}),
+      ...(topicId ? { topicId } : {}),
     })
 
     if (result.status === 'error') {

@@ -14,6 +14,7 @@ export function buildFromAddress(displayName: string): string | null {
 
 export type CreateAndSendBroadcastOptions = {
   audienceId: string
+  topicId?: string
   from: string
   name: string
   subject: string
@@ -34,7 +35,7 @@ export async function createAndSendResendBroadcast(
   const resend = getResendClient()
   if (!resend) return { status: 'disabled' }
 
-  const { audienceId, from, name, subject, previewText, html, scheduledAt } = options
+  const { audienceId, topicId, from, name, subject, previewText, html, scheduledAt } = options
 
   const { data, error } = await resend.broadcasts.create({
     audienceId,
@@ -43,7 +44,10 @@ export async function createAndSendResendBroadcast(
     subject,
     ...(previewText ? { previewText } : {}),
     html,
-  })
+    // topicId is supported by the Resend API for targeted sends; SDK types may not include it yet
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...(topicId ? { topicId } : {}),
+  } as any)
 
   if (error || !data) {
     return { status: 'error', message: error?.message ?? 'Unknown error from Resend' }

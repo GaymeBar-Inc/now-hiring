@@ -11,3 +11,10 @@ export type {
 } from './broadcasts'
 export { createAndSendResendBroadcast, cancelResendBroadcast, buildFromAddress } from './broadcasts'
 export { renderEmailTemplate } from './template'
+export {
+  createResendTopic,
+  updateResendTopic,
+  deleteResendTopic,
+  subscribeContactToTopic,
+} from './topics'
+export type { ResendTopic } from './topics'

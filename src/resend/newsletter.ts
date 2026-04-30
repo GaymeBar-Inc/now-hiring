@@ -1,11 +1,12 @@
 // src/resend/newsletter.ts
 import type { Payload } from 'payload'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
-import type { EmailLayout, EmailSetting } from '../payload-types'
+import type { Category, EmailLayout, EmailSetting } from '../payload-types'
 import { getResendClient, retryResendCall } from './client'
 import { renderEmailTemplate } from './template'
 import { createResendContact, addContactToResendSegment } from './contacts'
 import type { CreateResendContactResult, AddToResendSegmentResult } from './contacts'
+import { subscribeContactToTopic } from './topics'
 
 interface ResendEmailData {
   id: string
@@ -100,6 +101,12 @@ export async function handleNewsletterSubscribe(
   const segment =
     contact.status === 'disabled' ? undefined : await addContactToResendSegment(payload, email)
 
+  // Subscribe to all Category topics (idempotent — safe to call on re-subscribe so new
+  // topics added since last sign-up are picked up automatically).
+  if (contact.status !== 'disabled') {
+    await subscribeToAllCategoryTopics(payload, email)
+  }
+
   // Only send welcome email on first subscribe.
   if (contact.status === 'created') {
     const welcomeEmail = await sendWelcomeEmail(payload, email)
@@ -107,4 +114,31 @@ export async function handleNewsletterSubscribe(
   }
 
   return { contact, segment }
+}
+
+async function subscribeToAllCategoryTopics(payload: Payload, email: string): Promise<void> {
+  try {
+    const emailSettings = (await payload.findGlobal({
+      slug: 'email-settings',
+      depth: 0,
+    })) as EmailSetting
+    const audienceId = emailSettings?.resendAudienceId
+    if (!audienceId) return
+
+    const result = await payload.find({
+      collection: 'categories',
+      limit: 200,
+      depth: 0,
+    })
+
+    const topicIds = (result.docs as Category[])
+      .map((c) => c.resendTopicId)
+      .filter((id): id is string => Boolean(id))
+
+    await Promise.allSettled(
+      topicIds.map((topicId) => subscribeContactToTopic(audienceId, topicId, email)),
+    )
+  } catch (err) {
+    console.error('[Newsletter] Failed to subscribe contact to category topics', err)
+  }
 }
