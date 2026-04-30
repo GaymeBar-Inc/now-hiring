@@ -1,6 +1,9 @@
 import { getResendClient } from './client'
 
-export async function createResendTopic(name: string): Promise<string | null> {
+export async function createResendTopic(
+  name: string,
+  description?: string,
+): Promise<string | null> {
   const resend = getResendClient()
   if (!resend) return null
 
@@ -10,6 +13,7 @@ export async function createResendTopic(name: string): Promise<string | null> {
     }
     const { data, error } = await resend.topics.create({
       name,
+      ...(description ? { description } : {}),
       defaultSubscription: 'opt_out',
       visibility: 'public',
     } as CreateTopicOptionsWithVisibility)

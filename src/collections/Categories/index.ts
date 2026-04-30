@@ -28,6 +28,13 @@ export const Categories: CollectionConfig = {
       required: true,
     },
     {
+      name: 'description',
+      type: 'textarea',
+      admin: {
+        description: 'Shown on the Resend unsubscribe page to help subscribers understand this topic.',
+      },
+    },
+    {
       name: 'resendTopicId',
       type: 'text',
       admin: {

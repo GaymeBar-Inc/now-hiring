@@ -12,7 +12,10 @@ export const syncToResendTopic: CollectionBeforeChangeHook<Category> = async ({
       // Create the Resend Topic and embed the ID in the document before first save.
       // Using beforeChange avoids a payload.update() write-back, which was the source
       // of the duplicate-topic bug (write-back re-fired afterChange with resendTopicId: null).
-      const topicId = await createResendTopic(data.title as string)
+      const topicId = await createResendTopic(
+        data.title as string,
+        data.description as string | undefined,
+      )
       if (topicId) data.resendTopicId = topicId
     } else if (
       operation === 'update' &&

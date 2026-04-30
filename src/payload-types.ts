@@ -231,6 +231,10 @@ export interface Category {
   id: number;
   title: string;
   /**
+   * Shown on the Resend unsubscribe page to help subscribers understand this topic.
+   */
+  description?: string | null;
+  /**
    * Synced automatically from Resend Topics API — do not edit manually.
    */
   resendTopicId?: string | null;
@@ -1444,6 +1448,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   resendTopicId?: T;
   generateSlug?: T;
   slug?: T;
