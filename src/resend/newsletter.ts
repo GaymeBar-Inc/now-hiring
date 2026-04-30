@@ -118,13 +118,6 @@ export async function handleNewsletterSubscribe(
 
 async function subscribeToAllCategoryTopics(payload: Payload, email: string): Promise<void> {
   try {
-    const emailSettings = (await payload.findGlobal({
-      slug: 'email-settings',
-      depth: 0,
-    })) as EmailSetting
-    const audienceId = emailSettings?.resendAudienceId
-    if (!audienceId) return
-
     const result = await payload.find({
       collection: 'categories',
       limit: 200,
@@ -136,7 +129,7 @@ async function subscribeToAllCategoryTopics(payload: Payload, email: string): Pr
       .filter((id): id is string => Boolean(id))
 
     await Promise.allSettled(
-      topicIds.map((topicId) => subscribeContactToTopic(audienceId, topicId, email)),
+      topicIds.map((topicId) => subscribeContactToTopic(topicId, email)),
     )
   } catch (err) {
     console.error('[Newsletter] Failed to subscribe contact to category topics', err)

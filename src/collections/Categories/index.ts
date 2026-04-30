@@ -18,7 +18,7 @@ export const Categories: CollectionConfig = {
     useAsTitle: 'title',
   },
   hooks: {
-    afterChange: [syncToResendTopic],
+    beforeChange: [syncToResendTopic],
     afterDelete: [deleteResendTopicHook],
   },
   fields: [

@@ -1,116 +1,70 @@
-type ResendTopic = {
-  id: string
-  name: string
-}
+import { getResendClient } from './client'
 
-type TopicsListResponse = {
-  data: ResendTopic[]
-}
+export async function createResendTopic(name: string): Promise<string | null> {
+  const resend = getResendClient()
+  if (!resend) return null
 
-type TopicCreateResponse = {
-  data: {
-    id: string
-  }
-}
-
-const RESEND_BASE = 'https://api.resend.com'
-
-function resendFetch(path: string, init?: RequestInit): Promise<Response> | null {
-  const apiKey = process.env.RESEND_API_KEY
-  if (!apiKey) {
-    console.warn('[Resend Topics] RESEND_API_KEY not configured — skipping')
-    return null
-  }
-  return fetch(`${RESEND_BASE}${path}`, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      ...(init?.headers ?? {}),
-    },
-  })
-}
-
-export async function createResendTopic(audienceId: string, name: string): Promise<string | null> {
   try {
-    const res = resendFetch(`/audiences/${audienceId}/topics`, {
-      method: 'POST',
-      body: JSON.stringify({ name }),
-    })
-    if (!res) return null
-    const response = await res
-    if (!response.ok) {
-      console.error('[Resend Topics] Failed to create topic', { name, status: response.status })
+    type CreateTopicOptionsWithVisibility = Parameters<typeof resend.topics.create>[0] & {
+      visibility?: 'public' | 'private'
+    }
+    const { data, error } = await resend.topics.create({
+      name,
+      defaultSubscription: 'opt_out',
+      visibility: 'public',
+    } as CreateTopicOptionsWithVisibility)
+    if (error || !data) {
+      console.error('[Resend Topics] Failed to create topic', { name, error })
       return null
     }
-    const data = (await response.json()) as TopicCreateResponse
-    return data.data.id
+    return data.id
   } catch (err) {
     console.error('[Resend Topics] Exception creating topic', err)
     return null
   }
 }
 
-export async function updateResendTopic(
-  audienceId: string,
-  topicId: string,
-  name: string,
-): Promise<void> {
+export async function updateResendTopic(topicId: string, name: string): Promise<void> {
+  const resend = getResendClient()
+  if (!resend) return
+
   try {
-    const res = resendFetch(`/audiences/${audienceId}/topics/${topicId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ name }),
-    })
-    if (!res) return
-    const response = await res
-    if (!response.ok) {
-      console.error('[Resend Topics] Failed to update topic', {
-        topicId,
-        name,
-        status: response.status,
-      })
+    const { error } = await resend.topics.update({ id: topicId, name })
+    if (error) {
+      console.error('[Resend Topics] Failed to update topic', { topicId, name, error })
     }
   } catch (err) {
     console.error('[Resend Topics] Exception updating topic', err)
   }
 }
 
-export async function deleteResendTopic(audienceId: string, topicId: string): Promise<void> {
+export async function deleteResendTopic(topicId: string): Promise<void> {
+  const resend = getResendClient()
+  if (!resend) return
+
   try {
-    const res = resendFetch(`/audiences/${audienceId}/topics/${topicId}`, {
-      method: 'DELETE',
-    })
-    if (!res) return
-    const response = await res
-    if (!response.ok) {
-      console.error('[Resend Topics] Failed to delete topic', { topicId, status: response.status })
+    const { error } = await resend.topics.remove(topicId)
+    if (error) {
+      console.error('[Resend Topics] Failed to delete topic', { topicId, error })
     }
   } catch (err) {
     console.error('[Resend Topics] Exception deleting topic', err)
   }
 }
 
-export async function subscribeContactToTopic(
-  audienceId: string,
-  topicId: string,
-  email: string,
-): Promise<void> {
+export async function subscribeContactToTopic(topicId: string, email: string): Promise<void> {
+  const resend = getResendClient()
+  if (!resend) return
+
   try {
-    const res = resendFetch(`/audiences/${audienceId}/topics/${topicId}/contacts`, {
-      method: 'POST',
-      body: JSON.stringify({ email }),
+    const { error } = await resend.contacts.topics.update({
+      email,
+      topics: [{ id: topicId, subscription: 'opt_in' }],
     })
-    if (!res) return
-    const response = await res
-    if (!response.ok) {
-      console.error('[Resend Topics] Failed to subscribe contact to topic', {
-        topicId,
-        status: response.status,
-      })
+    if (error) {
+      console.error('[Resend Topics] Failed to subscribe contact to topic', { topicId, error })
     }
   } catch (err) {
     console.error('[Resend Topics] Exception subscribing contact to topic', err)
   }
 }
-
-export type { ResendTopic, TopicsListResponse }

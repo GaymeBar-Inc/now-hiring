@@ -17,4 +17,3 @@ export {
   deleteResendTopic,
   subscribeContactToTopic,
 } from './topics'
-export type { ResendTopic } from './topics'

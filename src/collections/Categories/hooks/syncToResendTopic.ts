@@ -1,42 +1,30 @@
-import type { CollectionAfterChangeHook } from 'payload'
-import type { Category, EmailSetting } from '../../../payload-types'
+import type { CollectionBeforeChangeHook } from 'payload'
+import type { Category } from '../../../payload-types'
 import { createResendTopic, updateResendTopic } from '../../../resend/topics'
 
-export const syncToResendTopic: CollectionAfterChangeHook<Category> = async ({
-  doc,
-  previousDoc,
+export const syncToResendTopic: CollectionBeforeChangeHook<Category> = async ({
+  data,
   operation,
-  req: { payload },
+  originalDoc,
 }) => {
-  // Skip the write-back re-entry: resendTopicId already set, title unchanged
-  if (operation === 'update' && doc.resendTopicId && doc.title === previousDoc?.title) {
-    return doc
-  }
-
   try {
-    const emailSettings = (await payload.findGlobal({
-      slug: 'email-settings',
-      depth: 0,
-    })) as EmailSetting
-    const audienceId = emailSettings?.resendAudienceId
-    if (!audienceId) return doc
-
-    if (!doc.resendTopicId) {
-      const topicId = await createResendTopic(audienceId, doc.title)
-      if (topicId) {
-        await payload.update({
-          collection: 'categories',
-          id: doc.id,
-          data: { resendTopicId: topicId },
-          overrideAccess: true,
-        })
-      }
-    } else if (doc.title !== previousDoc?.title) {
-      await updateResendTopic(audienceId, doc.resendTopicId, doc.title)
+    if (operation === 'create') {
+      // Create the Resend Topic and embed the ID in the document before first save.
+      // Using beforeChange avoids a payload.update() write-back, which was the source
+      // of the duplicate-topic bug (write-back re-fired afterChange with resendTopicId: null).
+      const topicId = await createResendTopic(data.title as string)
+      if (topicId) data.resendTopicId = topicId
+    } else if (
+      operation === 'update' &&
+      data.title !== undefined &&
+      data.title !== originalDoc?.title &&
+      originalDoc?.resendTopicId
+    ) {
+      await updateResendTopic(originalDoc.resendTopicId, data.title as string)
     }
   } catch (err) {
     console.error('[Categories] syncToResendTopic failed', err)
   }
 
-  return doc
+  return data
 }

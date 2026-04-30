@@ -44,10 +44,8 @@ export async function createAndSendResendBroadcast(
     subject,
     ...(previewText ? { previewText } : {}),
     html,
-    // topicId is supported by the Resend API for targeted sends; SDK types may not include it yet
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...(topicId ? { topicId } : {}),
-  } as any)
+  })
 
   if (error || !data) {
     return { status: 'error', message: error?.message ?? 'Unknown error from Resend' }
