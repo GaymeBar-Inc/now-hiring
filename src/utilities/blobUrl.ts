@@ -3,11 +3,10 @@ import { getServerSideURL } from './getURL'
 
 type ResolveOptions = {
   /**
-   * Prefer the 600px `small` size variant — ideal for email post cards.
-   * Falls back to the original if the size wasn't generated.
-   * Default: false
+   * Named size variant from the Media `sizes` object (e.g. `'thumbnail'`, `'small'`).
+   * Falls back to the original URL/filename if the variant wasn't generated.
    */
-  preferSmall?: boolean
+  size?: keyof NonNullable<Media['sizes']>
   /**
    * Allow localhost URLs. Set to true for the admin Live Preview, where the
    * browser can reach localhost. Leave false (default) for sent emails.
@@ -36,7 +35,7 @@ function getVercelBlobUrl(filename: string): string | null {
  * Resolves a publicly accessible URL from a Payload Media document for use in emails.
  *
  * Resolution order:
- * 1. `sizes.small.url` (if `preferSmall` is set) — 600px, ideal for email cards
+ * 1. `sizes[size].url` (if `size` is set) — selects a named generated variant
  * 2. `media.url` — the stored URL (absolute Vercel Blob URL for recent uploads)
  * 3. Vercel Blob URL constructed from `BLOB_READ_WRITE_TOKEN` + filename
  *    (handles legacy uploads where the URL was stored as a relative path)
@@ -48,10 +47,11 @@ export function resolvePayloadImageUrl(
 ): string | null {
   if (!image || typeof image === 'number') return null
 
-  const { preferSmall = false, preview = false, email = false } = options
+  const { size, preview = false, email = false } = options
 
-  const url = (preferSmall ? image.sizes?.small?.url : null) ?? image.url
-  const filename = (preferSmall ? image.sizes?.small?.filename : null) ?? image.filename
+  const sizeVariant = size ? (image.sizes?.[size] ?? null) : null
+  const url = sizeVariant?.url ?? image.url
+  const filename = sizeVariant?.filename ?? image.filename
 
   const serverUrl = getServerSideURL()
   const useProxy = email && !serverUrl.includes('localhost')
