@@ -14,7 +14,7 @@ export async function createResendTopic(
     const { data, error } = await resend.topics.create({
       name,
       ...(description ? { description } : {}),
-      defaultSubscription: 'opt_out',
+      defaultSubscription: 'opt_in',
       visibility: 'public',
     } as CreateTopicOptionsWithVisibility)
     if (error || !data) {
@@ -81,45 +81,3 @@ export async function subscribeContactToTopic(topicId: string, email: string): P
   }
 }
 
-interface ResendContact {
-  id: string
-  email: string
-  unsubscribed: boolean
-}
-
-interface ResendContactListResponse {
-  object: 'list'
-  data: ResendContact[]
-}
-
-export async function subscribeAllAudienceContactsToTopic(
-  audienceId: string,
-  topicId: string,
-): Promise<void> {
-  const resend = getResendClient()
-  if (!resend) return
-
-  try {
-    const { data, error } = (await resend.contacts.list({ audienceId })) as {
-      data: ResendContactListResponse | null
-      error: { message: string } | null
-    }
-    if (error || !data) {
-      console.error('[Resend Topics] Failed to list contacts for bulk topic subscribe', {
-        audienceId,
-        error,
-      })
-      return
-    }
-
-    const emails = data.data.filter((c) => !c.unsubscribed).map((c) => c.email)
-
-    await Promise.allSettled(emails.map((email) => subscribeContactToTopic(topicId, email)))
-    console.info('[Resend Topics] Bulk subscribed contacts to new topic', {
-      topicId,
-      count: emails.length,
-    })
-  } catch (err) {
-    console.error('[Resend Topics] Exception bulk subscribing contacts to topic', err)
-  }
-}
