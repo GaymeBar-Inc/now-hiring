@@ -28,14 +28,22 @@ export async function createResendTopic(
   }
 }
 
-export async function updateResendTopic(topicId: string, name: string): Promise<void> {
+export async function updateResendTopic(
+  topicId: string,
+  name?: string,
+  description?: string | null,
+): Promise<void> {
   const resend = getResendClient()
   if (!resend) return
 
   try {
-    const { error } = await resend.topics.update({ id: topicId, name })
+    const { error } = await resend.topics.update({
+      id: topicId,
+      ...(name !== undefined ? { name } : {}),
+      ...(description !== undefined ? { description: description ?? undefined } : {}),
+    })
     if (error) {
-      console.error('[Resend Topics] Failed to update topic', { topicId, name, error })
+      console.error('[Resend Topics] Failed to update topic', { topicId, error })
     }
   } catch (err) {
     console.error('[Resend Topics] Exception updating topic', err)
