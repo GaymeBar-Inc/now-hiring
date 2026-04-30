@@ -109,3 +109,25 @@ export async function addContactToResendSegment(
     }
   }
 }
+
+export async function removeContactFromResendAudience(
+  audienceId: string,
+  email: string,
+): Promise<void> {
+  const resend = getResendClient()
+  if (!resend) return
+
+  const normalizedEmail = email.trim().toLowerCase()
+
+  try {
+    const { error } = await resend.contacts.remove({ audienceId, email: normalizedEmail })
+    if (error) {
+      console.error('[Resend Contacts] Failed to remove contact from audience', {
+        email: normalizedEmail,
+        error,
+      })
+    }
+  } catch (err) {
+    console.error('[Resend Contacts] Exception removing contact from audience', err)
+  }
+}

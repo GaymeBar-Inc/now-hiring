@@ -14,7 +14,7 @@ export async function createResendTopic(
     const { data, error } = await resend.topics.create({
       name,
       ...(description ? { description } : {}),
-      defaultSubscription: 'opt_out',
+      defaultSubscription: 'opt_in',
       visibility: 'public',
     } as CreateTopicOptionsWithVisibility)
     if (error || !data) {
@@ -80,3 +80,4 @@ export async function subscribeContactToTopic(topicId: string, email: string): P
     console.error('[Resend Topics] Exception subscribing contact to topic', err)
   }
 }
+
