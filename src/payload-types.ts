@@ -284,6 +284,10 @@ export interface Post {
    * Manually select related posts. If left empty, related posts are chosen automatically by keyword and category.
    */
   relatedPosts?: (number | Post)[] | null;
+  /**
+   * When enabled, 3 related posts are automatically selected by keyword and category. Uncheck to hide the related posts section entirely.
+   */
+  includeRelatedPosts?: boolean | null;
   authors?: (number | User)[] | null;
   populatedAuthors?:
     | {
@@ -1326,6 +1330,7 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   keywords?: T;
   relatedPosts?: T;
+  includeRelatedPosts?: T;
   authors?: T;
   populatedAuthors?:
     | T

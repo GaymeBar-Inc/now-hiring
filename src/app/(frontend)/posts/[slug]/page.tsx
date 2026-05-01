@@ -62,7 +62,9 @@ export default async function Post({ params: paramsPromise }: Args) {
   const relatedPosts =
     manualRelatedPosts.length > 0
       ? manualRelatedPosts
-      : await getRelatedPostsByKeywords({ keywordIds, categoryIds, currentPostId: post.id })
+      : post.includeRelatedPosts !== false
+        ? await getRelatedPostsByKeywords({ keywordIds, categoryIds, currentPostId: post.id })
+        : []
 
   return (
     <article className="pt-16 pb-16">

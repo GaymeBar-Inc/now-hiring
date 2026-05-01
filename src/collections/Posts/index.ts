@@ -162,6 +162,21 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'posts',
             },
             {
+              name: 'includeRelatedPosts',
+              type: 'checkbox',
+              defaultValue: true,
+              label: 'Include Related Posts',
+              admin: {
+                position: 'sidebar',
+                description:
+                  'When enabled, 3 related posts are automatically selected by keyword and category. Uncheck to hide the related posts section entirely.',
+                condition: (data) => {
+                  const posts = data?.relatedPosts
+                  return !posts || (Array.isArray(posts) && posts.length === 0)
+                },
+              },
+            },
+            {
               name: 'authors',
               type: 'relationship',
               admin: {
