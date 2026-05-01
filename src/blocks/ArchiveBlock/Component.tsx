@@ -1,54 +1,41 @@
 import type { Post, ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
 
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import React from 'react'
 import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { getPostsByFilters } from '@/utilities/getPostsByFilters'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
     id?: string
   }
 > = async (props) => {
-  const { id, categories, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
+  const { id, categories, keywords, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
 
   const limit = limitFromProps || 3
 
   let posts: Post[] = []
 
   if (populateBy === 'collection') {
-    const payload = await getPayload({ config: configPromise })
+    const flattenedCategories = categories?.map((category) =>
+      typeof category === 'object' ? category.id : category,
+    )
 
-    const flattenedCategories = categories?.map((category) => {
-      if (typeof category === 'object') return category.id
-      else return category
-    })
+    const flattenedKeywords = keywords?.map((keyword) =>
+      typeof keyword === 'object' ? keyword.id : keyword,
+    )
 
-    const fetchedPosts = await payload.find({
-      collection: 'posts',
-      depth: 1,
+    posts = await getPostsByFilters({
+      categoryIds: flattenedCategories ?? [],
+      keywordIds: flattenedKeywords ?? [],
       limit,
-      ...(flattenedCategories && flattenedCategories.length > 0
-        ? {
-            where: {
-              categories: {
-                in: flattenedCategories,
-              },
-            },
-          }
-        : {}),
     })
-
-    posts = fetchedPosts.docs
   } else {
     if (selectedDocs?.length) {
-      const filteredSelectedPosts = selectedDocs.map((post) => {
+      posts = selectedDocs.map((post) => {
         if (typeof post.value === 'object') return post.value
       }) as Post[]
-
-      posts = filteredSelectedPosts
     }
   }
 
