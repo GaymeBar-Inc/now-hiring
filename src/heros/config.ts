@@ -24,6 +24,10 @@ export const hero: Field = {
           value: 'none',
         },
         {
+          label: 'Landing (Amber)',
+          value: 'landingImpact',
+        },
+        {
           label: 'High Impact',
           value: 'highImpact',
         },
@@ -65,7 +69,7 @@ export const hero: Field = {
         condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
       },
       relationTo: 'media',
-      required: true,
+      required: false,
     },
   ],
   label: false,

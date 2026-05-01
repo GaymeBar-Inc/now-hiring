@@ -96,6 +96,9 @@ const config = {
       fontFamily: {
         mono: ['var(--font-geist-mono)'],
         sans: ['var(--font-geist-sans)'],
+        serif: ['var(--font-fraunces)', 'Georgia', 'serif'],
+        display: ['var(--font-fraunces)', 'Georgia', 'serif'],
+        body: ['var(--font-plus-jakarta-sans)', 'var(--font-geist-sans)', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {
