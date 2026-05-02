@@ -46,7 +46,7 @@ export const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({
                     &ldquo;{t.quote}&rdquo;
                   </p>
                 </blockquote>
-                <figcaption className="flex flex-col gap-0.5 border-l-2 border-primary pl-4">
+                <figcaption className="flex flex-col gap-0.5 pt-4" style={{ borderTop: '1px solid var(--color-amber-light)' }}>
                   <span className="text-body font-semibold" style={{ fontSize: '1rem' }}>
                     {t.author}
                   </span>

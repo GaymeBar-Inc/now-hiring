@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Now Hiring — Brand Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --amber:      oklch(65% 0.18 65);
+      --amber-deep: oklch(45% 0.15 55);
+      --off-white:  oklch(97% 0.005 70);
+      --near-black: oklch(12% 0.01 60);
+      --mid-gray:   oklch(55% 0.005 65);
+
+      --font-display: 'Fraunces', serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+    }
+
+    html { background: var(--off-white); color: var(--near-black); }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--near-black);
+      background: var(--off-white);
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* ─── Shared ───────────────────────────────────────────────── */
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    /* ─── 01 Identity ──────────────────────────────────────────── */
+
+    .identity {
+      background: var(--amber);
+      padding: clamp(4rem, 10vw, 9rem) clamp(2rem, 6vw, 6rem);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem;
+      min-height: 52vh;
+    }
+
+    .identity__left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 1.5rem;
+    }
+
+    .identity__eyebrow {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber-deep);
+    }
+
+    .identity__wordmark {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 900;
+      line-height: 0.92;
+      color: var(--near-black);
+      letter-spacing: -0.02em;
+    }
+
+    .identity__tagline {
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 2.5vw, 2rem);
+      font-weight: 700;
+      font-style: italic;
+      color: var(--amber-deep);
+      max-width: 40ch;
+    }
+
+    .identity__meta {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--near-black);
+      opacity: 0.65;
+      max-width: 50ch;
+      line-height: 1.6;
+    }
+
+    .identity__badge {
+      align-self: flex-start;
+      background: var(--near-black);
+      color: var(--amber);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.25rem;
+      white-space: nowrap;
+    }
+
+    .identity__right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    .identity__version {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      opacity: 0.4;
+      writing-mode: vertical-rl;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ─── 02 Palette ───────────────────────────────────────────── */
+
+    .palette {
+      background: var(--near-black);
+      padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 6vw, 6rem);
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .palette .section-label { color: var(--off-white); }
+
+    .palette__swatches {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+    }
+
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .swatch__color {
+      aspect-ratio: 1;
+      width: 100%;
+      border: 1px solid oklch(30% 0.005 65);
+    }
+
+    .swatch__color--off-white {
+      border-color: oklch(75% 0.005 65);
+    }
+
+    .swatch__name {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--off-white);
+    }
+
+    .swatch__value {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--mid-gray);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── 03 Typography ────────────────────────────────────────── */
+
+    .typography {
+      background: var(--off-white);
+      padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 6vw, 6rem);
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .typography__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid oklch(85% 0.005 65);
+      padding-bottom: 1.5rem;
+    }
+
+    .typography__families {
+      display: flex;
+      gap: 2rem;
+      font-size: 1rem;
+      color: var(--mid-gray);
+    }
+
+    .typography__families span { font-weight: 500; color: var(--near-black); }
+
+    .type-row {
+      display: grid;
+      grid-template-columns: 6rem 1fr;
+      gap: 1.5rem 3rem;
+      align-items: baseline;
+      border-bottom: 1px solid oklch(90% 0.005 65);
+      padding-bottom: 2.5rem;
+    }
+
+    .type-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .type-row__meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-top: 0.5rem;
+    }
+
+    .type-row__level {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--near-black);
+    }
+
+    .type-row__spec {
+      font-size: 1rem;
+      color: var(--mid-gray);
+      line-height: 1.5;
+    }
+
+    .type-display {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 7vw, 6rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      color: var(--near-black);
+    }
+
+    .type-headline {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.05;
+      color: var(--near-black);
+    }
+
+    .type-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 2vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--near-black);
+    }
+
+    .type-body {
+      font-family: var(--font-body);
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: 1.65;
+      max-width: 68ch;
+      color: var(--near-black);
+    }
+
+    .type-label {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--near-black);
+    }
+
+    /* ─── 04 Icons ─────────────────────────────────────────────── */
+
+    .icons {
+      background: var(--amber);
+      padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 6vw, 6rem);
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .icons__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .icons__source {
+      font-size: 1rem;
+      color: var(--amber-deep);
+      font-weight: 500;
+    }
+
+    .icons__grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+
+    .icon-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .icon-cell i {
+      font-size: 2rem;
+      color: var(--near-black);
+    }
+
+    .icon-cell__label {
+      font-size: 1rem;
+      color: var(--amber-deep);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    /* ─── 05 Components ────────────────────────────────────────── */
+
+    .components {
+      background: var(--off-white);
+      padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 6vw, 6rem);
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .components__row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .component-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .component-group__label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--mid-gray);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.875rem 1.75rem;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: background 150ms, color 150ms, border-color 150ms;
+      text-decoration: none;
+    }
+
+    .btn--primary {
+      background: var(--amber);
+      color: var(--near-black);
+      border-color: var(--amber);
+    }
+
+    .btn--primary:hover {
+      background: var(--amber-deep);
+      border-color: var(--amber-deep);
+      color: var(--off-white);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--near-black);
+      border-color: var(--near-black);
+    }
+
+    .btn--ghost:hover {
+      background: var(--near-black);
+      color: var(--off-white);
+    }
+
+    .btn--ghost-amber {
+      background: transparent;
+      color: var(--amber-deep);
+      border-color: var(--amber);
+    }
+
+    .btn--ghost-amber:hover {
+      background: var(--amber);
+      color: var(--near-black);
+    }
+
+    /* Input */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .field__label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--near-black);
+    }
+
+    .field__input {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--near-black);
+      background: var(--off-white);
+      border: 2px solid oklch(80% 0.01 65);
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 150ms;
+      width: 100%;
+    }
+
+    .field__input:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 0 3px oklch(65% 0.18 65 / 0.2);
+    }
+
+    .field__input.is-focused {
+      border-color: var(--amber);
+      box-shadow: 0 0 0 3px oklch(65% 0.18 65 / 0.2);
+    }
+
+    .field__hint {
+      font-size: 1rem;
+      color: var(--mid-gray);
+    }
+
+    /* Card */
+    .post-card {
+      background: var(--off-white);
+      border: 1px solid oklch(88% 0.005 65);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: box-shadow 200ms, transform 200ms;
+      cursor: pointer;
+    }
+
+    .post-card:hover, .post-card.is-hovered {
+      box-shadow: 0 8px 24px oklch(12% 0.01 60 / 0.12);
+      transform: translateY(-2px);
+    }
+
+    .post-card__tag {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--amber-deep);
+    }
+
+    .post-card__title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--near-black);
+    }
+
+    .post-card__excerpt {
+      font-size: 1rem;
+      color: var(--mid-gray);
+      line-height: 1.6;
+    }
+
+    .post-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+    }
+
+    .post-card__date {
+      font-size: 1rem;
+      color: var(--mid-gray);
+    }
+
+    .post-card__arrow {
+      color: var(--amber-deep);
+      font-size: 1.25rem;
+      transition: transform 150ms;
+    }
+
+    .post-card:hover .post-card__arrow,
+    .post-card.is-hovered .post-card__arrow {
+      transform: translateX(4px);
+    }
+
+    /* ─── 06 Social Tiles ──────────────────────────────────────── */
+
+    .social {
+      background: var(--near-black);
+      padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 6vw, 6rem);
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .social .section-label { color: var(--off-white); }
+
+    .social__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .tile-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .tile-spec {
+      font-size: 1rem;
+      color: var(--mid-gray);
+      font-weight: 500;
+    }
+
+    /* OG Tile — 1200×630, displayed at ~600×315 */
+    .tile-og {
+      background: var(--amber);
+      aspect-ratio: 1200/630;
+      width: 100%;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: clamp(1.5rem, 4%, 2.5rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tile-og__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      z-index: 1;
+    }
+
+    .tile-og__eyebrow {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber-deep);
+    }
+
+    .tile-og__headline {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--near-black);
+      max-width: 18ch;
+    }
+
+    .tile-og__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tile-og__name {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--near-black);
+      opacity: 0.7;
+    }
+
+    .tile-og__logo {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--near-black);
+      letter-spacing: -0.02em;
+      opacity: 0.5;
+    }
+
+    /* Square Tile — 1080×1080 */
+    .tile-square {
+      background: var(--near-black);
+      border: 1px solid oklch(25% 0.005 65);
+      aspect-ratio: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(1.25rem, 6%, 2rem);
+      gap: 0.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tile-square::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 55%;
+      background: var(--amber);
+    }
+
+    .tile-square__content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .tile-square__label {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+    }
+
+    .tile-square__headline {
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--off-white);
+    }
+
+    .tile-square__sub {
+      font-size: 1rem;
+      color: var(--mid-gray);
+    }
+
+    /* ─── 07 Direction ─────────────────────────────────────────── */
+
+    .direction {
+      background: var(--off-white);
+      padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 6vw, 6rem);
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .direction__pairs {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .direction-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid oklch(88% 0.005 65);
+    }
+
+    .direction-pair:last-child { border-bottom: none; }
+
+    .direction-item {
+      padding: 2rem 2.5rem 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .direction-item:last-child {
+      padding-left: 2.5rem;
+      padding-right: 0;
+      border-left: 1px solid oklch(88% 0.005 65);
+    }
+
+    .direction-item__signal {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .direction-item__signal--do { color: oklch(50% 0.15 150); }
+    .direction-item__signal--dont { color: oklch(50% 0.18 25); }
+
+    .direction-item__rule {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--near-black);
+    }
+
+    .direction-item__reason {
+      font-size: 1rem;
+      color: var(--mid-gray);
+      line-height: 1.6;
+      max-width: 52ch;
+    }
+
+    /* ─── 08 Footer ────────────────────────────────────────────── */
+
+    .board-footer {
+      background: var(--amber);
+      padding: 2rem clamp(2rem, 6vw, 6rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .board-footer__name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--near-black);
+      letter-spacing: -0.01em;
+    }
+
+    .board-footer__meta {
+      font-size: 1rem;
+      color: var(--amber-deep);
+      font-weight: 500;
+    }
+
+    /* ─── Print ────────────────────────────────────────────────── */
+
+    @media print {
+      body { max-width: 100%; }
+      .identity { min-height: auto; }
+    }
+
+    @media (max-width: 900px) {
+      .palette__swatches { grid-template-columns: repeat(3, 1fr); }
+      .icons__grid { grid-template-columns: repeat(6, 1fr); }
+      .components__row { grid-template-columns: 1fr; }
+      .social__grid { grid-template-columns: 1fr; }
+      .direction-pair { grid-template-columns: 1fr; }
+      .direction-item:last-child { padding-left: 0; border-left: none; border-top: 1px solid oklch(88% 0.005 65); }
+      .type-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .identity { grid-template-columns: 1fr; }
+      .identity__right { display: none; }
+      .palette__swatches { grid-template-columns: repeat(2, 1fr); }
+      .icons__grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .post-card { transition: box-shadow 200ms ease, transform 200ms ease; }
+      .btn { transition: background 150ms ease, color 150ms ease, border-color 150ms ease; }
+      .post-card__arrow { transition: transform 150ms ease; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .post-card, .btn, .post-card__arrow { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 01 · IDENTITY ─────────────────────────────────────────── -->
+  <section class="identity" aria-label="Brand Identity">
+    <div class="identity__left">
+      <span class="identity__eyebrow">Engineer Portfolio Template</span>
+      <h1 class="identity__wordmark">Now<br>Hiring</h1>
+      <p class="identity__tagline">Show up like a product.</p>
+      <p class="identity__meta">
+        A Payload CMS template for engineers who want to build an audience
+        while establishing expertise — newsletter and contact, above the fold.
+      </p>
+    </div>
+    <div class="identity__right">
+      <span class="identity__badge">Brand Board</span>
+      <span class="identity__version">v1.0 · 2026</span>
+    </div>
+  </section>
+
+  <!-- 02 · PALETTE ──────────────────────────────────────────── -->
+  <section class="palette" aria-label="Color Palette">
+    <span class="section-label">02 · Palette</span>
+    <div class="palette__swatches" role="list">
+
+      <div class="swatch" role="listitem">
+        <div class="swatch__color" style="background: var(--amber);" aria-label="Warm Amber swatch"></div>
+        <span class="swatch__name">Warm Amber</span>
+        <span class="swatch__value">oklch(65% 0.18 65)</span>
+      </div>
+
+      <div class="swatch" role="listitem">
+        <div class="swatch__color" style="background: var(--amber-deep);" aria-label="Deep Amber swatch"></div>
+        <span class="swatch__name">Deep Amber</span>
+        <span class="swatch__value">oklch(45% 0.15 55)</span>
+      </div>
+
+      <div class="swatch" role="listitem">
+        <div class="swatch__color swatch__color--off-white" style="background: var(--off-white);" aria-label="Warm Off-White swatch"></div>
+        <span class="swatch__name">Off-White</span>
+        <span class="swatch__value">oklch(97% 0.005 70)</span>
+      </div>
+
+      <div class="swatch" role="listitem">
+        <div class="swatch__color" style="background: var(--near-black);" aria-label="Warm Near-Black swatch"></div>
+        <span class="swatch__name">Near-Black</span>
+        <span class="swatch__value">oklch(12% 0.01 60)</span>
+      </div>
+
+      <div class="swatch" role="listitem">
+        <div class="swatch__color" style="background: var(--mid-gray);" aria-label="Warm Mid-Gray swatch"></div>
+        <span class="swatch__name">Mid-Gray</span>
+        <span class="swatch__value">oklch(55% 0.005 65)</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 03 · TYPOGRAPHY ───────────────────────────────────────── -->
+  <section class="typography" aria-label="Typography Specimen">
+    <div class="typography__header">
+      <span class="section-label">03 · Typography</span>
+      <div class="typography__families" aria-label="Font families">
+        <span>Display: <span>Fraunces</span></span>
+        <span>Body: <span>Plus Jakarta Sans</span></span>
+      </div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-row__meta">
+        <span class="type-row__level">Display</span>
+        <span class="type-row__spec">Fraunces 900<br>clamp(3.5rem, 7vw, 6rem)<br>lh 0.92</span>
+      </div>
+      <p class="type-display">Show up like<br>a product.</p>
+    </div>
+
+    <div class="type-row">
+      <div class="type-row__meta">
+        <span class="type-row__level">Headline</span>
+        <span class="type-row__spec">Fraunces 800<br>clamp(2rem, 4vw, 3.25rem)<br>lh 1.05</span>
+      </div>
+      <p class="type-headline">Writing that earns trust<br>before the first email.</p>
+    </div>
+
+    <div class="type-row">
+      <div class="type-row__meta">
+        <span class="type-row__level">Title</span>
+        <span class="type-row__spec">Fraunces 700<br>clamp(1.25rem, 2vw, 1.75rem)<br>lh 1.2</span>
+      </div>
+      <p class="type-title">Posts that double as broadcasts</p>
+    </div>
+
+    <div class="type-row">
+      <div class="type-row__meta">
+        <span class="type-row__level">Body</span>
+        <span class="type-row__spec">Jakarta Sans 400<br>1.125rem · max 68ch<br>lh 1.65</span>
+      </div>
+      <p class="type-body">A Payload CMS template for engineers who want to show up online like a business, not a developer with a hobby site. The portfolio is structured like a product landing page — clear value proposition, social proof through writing, and two focused conversion points.</p>
+    </div>
+
+    <div class="type-row">
+      <div class="type-row__meta">
+        <span class="type-row__level">Label</span>
+        <span class="type-row__spec">Jakarta Sans 500<br>1rem · ls 0.08em<br>UPPERCASE</span>
+      </div>
+      <p class="type-label">Newsletter &nbsp;·&nbsp; Contact &nbsp;·&nbsp; Posts &nbsp;·&nbsp; About</p>
+    </div>
+  </section>
+
+  <!-- 04 · ICONS ────────────────────────────────────────────── -->
+  <section class="icons" aria-label="Icon Language">
+    <div class="icons__header">
+      <span class="section-label">04 · Icons</span>
+      <span class="icons__source">Phosphor Icons · Bold weight</span>
+    </div>
+    <div class="icons__grid" role="list">
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-envelope" aria-hidden="true"></i><span class="icon-cell__label">Envelope</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-arrow-right" aria-hidden="true"></i><span class="icon-cell__label">ArrowRight</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-check" aria-hidden="true"></i><span class="icon-cell__label">Check</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-star" aria-hidden="true"></i><span class="icon-cell__label">Star</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-code" aria-hidden="true"></i><span class="icon-cell__label">Code</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-user" aria-hidden="true"></i><span class="icon-cell__label">User</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-chat-text" aria-hidden="true"></i><span class="icon-cell__label">ChatText</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-rss" aria-hidden="true"></i><span class="icon-cell__label">Rss</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-lightning" aria-hidden="true"></i><span class="icon-cell__label">Lightning</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-book-open" aria-hidden="true"></i><span class="icon-cell__label">BookOpen</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-tag" aria-hidden="true"></i><span class="icon-cell__label">Tag</span></div>
+      <div class="icon-cell" role="listitem"><i class="ph-bold ph-x" aria-hidden="true"></i><span class="icon-cell__label">X</span></div>
+    </div>
+  </section>
+
+  <!-- 05 · COMPONENTS ───────────────────────────────────────── -->
+  <section class="components" aria-label="UI Components">
+    <span class="section-label">05 · Components</span>
+    <div class="components__row">
+
+      <div class="component-group">
+        <span class="component-group__label">Buttons</span>
+        <button class="btn btn--primary" type="button">
+          Subscribe <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn--ghost" type="button">
+          Get in touch
+        </button>
+        <button class="btn btn--ghost-amber" type="button">
+          Read more <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="component-group">
+        <span class="component-group__label">Input · Focus state</span>
+        <div class="field">
+          <label class="field__label" for="email-demo">Email address</label>
+          <input
+            class="field__input is-focused"
+            id="email-demo"
+            type="email"
+            value="you@company.com"
+            aria-describedby="email-hint"
+          >
+          <span class="field__hint" id="email-hint">Weekly signal, no noise.</span>
+        </div>
+      </div>
+
+      <div class="component-group">
+        <span class="component-group__label">Post card · Hover state</span>
+        <article class="post-card is-hovered">
+          <span class="post-card__tag">Engineering</span>
+          <h3 class="post-card__title">How I structure a client engagement from day one</h3>
+          <p class="post-card__excerpt">The first three days determine everything. Here's the checklist I run before writing a single line of code.</p>
+          <div class="post-card__footer">
+            <time class="post-card__date" datetime="2026-05-02">May 2, 2026</time>
+            <i class="ph-bold ph-arrow-right post-card__arrow" aria-hidden="true"></i>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 06 · SOCIAL TILES ─────────────────────────────────────── -->
+  <section class="social" aria-label="Social Tiles">
+    <span class="section-label">06 · Social Tiles</span>
+    <div class="social__grid">
+
+      <div class="tile-wrapper">
+        <span class="tile-spec">OG Image · 1200 × 630</span>
+        <div class="tile-og" role="img" aria-label="Open Graph image preview">
+          <div class="tile-og__content">
+            <span class="tile-og__eyebrow">Engineer Portfolio</span>
+            <p class="tile-og__headline">Show up like a product.</p>
+          </div>
+          <div class="tile-og__footer">
+            <span class="tile-og__name">Jason Toups</span>
+            <span class="tile-og__logo">Now Hiring</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile-wrapper">
+        <span class="tile-spec">Square · 1080 × 1080</span>
+        <div class="tile-square" role="img" aria-label="Square social tile preview">
+          <div class="tile-square__content">
+            <span class="tile-square__label">New Post</span>
+            <p class="tile-square__headline">Writing that earns trust before the first email.</p>
+            <span class="tile-square__sub">nowhiring.dev</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 07 · DIRECTION ────────────────────────────────────────── -->
+  <section class="direction" aria-label="Design Direction">
+    <span class="section-label">07 · Direction</span>
+    <div class="direction__pairs">
+
+      <div class="direction-pair">
+        <div class="direction-item">
+          <span class="direction-item__signal direction-item__signal--do" aria-label="Do">
+            <i class="ph-bold ph-check" aria-hidden="true"></i> Do
+          </span>
+          <p class="direction-item__rule">Amber as atmosphere, not accent.</p>
+          <p class="direction-item__reason">Warm amber carries 30–60% of any given screen. It is the atmosphere, not a button highlight on an otherwise gray page.</p>
+        </div>
+        <div class="direction-item">
+          <span class="direction-item__signal direction-item__signal--dont" aria-label="Don't">
+            <i class="ph-bold ph-x" aria-hidden="true"></i> Don't
+          </span>
+          <p class="direction-item__rule">Never use pure white or pure black.</p>
+          <p class="direction-item__reason">Every surface carries the amber warmth tint. No surface is ever #ffffff or #000000 — chroma 0.005–0.01 in OKLCH is enough.</p>
+        </div>
+      </div>
+
+      <div class="direction-pair">
+        <div class="direction-item">
+          <span class="direction-item__signal direction-item__signal--do" aria-label="Do">
+            <i class="ph-bold ph-check" aria-hidden="true"></i> Do
+          </span>
+          <p class="direction-item__rule">Subscribe before scroll.</p>
+          <p class="direction-item__reason">The newsletter is the primary conversion. The subscribe CTA belongs in the hero and at least one mid-page section — never buried in the footer.</p>
+        </div>
+        <div class="direction-item">
+          <span class="direction-item__signal direction-item__signal--dont" aria-label="Don't">
+            <i class="ph-bold ph-x" aria-hidden="true"></i> Don't
+          </span>
+          <p class="direction-item__rule">No gradient text or side-stripe borders.</p>
+          <p class="direction-item__reason">background-clip: text is decorative, never meaningful. Side-stripe borders above 1px on cards or callouts are banned. Use background tints or nothing.</p>
+        </div>
+      </div>
+
+      <div class="direction-pair">
+        <div class="direction-item">
+          <span class="direction-item__signal direction-item__signal--do" aria-label="Do">
+            <i class="ph-bold ph-check" aria-hidden="true"></i> Do
+          </span>
+          <p class="direction-item__rule">Fraunces at Black weight only.</p>
+          <p class="direction-item__reason">Fraunces appears at Display, Headline, and Title levels only. Never body copy or labels. Its authority comes from rarity and weight — light cuts collapse the contrast.</p>
+        </div>
+        <div class="direction-item">
+          <span class="direction-item__signal direction-item__signal--dont" aria-label="Don't">
+            <i class="ph-bold ph-x" aria-hidden="true"></i> Don't
+          </span>
+          <p class="direction-item__rule">No motion that can't be turned off.</p>
+          <p class="direction-item__reason">Every entrance animation and scroll sequence must be gated by prefers-reduced-motion. State transitions (color, opacity) survive; translate/scale animations are suppressed.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer ────────────────────────────────────────────────── -->
+  <footer class="board-footer">
+    <span class="board-footer__name">Now Hiring</span>
+    <span class="board-footer__meta">Brand Board · v1.0 · 2026</span>
+  </footer>
+
+</body>
+</html>

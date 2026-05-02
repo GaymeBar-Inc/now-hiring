@@ -54,6 +54,7 @@
     "react-dom": "19.2.1",
     "react-hook-form": "7.45.4",
     "resend": "^6.6.0",
+    "shaders": "^2.5.110",
     "sharp": "0.34.2",
     "svix": "^1.92.2",
     "tailwind-merge": "^2.3.0",
