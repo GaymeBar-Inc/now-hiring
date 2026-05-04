@@ -21,11 +21,11 @@ export const ServicesBlock: React.FC<ServicesBlockProps> = ({ heading, descripti
       <div className="container">
         <RevealOnScroll>
           <div className="mb-16 max-w-2xl">
-            {heading && (
-              <h2 className="text-headline mb-4">{heading}</h2>
-            )}
+            {heading && <h2 className="text-headline mb-4">{heading}</h2>}
             {description && (
-              <p className="text-body text-muted-foreground">{description}</p>
+              <p className="text-foreground/75" style={{ fontSize: '1.0625rem', lineHeight: '1.7' }}>
+                {description}
+              </p>
             )}
           </div>
         </RevealOnScroll>
@@ -42,15 +42,15 @@ export const ServicesBlock: React.FC<ServicesBlockProps> = ({ heading, descripti
                 )}
               >
                 <dt>
-                  <span className="text-label text-muted-foreground">
+                  <span className="text-label text-primary font-semibold">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <p className="text-title mt-2 group-hover:text-primary transition-colors duration-200">
+                  <p className="text-title mt-2 text-foreground group-hover:text-primary transition-colors duration-200">
                     {service.title}
                   </p>
                 </dt>
                 <dd>
-                  <p className="text-body text-muted-foreground leading-relaxed">
+                  <p className="text-foreground/82 leading-relaxed" style={{ fontSize: '1.0625rem', lineHeight: '1.7' }}>
                     {service.description}
                   </p>
                 </dd>

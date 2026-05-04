@@ -37,7 +37,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
       })
 
       if (!res.ok) {
-        const data = await res.json() as { error?: string }
+        const data = (await res.json()) as { error?: string }
         throw new Error(data.error || 'Something went wrong.')
       }
 
@@ -45,12 +45,14 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
       setEmail('')
     } catch (err) {
       setStatus('error')
-      setErrorMessage(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setErrorMessage(
+        err instanceof Error ? err.message : 'Something went wrong. Please try again.',
+      )
     }
   }
 
   return (
-    <section id="subscribe" className="section-amber py-20">
+    <section id="subscribe" className="section-amber py-20 rounded-4xl">
       <div className="container">
         <div className="mx-auto max-w-2xl">
           {status === 'success' ? (
@@ -66,7 +68,10 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
               >
                 You&rsquo;re in.
               </p>
-              <p className="text-body" style={{ color: 'var(--color-warm-near-black)', opacity: 0.75 }}>
+              <p
+                className="text-body"
+                style={{ color: 'var(--color-warm-near-black)', opacity: 0.75 }}
+              >
                 Welcome — check your inbox for a confirmation.
               </p>
             </div>
