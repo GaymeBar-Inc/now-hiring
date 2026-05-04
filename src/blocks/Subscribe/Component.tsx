@@ -147,7 +147,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
                     id="subscribe-error"
                     role="alert"
                     className="mt-3 text-body"
-                    style={{ color: 'hsl(var(--destructive))', fontSize: '1rem' }}
+                    style={{ color: 'var(--destructive)', fontSize: '1rem' }}
                   >
                     {errorMessage}
                   </p>

@@ -482,6 +482,7 @@ export interface Page {
   title: string;
   hero: {
     type: 'none' | 'landingImpact' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    heading?: string | null;
     richText?: {
       root: {
         type: string;
@@ -1282,6 +1283,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
+        heading?: T;
         richText?: T;
         links?:
           | T

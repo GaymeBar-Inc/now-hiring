@@ -43,6 +43,11 @@ export const hero: Field = {
       required: true,
     },
     {
+      name: 'heading',
+      type: 'text',
+      label: 'Heading',
+    },
+    {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({

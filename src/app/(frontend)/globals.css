@@ -1,118 +1,157 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate";
+
+@source "../../../**/*.{ts,tsx}";
+@source inline("lg:col-span-4 lg:col-span-6 lg:col-span-8 lg:col-span-12 border-border bg-card border-error bg-error/30 border-success bg-success/30 border-warning bg-warning/30");
+
+/* ─── Dark mode via data-theme attribute ──────────────────────────────────── */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* ─── Design tokens ───────────────────────────────────────────────────────── */
+
+:root {
+  /* Amber palette — primitives */
+  --amber:       oklch(65% 0.16 58);
+  --amber-deep:  oklch(42% 0.16 54);
+  --amber-dark:  oklch(28% 0.12 52);
+  --amber-light: oklch(82% 0.10 65);
+  --amber-pale:  oklch(93% 0.04 68);
+
+  /* Semantic surfaces — light mode */
+  --background:               oklch(97% 0.006 70);
+  --foreground:               oklch(11% 0.01 60);
+  --card:                     oklch(94% 0.008 68);
+  --card-foreground:          oklch(11% 0.01 60);
+  --popover:                  oklch(97% 0.006 70);
+  --popover-foreground:       oklch(11% 0.01 60);
+  --primary:                  oklch(65% 0.16 58);
+  --primary-foreground:       oklch(11% 0.01 60);
+  --secondary:                oklch(96% 0.005 68);
+  --secondary-foreground:     oklch(11% 0.01 60);
+  --muted:                    oklch(96% 0.005 68);
+  --muted-foreground:         oklch(52% 0.005 65);
+  --accent:                   oklch(92% 0.04 68);
+  --accent-foreground:        oklch(11% 0.01 60);
+  --destructive:              oklch(60% 0.21 25);
+  --destructive-foreground:   oklch(97% 0.006 70);
+  --border:                   oklch(88% 0.012 65);
+  --input:                    oklch(92% 0.008 68);
+  --ring:                     oklch(55% 0.18 58);
+  --radius:                   0.5rem;
+  --success:                  oklch(55% 0.14 155);
+  --warning:                  oklch(75% 0.18 70);
+  --error:                    oklch(60% 0.21 25);
+}
+
+[data-theme='dark'] {
+  --background:               oklch(11% 0.01 58);
+  --foreground:               oklch(96% 0.005 68);
+  --card:                     oklch(15% 0.01 58);
+  --card-foreground:          oklch(96% 0.005 68);
+  --popover:                  oklch(11% 0.01 58);
+  --popover-foreground:       oklch(96% 0.005 68);
+  --primary:                  oklch(70% 0.16 60);
+  --primary-foreground:       oklch(11% 0.01 58);
+  --secondary:                oklch(20% 0.008 58);
+  --secondary-foreground:     oklch(96% 0.005 68);
+  --muted:                    oklch(20% 0.008 58);
+  --muted-foreground:         oklch(58% 0.008 65);
+  --accent:                   oklch(20% 0.008 58);
+  --accent-foreground:        oklch(96% 0.005 68);
+  --destructive:              oklch(40% 0.15 25);
+  --destructive-foreground:   oklch(96% 0.005 68);
+  --border:                   oklch(22% 0.008 58);
+  --input:                    oklch(20% 0.008 58);
+  --ring:                     oklch(70% 0.16 60);
+  --success:                  oklch(38% 0.10 155);
+  --warning:                  oklch(45% 0.12 70);
+  --error:                    oklch(45% 0.14 25);
+}
+
+/* ─── @theme — maps tokens to Tailwind utility classes ───────────────────── */
+
+@theme inline {
+  --color-background:               var(--background);
+  --color-foreground:               var(--foreground);
+  --color-card:                     var(--card);
+  --color-card-foreground:          var(--card-foreground);
+  --color-popover:                  var(--popover);
+  --color-popover-foreground:       var(--popover-foreground);
+  --color-primary:                  var(--primary);
+  --color-primary-foreground:       var(--primary-foreground);
+  --color-secondary:                var(--secondary);
+  --color-secondary-foreground:     var(--secondary-foreground);
+  --color-muted:                    var(--muted);
+  --color-muted-foreground:         var(--muted-foreground);
+  --color-accent:                   var(--accent);
+  --color-accent-foreground:        var(--accent-foreground);
+  --color-destructive:              var(--destructive);
+  --color-destructive-foreground:   var(--destructive-foreground);
+  --color-border:                   var(--border);
+  --color-input:                    var(--input);
+  --color-ring:                     var(--ring);
+  --color-success:                  var(--success);
+  --color-warning:                  var(--warning);
+  --color-error:                    var(--error);
+
+  --color-amber:       var(--amber);
+  --color-amber-deep:  var(--amber-deep);
+  --color-amber-dark:  var(--amber-dark);
+  --color-amber-light: var(--amber-light);
+  --color-amber-pale:  var(--amber-pale);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans:    var(--font-plus-jakarta-sans, var(--font-geist-sans)), sans-serif;
+  --font-mono:    var(--font-geist-mono), monospace;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-serif:   var(--font-fraunces), Georgia, serif;
+  --font-body:    var(--font-plus-jakarta-sans, var(--font-geist-sans)), sans-serif;
+}
+
+/* ─── Container ───────────────────────────────────────────────────────────── */
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) { max-width: 40rem; padding-inline: 1rem; }
+  @media (width >= 48rem) { max-width: 48rem; padding-inline: 2rem; }
+  @media (width >= 64rem) { max-width: 64rem; padding-inline: 2rem; }
+  @media (width >= 80rem) { max-width: 80rem; padding-inline: 2rem; }
+  @media (width >= 86rem) { max-width: 86rem; padding-inline: 2rem; }
+}
+
+/* ─── Base layer ──────────────────────────────────────────────────────────── */
 
 @layer base {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-size: unset;
     font-weight: unset;
   }
 
-  :root {
-    /* Warm amber palette — all neutrals tinted toward amber hue */
-    --background: 42 30% 97%;
-    --foreground: 35 15% 11%;
-
-    --card: 40 25% 94%;
-    --card-foreground: 35 15% 11%;
-
-    --popover: 42 30% 97%;
-    --popover-foreground: 35 15% 11%;
-
-    /* Amber as primary — not an accent, the atmosphere */
-    --primary: 38 85% 55%;
-    --primary-foreground: 35 15% 11%;
-
-    --secondary: 40 20% 96%;
-    --secondary-foreground: 35 15% 11%;
-
-    --muted: 40 20% 96%;
-    --muted-foreground: 35 8% 52%;
-
-    --accent: 38 80% 92%;
-    --accent-foreground: 35 15% 11%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 42 30% 97%;
-
-    --border: 38 22% 88%;
-    --input: 40 20% 92%;
-    /* Amber focus rings — WCAG AA visible, on-brand */
-    --ring: 38 85% 45%;
-
-    --radius: 0.5rem;
-
-    --success: 158 60% 38%;
-    --warning: 38 92% 50%;
-    --error: 0 84% 60%;
-
-    /* OKLCH primitives — canonical color references for custom components */
-    --color-amber: oklch(65% 0.16 58);
-    --color-amber-deep: oklch(42% 0.16 54);
-    --color-amber-dark: oklch(28% 0.12 52);
-    --color-amber-light: oklch(82% 0.10 65);
-    --color-amber-pale: oklch(93% 0.04 68);
-    --color-warm-white: oklch(97% 0.006 70);
-    --color-warm-near-black: oklch(11% 0.01 60);
-    --color-warm-mid: oklch(52% 0.005 65);
-    --color-warm-surface: oklch(94% 0.008 68);
-  }
-
-  [data-theme='dark'] {
-    --background: 35 15% 9%;
-    --foreground: 40 20% 96%;
-
-    --card: 35 12% 13%;
-    --card-foreground: 40 20% 96%;
-
-    --popover: 35 15% 9%;
-    --popover-foreground: 40 20% 96%;
-
-    --primary: 38 80% 62%;
-    --primary-foreground: 35 15% 9%;
-
-    --secondary: 35 10% 20%;
-    --secondary-foreground: 40 20% 96%;
-
-    --muted: 35 10% 20%;
-    --muted-foreground: 38 12% 58%;
-
-    --accent: 35 10% 20%;
-    --accent-foreground: 40 20% 96%;
-
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 40 20% 96%;
-
-    --border: 35 10% 22%;
-    --input: 35 10% 20%;
-    --ring: 38 80% 62%;
-
-    --success: 158 50% 25%;
-    --warning: 38 60% 30%;
-    --error: 0 50% 40%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
-    font-family: var(--font-plus-jakarta-sans, var(--font-geist-sans)), sans-serif;
+    font-family: var(--font-sans);
+  }
+
+  .prose {
+    --tw-prose-body:     var(--foreground);
+    --tw-prose-headings: var(--foreground);
   }
 }
 
-/* ─── Section layouts ──────────────────────────────────────────────────── */
+/* ─── Section layouts ──────────────────────────────────────────────────────── */
 
 .section-amber {
-  background-color: var(--color-amber);
-  color: var(--color-warm-near-black);
+  background-color: var(--amber);
+  color: var(--color-warm-near-black, oklch(11% 0.01 60));
 }
 
 .section-amber-dark {
@@ -122,20 +161,20 @@
     oklch(32% 0.14 55) 55%,
     oklch(48% 0.17 60) 100%
   );
-  color: var(--color-warm-white);
+  color: oklch(97% 0.006 70);
 }
 
 .section-warm {
-  background-color: var(--color-warm-white);
-  color: var(--color-warm-near-black);
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 .section-dark {
-  background-color: var(--color-warm-near-black);
-  color: var(--color-warm-white);
+  background-color: oklch(11% 0.01 60);
+  color: oklch(97% 0.006 70);
 }
 
-/* ─── Typography ──────────────────────────────────────────────────────── */
+/* ─── Typography ──────────────────────────────────────────────────────────── */
 
 .font-display {
   font-family: var(--font-fraunces), Georgia, serif;
@@ -184,7 +223,7 @@
   text-transform: uppercase;
 }
 
-/* ─── Scroll reveal animations ────────────────────────────────────────── */
+/* ─── Scroll reveal animations ────────────────────────────────────────────── */
 
 @keyframes reveal-up {
   from {
@@ -258,7 +297,7 @@
   }
 }
 
-/* ─── Theme flash prevention ─────────────────────────────────────────── */
+/* ─── Theme flash prevention ─────────────────────────────────────────────── */
 
 html {
   opacity: 0;
