@@ -8,9 +8,9 @@ import RichText from '@/components/RichText'
 
 export const MediumImpactHero: React.FC<Page['hero']> = ({ heading, links, media, richText }) => {
   return (
-    <div className="hero-medium-impact mt-4 mb-10 md:my-16 mx-4 grid grid-cols-2 md:grid-cols-[3fr_2fr] gap-x-8 gap-y-4 items-start">
+    <div className="hero-medium-impact mt-6 mb-10 md:mb-14 md:mt-14 md:my-16 mx-6 md:mx-10 grid grid-cols-2 md:grid-cols-[3fr_2fr] gap-x-8 gap-y-1 md:gap-y-3  items-start">
       {heading && (
-        <h1 className="text-display col-start-1 row-start-1 self-center text-center md:self-start md:text-left">
+        <h1 className="text-display col-start-1 row-start-1 self-center text-center  md:text-left">
           {heading}
         </h1>
       )}
@@ -22,10 +22,10 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ heading, links, media
       )}
 
       <div className="col-start-1 col-span-2 md:col-span-1 row-start-2">
-        {richText && <RichText className="mb-6" data={richText} enableGutter={true} />}
+        {richText && <RichText className="mb-5 md:mb-10" data={richText} enableGutter={true} />}
 
         {Array.isArray(links) && links.length > 0 && (
-          <ul className="flex gap-4">
+          <ul className="flex justify-end md:justify-start gap-4">
             {links.map(({ link }, i) => (
               <li key={i}>
                 <CMSLink {...link} />

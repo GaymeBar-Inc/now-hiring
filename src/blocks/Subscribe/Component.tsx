@@ -52,7 +52,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
   }
 
   return (
-    <section id="subscribe" className="section-primary py-20 rounded-4xl">
+    <section id="subscribe" className="section-primary md:py-20 py-6 rounded-4xl">
       <div className="container">
         <div className="mx-auto max-w-2xl">
           {status === 'success' ? (
