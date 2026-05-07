@@ -34,7 +34,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const logoText = data.logo?.text
 
   return (
-    <header className="container relative z-20" {...(theme ? { 'data-theme': theme } : {})}>
+    <header
+      className="container relative border-4 rounded-full z-20"
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
       <div className="md:py-8 py-4 flex justify-between">
         <Link href="/" className="flex items-center gap-3">
           {logoImage && typeof logoImage === 'object' && (
