@@ -52,7 +52,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
   }
 
   return (
-    <section id="subscribe" className="section-amber py-20 rounded-4xl">
+    <section id="subscribe" className="section-primary py-20 rounded-4xl">
       <div className="container">
         <div className="mx-auto max-w-2xl">
           {status === 'success' ? (
@@ -68,10 +68,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
               >
                 You&rsquo;re in.
               </p>
-              <p
-                className="text-body"
-                style={{ color: 'var(--neutral-900)', opacity: 0.75 }}
-              >
+              <p className="text-body" style={{ color: 'var(--neutral-900)', opacity: 0.75 }}>
                 Welcome — check your inbox for a confirmation.
               </p>
             </div>

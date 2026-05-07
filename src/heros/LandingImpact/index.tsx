@@ -16,7 +16,7 @@ export const LandingImpactHero: React.FC<Page['hero']> = ({ heading, links, rich
 
   return (
     <div
-      className="section-amber-dark relative -mt-[10.4rem] flex min-h-[80vh] items-center justify-center"
+      className="section-primary-dark relative -mt-[10.4rem] flex min-h-[80vh] items-center justify-center"
       data-theme="dark"
     >
       <div className="container z-10 flex items-center justify-center py-24">

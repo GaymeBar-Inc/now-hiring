@@ -211,12 +211,12 @@
 
 /* ─── Section layouts ──────────────────────────────────────────────────────── */
 
-.section-amber {
+.section-primary {
   background-color: var(--primary-base);
   color: var(--neutral-900);
 }
 
-.section-amber-dark {
+.section-primary-dark {
   background: linear-gradient(
     135deg,
     var(--neutral-950) 0%,
