@@ -13,14 +13,11 @@ interface TestimonialsBlockProps {
   testimonials?: Testimonial[]
 }
 
-export const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({
-  heading,
-  testimonials,
-}) => {
+export const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({ heading, testimonials }) => {
   if (!testimonials?.length) return null
 
   return (
-    <section className="section-warm py-24">
+    <section className="section-warm md:py-24 py-12">
       <div className="container">
         {heading && (
           <RevealOnScroll>
@@ -46,7 +43,10 @@ export const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({
                     &ldquo;{t.quote}&rdquo;
                   </p>
                 </blockquote>
-                <figcaption className="flex flex-col gap-0.5 pt-4" style={{ borderTop: '1px solid var(--primary-light)' }}>
+                <figcaption
+                  className="flex flex-col gap-0.5 pt-4"
+                  style={{ borderTop: '1px solid var(--primary-light)' }}
+                >
                   <span className="text-body font-semibold" style={{ fontSize: '1rem' }}>
                     {t.author}
                   </span>
