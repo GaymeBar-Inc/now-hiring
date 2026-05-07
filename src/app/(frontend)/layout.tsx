@@ -3,13 +3,13 @@ import type { Metadata } from 'next'
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
-import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google'
+import { Spectral, Plus_Jakarta_Sans } from 'next/font/google'
 import React from 'react'
 
-const cormorantGaramond = Cormorant_Garamond({
+const spectral = Spectral({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-cormorant-garamond',
+  variable: '--font-spectral',
   display: 'swap',
 })
 
@@ -51,7 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable, cormorantGaramond.variable, plusJakartaSans.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(GeistSans.variable, GeistMono.variable, spectral.variable, plusJakartaSans.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href={faviconUrl} rel="icon" sizes="32x32" />
