@@ -11,62 +11,94 @@
 /* ─── Design tokens ───────────────────────────────────────────────────────── */
 
 :root {
-  /* Amber palette — primitives */
-  --amber:       oklch(65% 0.16 58);
-  --amber-deep:  oklch(42% 0.16 54);
-  --amber-dark:  oklch(28% 0.12 52);
-  --amber-light: oklch(82% 0.10 65);
-  --amber-pale:  oklch(93% 0.04 68);
+  /* ── Primitive palette ────────────────────────────────────────────────── */
 
-  /* Semantic surfaces — light mode */
-  --background:               oklch(97% 0.006 70);
-  --foreground:               oklch(11% 0.01 60);
-  --card:                     oklch(94% 0.008 68);
-  --card-foreground:          oklch(11% 0.01 60);
-  --popover:                  oklch(97% 0.006 70);
-  --popover-foreground:       oklch(11% 0.01 60);
-  --primary:                  oklch(65% 0.16 58);
-  --primary-foreground:       oklch(11% 0.01 60);
-  --secondary:                oklch(96% 0.005 68);
-  --secondary-foreground:     oklch(11% 0.01 60);
-  --muted:                    oklch(96% 0.005 68);
-  --muted-foreground:         oklch(52% 0.005 65);
-  --accent:                   oklch(92% 0.04 68);
-  --accent-foreground:        oklch(11% 0.01 60);
-  --destructive:              oklch(60% 0.21 25);
-  --destructive-foreground:   oklch(97% 0.006 70);
-  --border:                   oklch(88% 0.012 65);
-  --input:                    oklch(92% 0.008 68);
-  --ring:                     oklch(55% 0.18 58);
-  --radius:                   0.5rem;
-  --success:                  oklch(55% 0.14 155);
-  --warning:                  oklch(75% 0.18 70);
-  --error:                    oklch(60% 0.21 25);
+  /* Primary (amber) scale — all raw oklch values declared here */
+  --primary-pale:         oklch(93% 0.04 68);
+  --primary-light:        oklch(82% 0.10 65);
+  --primary-bright:       oklch(70% 0.16 60);
+  --primary-base:         oklch(65% 0.16 58);
+  --primary-muted:        oklch(55% 0.18 58);
+  --primary-mid:          oklch(48% 0.17 60);
+  --primary-deep:         oklch(42% 0.16 54);
+  --primary-gradient-mid: oklch(32% 0.14 55);
+  --primary-dark:         oklch(28% 0.12 52);
+
+  /* Neutral (warm) scale */
+  --neutral-50:  oklch(97% 0.006 70);
+  --neutral-100: oklch(96% 0.005 68);
+  --neutral-150: oklch(94% 0.008 68);
+  --neutral-200: oklch(92% 0.008 68);
+  --neutral-250: oklch(92% 0.04 68);
+  --neutral-300: oklch(88% 0.012 65);
+  --neutral-350: oklch(80% 0.006 68);
+  --neutral-400: oklch(70% 0.005 65);
+  --neutral-450: oklch(58% 0.008 65);
+  --neutral-500: oklch(52% 0.005 65);
+  --neutral-700: oklch(22% 0.008 58);
+  --neutral-800: oklch(20% 0.008 58);
+  --neutral-850: oklch(15% 0.01 58);
+  --neutral-900: oklch(11% 0.01 60);
+  --neutral-950: oklch(11% 0.01 58);
+
+  /* Utility color scales */
+  --destructive-base: oklch(60% 0.21 25);
+  --destructive-dark: oklch(40% 0.15 25);
+  --success-base:     oklch(55% 0.14 155);
+  --success-dark:     oklch(38% 0.10 155);
+  --warning-base:     oklch(75% 0.18 70);
+  --warning-dark:     oklch(45% 0.12 70);
+  --error-dark:       oklch(45% 0.14 25);
+
+  /* ── Semantic tokens — light mode ─────────────────────────────────────── */
+  --background:             var(--neutral-50);
+  --foreground:             var(--neutral-900);
+  --card:                   var(--neutral-150);
+  --card-foreground:        var(--neutral-900);
+  --popover:                var(--neutral-50);
+  --popover-foreground:     var(--neutral-900);
+  --primary:                var(--primary-base);
+  --primary-foreground:     var(--neutral-900);
+  --secondary:              var(--neutral-100);
+  --secondary-foreground:   var(--neutral-900);
+  --muted:                  var(--neutral-100);
+  --muted-foreground:       var(--neutral-500);
+  --accent:                 var(--neutral-250);
+  --accent-foreground:      var(--neutral-900);
+  --destructive:            var(--destructive-base);
+  --destructive-foreground: var(--neutral-50);
+  --border:                 var(--neutral-300);
+  --input:                  var(--neutral-200);
+  --ring:                   var(--primary-muted);
+  --radius:                 0.5rem;
+  --success:                var(--success-base);
+  --warning:                var(--warning-base);
+  --error:                  var(--destructive-base);
 }
 
 [data-theme='dark'] {
-  --background:               oklch(11% 0.01 58);
-  --foreground:               oklch(96% 0.005 68);
-  --card:                     oklch(15% 0.01 58);
-  --card-foreground:          oklch(96% 0.005 68);
-  --popover:                  oklch(11% 0.01 58);
-  --popover-foreground:       oklch(96% 0.005 68);
-  --primary:                  oklch(70% 0.16 60);
-  --primary-foreground:       oklch(11% 0.01 58);
-  --secondary:                oklch(20% 0.008 58);
-  --secondary-foreground:     oklch(96% 0.005 68);
-  --muted:                    oklch(20% 0.008 58);
-  --muted-foreground:         oklch(58% 0.008 65);
-  --accent:                   oklch(20% 0.008 58);
-  --accent-foreground:        oklch(96% 0.005 68);
-  --destructive:              oklch(40% 0.15 25);
-  --destructive-foreground:   oklch(96% 0.005 68);
-  --border:                   oklch(22% 0.008 58);
-  --input:                    oklch(20% 0.008 58);
-  --ring:                     oklch(70% 0.16 60);
-  --success:                  oklch(38% 0.10 155);
-  --warning:                  oklch(45% 0.12 70);
-  --error:                    oklch(45% 0.14 25);
+  --background:             var(--neutral-950);
+  --foreground:             var(--neutral-100);
+  --card:                   var(--neutral-850);
+  --card-foreground:        var(--neutral-100);
+  --popover:                var(--neutral-950);
+  --popover-foreground:     var(--neutral-100);
+  --primary:                var(--primary-bright);
+  --primary-foreground:     var(--neutral-950);
+  --secondary:              var(--neutral-800);
+  --secondary-foreground:   var(--neutral-100);
+  --muted:                  var(--neutral-800);
+  --muted-foreground:       var(--neutral-450);
+  --accent:                 var(--neutral-800);
+  --accent-foreground:      var(--neutral-100);
+  --destructive:            var(--destructive-dark);
+  --destructive-foreground: var(--neutral-100);
+  --border:                 var(--neutral-700);
+  --input:                  var(--neutral-800);
+  --ring:                   var(--primary-bright);
+  --success:                var(--success-dark);
+  --warning:                var(--warning-dark);
+  --error:                  var(--error-dark);
 }
 
 /* ─── @theme — maps tokens to Tailwind utility classes ───────────────────── */
@@ -95,11 +127,15 @@
   --color-warning:                  var(--warning);
   --color-error:                    var(--error);
 
-  --color-amber:       var(--amber);
-  --color-amber-deep:  var(--amber-deep);
-  --color-amber-dark:  var(--amber-dark);
-  --color-amber-light: var(--amber-light);
-  --color-amber-pale:  var(--amber-pale);
+  --color-primary-pale:         var(--primary-pale);
+  --color-primary-light:        var(--primary-light);
+  --color-primary-bright:       var(--primary-bright);
+  --color-primary-base:         var(--primary-base);
+  --color-primary-muted:        var(--primary-muted);
+  --color-primary-mid:          var(--primary-mid);
+  --color-primary-deep:         var(--primary-deep);
+  --color-primary-gradient-mid: var(--primary-gradient-mid);
+  --color-primary-dark:         var(--primary-dark);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -150,18 +186,18 @@
 /* ─── Section layouts ──────────────────────────────────────────────────────── */
 
 .section-amber {
-  background-color: var(--amber);
-  color: var(--color-warm-near-black, oklch(11% 0.01 60));
+  background-color: var(--primary-base);
+  color: var(--neutral-900);
 }
 
 .section-amber-dark {
   background: linear-gradient(
     135deg,
-    oklch(10% 0.01 58) 0%,
-    oklch(32% 0.14 55) 55%,
-    oklch(48% 0.17 60) 100%
+    var(--neutral-950) 0%,
+    var(--primary-gradient-mid) 55%,
+    var(--primary-mid) 100%
   );
-  color: oklch(97% 0.006 70);
+  color: var(--neutral-50);
 }
 
 .section-warm {
@@ -170,8 +206,8 @@
 }
 
 .section-dark {
-  background-color: oklch(11% 0.01 60);
-  color: oklch(97% 0.006 70);
+  background-color: var(--neutral-900);
+  color: var(--neutral-50);
 }
 
 /* ─── Typography ──────────────────────────────────────────────────────────── */

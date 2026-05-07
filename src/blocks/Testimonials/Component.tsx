@@ -40,13 +40,13 @@ export const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({
                       fontWeight: 700,
                       fontSize: 'clamp(1.25rem, 2vw, 1.625rem)',
                       lineHeight: 1.25,
-                      color: 'var(--color-warm-near-black)',
+                      color: 'var(--foreground)',
                     }}
                   >
                     &ldquo;{t.quote}&rdquo;
                   </p>
                 </blockquote>
-                <figcaption className="flex flex-col gap-0.5 pt-4" style={{ borderTop: '1px solid var(--color-amber-light)' }}>
+                <figcaption className="flex flex-col gap-0.5 pt-4" style={{ borderTop: '1px solid var(--primary-light)' }}>
                   <span className="text-body font-semibold" style={{ fontSize: '1rem' }}>
                     {t.author}
                   </span>

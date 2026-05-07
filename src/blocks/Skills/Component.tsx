@@ -25,14 +25,14 @@ export const SkillsBlock: React.FC<SkillsBlockProps> = ({ heading, description, 
         <RevealOnScroll>
           <div className="mb-16 max-w-2xl">
             {heading && (
-              <h2 className="text-headline mb-4" style={{ color: 'var(--color-warm-white)' }}>
+              <h2 className="text-headline mb-4">
                 {heading}
               </h2>
             )}
             {description && (
               <p
                 className="text-body"
-                style={{ color: 'oklch(70% 0.005 65)' }}
+                style={{ color: 'var(--neutral-400)' }}
               >
                 {description}
               </p>
@@ -46,7 +46,7 @@ export const SkillsBlock: React.FC<SkillsBlockProps> = ({ heading, description, 
               <div key={index}>
                 <p
                   className="text-label mb-4"
-                  style={{ color: 'var(--color-amber)' }}
+                  style={{ color: 'var(--primary-base)' }}
                 >
                   {category.name}
                 </p>
@@ -55,7 +55,7 @@ export const SkillsBlock: React.FC<SkillsBlockProps> = ({ heading, description, 
                     <li
                       key={i}
                       className="text-body"
-                      style={{ color: 'oklch(80% 0.006 68)', fontSize: '1rem' }}
+                      style={{ color: 'var(--neutral-350)', fontSize: '1rem' }}
                     >
                       {item.name}
                     </li>

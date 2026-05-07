@@ -63,14 +63,14 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
                   fontFamily: 'var(--font-fraunces), Georgia, serif',
                   fontWeight: 700,
                   fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                  color: 'var(--color-warm-near-black)',
+                  color: 'var(--neutral-900)',
                 }}
               >
                 You&rsquo;re in.
               </p>
               <p
                 className="text-body"
-                style={{ color: 'var(--color-warm-near-black)', opacity: 0.75 }}
+                style={{ color: 'var(--neutral-900)', opacity: 0.75 }}
               >
                 Welcome — check your inbox for a confirmation.
               </p>
@@ -84,7 +84,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
                     fontWeight: 800,
                     fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
                     lineHeight: 1.05,
-                    color: 'var(--color-warm-near-black)',
+                    color: 'var(--neutral-900)',
                     marginBottom: '0.5rem',
                   }}
                 >
@@ -92,7 +92,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
                 </h2>
                 <p
                   className="text-body"
-                  style={{ color: 'var(--color-warm-near-black)', opacity: 0.75, maxWidth: '42ch' }}
+                  style={{ color: 'var(--neutral-900)', opacity: 0.75, maxWidth: '42ch' }}
                 >
                   {description}
                 </p>
@@ -117,7 +117,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
                       'text-body bg-background border border-border',
                       'placeholder:text-muted-foreground',
                       'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                      'focus:ring-offset-[var(--color-amber)]',
+                      'focus:ring-offset-[var(--primary-base)]',
                       'disabled:opacity-60',
                       'transition-shadow duration-150',
                     )}
@@ -131,7 +131,7 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
                       'text-label bg-foreground text-background',
                       'hover:opacity-90 active:scale-[0.98]',
                       'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                      'focus:ring-offset-[var(--color-amber)]',
+                      'focus:ring-offset-[var(--primary-base)]',
                       'disabled:opacity-50 disabled:cursor-not-allowed',
                       'transition-all duration-150',
                       'whitespace-nowrap',
