@@ -183,6 +183,12 @@
   }
 }
 
+@layer utilities {
+  [data-theme='dark'] .prose {
+    --tw-prose-links: var(--neutral-100);
+  }
+}
+
 /* ─── Section layouts ──────────────────────────────────────────────────────── */
 
 .section-amber {
