@@ -481,7 +481,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'landingImpact' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'kinetic' | 'landingImpact' | 'highImpact' | 'mediumImpact' | 'lowImpact';
     heading?: string | null;
     richText?: {
       root: {
@@ -523,6 +523,51 @@ export interface Page {
         }[]
       | null;
     media?: (number | null) | Media;
+    /**
+     * Short label left of the rule, e.g. "NOW HIRING ME — INDEX"
+     */
+    eyebrow?: string | null;
+    /**
+     * Version stamp right of the rule, e.g. "v.26.05.07"
+     */
+    version?: string | null;
+    headline?: {
+      /**
+       * e.g. "I build"
+       */
+      before?: string | null;
+      /**
+       * Italic accent word, e.g. "software"
+       */
+      emphasis?: string | null;
+      /**
+       * e.g. "that earns its place on the"
+       */
+      middle?: string | null;
+      /**
+       * Up to 3 words that cycle in the headline
+       */
+      rotatingWords?:
+        | {
+            word: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    /**
+     * Short body copy shown left of the CTAs
+     */
+    manifesto?: string | null;
+    /**
+     * Skills ticker below the hero. Every 3rd item is auto-italicised.
+     */
+    marquee?:
+      | {
+          label: string;
+          emphasis?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   layout: (
     | CallToActionBlock
@@ -1301,6 +1346,29 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
             };
         media?: T;
+        eyebrow?: T;
+        version?: T;
+        headline?:
+          | T
+          | {
+              before?: T;
+              emphasis?: T;
+              middle?: T;
+              rotatingWords?:
+                | T
+                | {
+                    word?: T;
+                    id?: T;
+                  };
+            };
+        manifesto?: T;
+        marquee?:
+          | T
+          | {
+              label?: T;
+              emphasis?: T;
+              id?: T;
+            };
       };
   layout?:
     | T
