@@ -35,11 +35,11 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <header
-      className="container absolute z-20 w-full flex justify-center"
+      className="absolute z-20 w-full flex justify-center"
       style={{ height: '60px' }}
       {...(theme ? { 'data-theme': theme } : {})}
     >
-      <div className="flex justify-between w-full max-w-3xl bg-background border-4 border-neutral-150 rounded-full py-3 px-4 md:py-4 md:px-6">
+      <div className="container flex justify-between w-full max-w-xl bg-background border-4 border-neutral-150 rounded-full py-3 px-4 md:py-4 md:px-6">
         <Link href="/" className="flex items-center gap-3">
           {logoImage && typeof logoImage === 'object' && (
             <div className="relative h-[34px] w-[34px]">
