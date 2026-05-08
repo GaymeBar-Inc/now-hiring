@@ -83,13 +83,10 @@ export const Card: React.FC<{
             fill
           />
         )}
+        {/* Badge — desktop only, overlaid on thumbnail */}
         <div
-          style={{
-            position: 'absolute',
-            top: '1rem',
-            left: '1rem',
-            zIndex: 1,
-          }}
+          className="hidden md:block"
+          style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 1 }}
         >
           <span
             className="font-mono"
@@ -107,17 +104,36 @@ export const Card: React.FC<{
         </div>
       </div>
 
-      <div style={{ padding: '1rem 1.75rem', flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '1rem',
-            alignItems: 'center',
-            gap: '0.5rem',
-          }}
-        >
-          <div className="flex flex-wrap gap-1.5" onClick={(e) => e.stopPropagation()}>
+      {/* Content grid: meta / title / description(1fr) / footer */}
+      <div
+        style={{
+          padding: '1rem 1.75rem',
+          flex: 1,
+          display: 'grid',
+          gridTemplateRows: 'auto auto 1fr auto',
+          gap: '0.75rem',
+          minWidth: 0,
+          alignContent: 'start',
+        }}
+      >
+        {/* Row 1 — number (mobile) · pills · date */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span
+            className="font-mono md:hidden"
+            style={{
+              fontSize: '0.75rem',
+              letterSpacing: '0.08em',
+              color: 'var(--primary-on-bg)',
+              flexShrink: 0,
+            }}
+          >
+            {cardNumber}
+          </span>
+
+          <div
+            className="flex flex-wrap gap-1.5 flex-1 min-w-0"
+            onClick={(e) => e.stopPropagation()}
+          >
             {showCategories && hasCategories && (
               <Fragment>
                 {categories?.map((category, i) => {
@@ -140,6 +156,7 @@ export const Card: React.FC<{
               </Fragment>
             )}
           </div>
+
           {formattedDate && (
             <span
               className="font-mono"
@@ -156,15 +173,11 @@ export const Card: React.FC<{
           )}
         </div>
 
+        {/* Row 2 — title */}
         {titleToUse && (
           <h3
             className="font-display"
-            style={{
-              fontWeight: 600,
-              fontSize: '1.375rem',
-              lineHeight: 1.2,
-              marginBottom: '0.75rem',
-            }}
+            style={{ fontWeight: 600, fontSize: '1.375rem', lineHeight: 1.2 }}
           >
             <Link
               className="not-prose no-underline"
@@ -177,22 +190,14 @@ export const Card: React.FC<{
           </h3>
         )}
 
-        {sanitizedDescription && (
-          <p
-            style={{
-              fontSize: '0.9375rem',
-              color: 'var(--muted-foreground)',
-              lineHeight: 1.55,
-              flex: 1,
-            }}
-          >
-            {sanitizedDescription}
-          </p>
-        )}
+        {/* Row 3 — description (1fr, fills remaining height) */}
+        <p style={{ fontSize: '0.9375rem', color: 'var(--muted-foreground)', lineHeight: 1.55 }}>
+          {sanitizedDescription ?? ''}
+        </p>
 
+        {/* Row 4 — footer */}
         <div
           style={{
-            marginTop: '1.25rem',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -202,11 +207,7 @@ export const Card: React.FC<{
         >
           <span
             className="font-mono"
-            style={{
-              fontSize: '0.75rem',
-              color: 'var(--muted-foreground)',
-              letterSpacing: '0.08em',
-            }}
+            style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)', letterSpacing: '0.08em' }}
           >
             {readMinutes} MIN READ
           </span>
