@@ -2219,84 +2219,6 @@ export interface Header {
      */
     text?: string | null;
   };
-  /**
-   * Short location shown in the header (e.g. SF, NOLA, NYC)
-   */
-  locationLabel?: string | null;
-  /**
-   * Timezone for the live clock
-   */
-  timezone?:
-    | (
-        | 'Pacific/Honolulu'
-        | 'America/Anchorage'
-        | 'America/Los_Angeles'
-        | 'America/Vancouver'
-        | 'America/Denver'
-        | 'America/Phoenix'
-        | 'America/Chicago'
-        | 'America/Mexico_City'
-        | 'America/New_York'
-        | 'America/Toronto'
-        | 'America/Bogota'
-        | 'America/Lima'
-        | 'America/Caracas'
-        | 'America/Santiago'
-        | 'America/Sao_Paulo'
-        | 'America/Argentina/Buenos_Aires'
-        | 'Europe/London'
-        | 'Europe/Lisbon'
-        | 'Europe/Paris'
-        | 'Europe/Berlin'
-        | 'Europe/Amsterdam'
-        | 'Europe/Brussels'
-        | 'Europe/Madrid'
-        | 'Europe/Rome'
-        | 'Europe/Vienna'
-        | 'Europe/Zurich'
-        | 'Europe/Stockholm'
-        | 'Europe/Oslo'
-        | 'Europe/Copenhagen'
-        | 'Europe/Warsaw'
-        | 'Europe/Prague'
-        | 'Europe/Helsinki'
-        | 'Europe/Athens'
-        | 'Europe/Kiev'
-        | 'Europe/Istanbul'
-        | 'Europe/Moscow'
-        | 'Africa/Casablanca'
-        | 'Africa/Lagos'
-        | 'Africa/Cairo'
-        | 'Africa/Nairobi'
-        | 'Africa/Johannesburg'
-        | 'Asia/Beirut'
-        | 'Asia/Jerusalem'
-        | 'Asia/Riyadh'
-        | 'Asia/Dubai'
-        | 'Asia/Karachi'
-        | 'Asia/Kolkata'
-        | 'Asia/Colombo'
-        | 'Asia/Dhaka'
-        | 'Asia/Bangkok'
-        | 'Asia/Jakarta'
-        | 'Asia/Singapore'
-        | 'Asia/Kuala_Lumpur'
-        | 'Asia/Manila'
-        | 'Asia/Hong_Kong'
-        | 'Asia/Shanghai'
-        | 'Asia/Taipei'
-        | 'Asia/Seoul'
-        | 'Asia/Tokyo'
-        | 'Asia/Almaty'
-        | 'Australia/Perth'
-        | 'Australia/Brisbane'
-        | 'Australia/Sydney'
-        | 'Australia/Melbourne'
-        | 'Pacific/Auckland'
-        | 'Pacific/Fiji'
-        | 'Pacific/Guam'
-      )
-    | null;
   navItems?:
     | {
         link: {
@@ -2493,8 +2415,6 @@ export interface HeaderSelect<T extends boolean = true> {
         image?: T;
         text?: T;
       };
-  locationLabel?: T;
-  timezone?: T;
   navItems?:
     | T
     | {

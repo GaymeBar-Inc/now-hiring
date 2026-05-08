@@ -8,7 +8,7 @@ import type { Header, Media as MediaType } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { Media } from '@/components/Media'
-import { HeaderNav, LiveClock } from './Nav'
+import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
   data: Header
@@ -40,34 +40,22 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       {...(theme ? { 'data-theme': theme } : {})}
     >
       <div className="container flex justify-between w-full max-w-xl bg-background border-4 border-neutral-150 rounded-full py-3 px-4 md:py-4 md:px-6">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-3">
-            {logoImage && typeof logoImage === 'object' && (
-              <div className="relative h-[34px] w-[34px]">
-                <Media
-                  resource={logoImage}
-                  imgClassName="object-contain invert dark:invert-0"
-                  fill
-                  priority
-                />
-              </div>
-            )}
-            {logoText && <span className="text-xl font-semibold text-primary">{logoText}</span>}
-            {!logoImage && !logoText && (
-              <Logo loading="eager" priority="high" className="invert dark:invert-0" />
-            )}
-          </Link>
-
-          <span className="w-px h-4 bg-border" aria-hidden="true" />
-
-          <span
-            className="font-mono text-muted-foreground"
-            style={{ fontSize: '0.875rem', letterSpacing: '0.08em' }}
-          >
-            {data.locationLabel && `${data.locationLabel} · `}
-            <LiveClock timezone={data.timezone ?? 'America/Chicago'} />
-          </span>
-        </div>
+        <Link href="/" className="flex items-center gap-3">
+          {logoImage && typeof logoImage === 'object' && (
+            <div className="relative h-[34px] w-[34px]">
+              <Media
+                resource={logoImage}
+                imgClassName="object-contain invert dark:invert-0"
+                fill
+                priority
+              />
+            </div>
+          )}
+          {logoText && <span className="text-xl font-semibold text-primary">{logoText}</span>}
+          {!logoImage && !logoText && (
+            <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+          )}
+        </Link>
 
         <HeaderNav data={data} />
       </div>
