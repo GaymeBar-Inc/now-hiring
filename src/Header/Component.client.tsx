@@ -56,7 +56,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             <Logo loading="eager" priority="high" className="invert dark:invert-0" />
           )}
         </Link>
-        <HeaderNav data={data} />
+        <HeaderNav data={data} locationLabel={data.locationLabel} timezone={data.timezone} />
       </div>
     </header>
   )
