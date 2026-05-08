@@ -6,7 +6,7 @@ import type { Header as HeaderType } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 
-function LiveClock({ timezone }: { timezone: string }) {
+export function LiveClock({ timezone }: { timezone: string }) {
   const [time, setTime] = useState('')
 
   useEffect(() => {
@@ -29,9 +29,7 @@ function LiveClock({ timezone }: { timezone: string }) {
 
 export const HeaderNav: React.FC<{
   data: HeaderType
-  locationLabel?: string | null
-  timezone?: string | null
-}> = ({ data, locationLabel, timezone }) => {
+}> = ({ data }) => {
   const navItems = data?.navItems || []
 
   return (
@@ -39,16 +37,6 @@ export const HeaderNav: React.FC<{
       {navItems.map(({ link }, i) => (
         <CMSLink className="text-primary-muted" key={i} {...link} appearance="link" />
       ))}
-
-      <span className="w-px h-4 bg-border" aria-hidden="true" />
-
-      <span
-        className="font-mono text-muted-foreground"
-        style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}
-      >
-        {locationLabel && `${locationLabel} · `}
-        <LiveClock timezone={timezone ?? 'America/Chicago'} />
-      </span>
     </nav>
   )
 }
