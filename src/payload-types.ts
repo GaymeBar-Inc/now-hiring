@@ -711,6 +711,11 @@ export interface MediaBlock {
  * via the `definition` "ArchiveBlock".
  */
 export interface ArchiveBlock {
+  /**
+   * Small label above the heading
+   */
+  eyebrow?: string | null;
+  heading?: string | null;
   introContent?: {
     root: {
       type: string;
@@ -1042,10 +1047,18 @@ export interface SkillsBlock {
  * via the `definition` "SubscribeBlock".
  */
 export interface SubscribeBlock {
+  /**
+   * Small label above the heading, e.g. "— Newsletter"
+   */
+  eyebrow?: string | null;
   heading?: string | null;
   description?: string | null;
   placeholder?: string | null;
   buttonText?: string | null;
+  /**
+   * Stat line shown below the form
+   */
+  meta?: string | null;
   /**
    * Stored with the subscriber record (e.g. homepage, post-footer)
    */
@@ -1528,6 +1541,8 @@ export interface MediaBlockSelect<T extends boolean = true> {
  * via the `definition` "ArchiveBlock_select".
  */
 export interface ArchiveBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  heading?: T;
   introContent?: T;
   populateBy?: T;
   relationTo?: T;
@@ -1634,10 +1649,12 @@ export interface SkillsBlockSelect<T extends boolean = true> {
  * via the `definition` "SubscribeBlock_select".
  */
 export interface SubscribeBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
   heading?: T;
   description?: T;
   placeholder?: T;
   buttonText?: T;
+  meta?: T;
   source?: T;
   id?: T;
   blockName?: T;

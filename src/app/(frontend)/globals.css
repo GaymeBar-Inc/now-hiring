@@ -620,6 +620,43 @@
   }
 }
 
+/* ─── Post cards ────────────────────────────────────────────────────────────── */
+
+.post-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 250ms, border-color 250ms;
+}
+.post-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklch, var(--primary) 50%, var(--border));
+}
+
+.post-thumb {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--primary) 35%, var(--background)) 0%,
+    color-mix(in oklch, var(--primary) 10%, var(--background)) 100%
+  );
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+.post-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 8px,
+    color-mix(in oklch, var(--primary) 18%, transparent) 8px 9px
+  );
+}
+
 /* ─── Theme flash prevention ─────────────────────────────────────────────── */
 
 html {
