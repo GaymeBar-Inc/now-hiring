@@ -91,8 +91,8 @@ export const SubscribeBlock: React.FC<SubscribeBlockProps> = ({
                   {heading}
                 </h2>
                 <p
-                  className="text-body"
-                  style={{ color: 'var(--neutral-900)', opacity: 0.75, maxWidth: '42ch' }}
+                  className="text-body flex justify-end md:justify-center"
+                  style={{ color: 'var(--neutral-900)', opacity: 0.75 }}
                 >
                   {description}
                 </p>
