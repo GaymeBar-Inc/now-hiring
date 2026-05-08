@@ -8,7 +8,6 @@ export const KineticHero: React.FC<Page['hero']> = ({
   headline,
   manifesto,
   links,
-  marquee,
 }) => {
   const rotatingWords = headline?.rotatingWords ?? []
 

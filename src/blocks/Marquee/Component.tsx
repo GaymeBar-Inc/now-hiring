@@ -1,6 +1,5 @@
 import React from 'react'
 import type { MarqueeBlock as MarqueeBlockProps, Media as MediaType } from '@/payload-types'
-import { Media } from '@/components/Media'
 
 type TextItem = NonNullable<MarqueeBlockProps['items']>[number]
 type LogoItem = NonNullable<MarqueeBlockProps['logos']>[number]
@@ -38,14 +37,14 @@ function ImageTrack({ logos }: { logos: LogoItem[] }) {
         if (typeof image !== 'object') return null
         const mediaImage = image as MediaType
         const altText = alt || mediaImage.alt || ''
+        if (!mediaImage.url) return null
         return (
-          <div key={id ?? i} className="shrink-0" style={{ height: '2.5rem' }}>
-            <Media
-              resource={mediaImage}
-              imgClassName="h-full w-auto object-contain"
-              alt={altText}
-            />
-          </div>
+          <img
+            key={id ?? i}
+            src={mediaImage.url}
+            alt={altText}
+            style={{ height: '80px', width: 'auto', objectFit: 'contain', display: 'block', flexShrink: 0 }}
+          />
         )
       })}
     </>
