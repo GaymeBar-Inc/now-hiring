@@ -5,6 +5,7 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { sizePreviewSlug } from '@payloadcms/ui/elements/Upload'
 
 export const MediumImpactHero: React.FC<Page['hero']> = ({ heading, links, media, richText }) => {
   return (
@@ -31,7 +32,7 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ heading, links, media
             <ul className="flex justify-end md:justify-start gap-4 ml-16">
               {links.map(({ link }, i) => (
                 <li key={i}>
-                  <CMSLink {...link} />
+                  <CMSLink {...link} size="lg" className="text-lg" />
                 </li>
               ))}
             </ul>
