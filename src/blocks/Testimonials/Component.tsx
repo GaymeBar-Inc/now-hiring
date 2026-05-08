@@ -73,13 +73,20 @@ export const TestimonialsBlock: React.FC<TestimonialsBlockProps> = ({
   if (!testimonials?.length) return null
 
   return (
-    <section className="section-warm py-12 md:py-24 px-6 md:px-12">
-      <div className="grid gap-8 md:gap-16 mb-12 items-end" style={{ gridTemplateColumns: '1fr 2fr' }}>
+    <section className="py-12 md:py-24 px-6 md:px-12">
+      <div
+        className="grid gap-8 md:gap-16 mb-12 items-end"
+        style={{ gridTemplateColumns: '1fr 2fr' }}
+      >
         <div>
           {eyebrow && (
             <span
               className="font-mono"
-              style={{ fontSize: '0.75rem', letterSpacing: '0.12em', color: 'var(--primary-on-bg)' }}
+              style={{
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                color: 'var(--primary-on-bg)',
+              }}
             >
               {eyebrow}
             </span>

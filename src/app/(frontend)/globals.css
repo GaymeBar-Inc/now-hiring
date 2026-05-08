@@ -229,11 +229,6 @@
   color: var(--neutral-50);
 }
 
-.section-warm {
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
 .section-dark {
   background-color: var(--neutral-900);
   color: var(--neutral-50);
@@ -629,7 +624,9 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 250ms, border-color 250ms;
+  transition:
+    transform 250ms,
+    border-color 250ms;
 }
 .post-card:hover {
   transform: translateY(-2px);

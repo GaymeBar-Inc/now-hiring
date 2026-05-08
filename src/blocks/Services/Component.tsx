@@ -68,7 +68,7 @@ function TileCta({ tile }: { tile: Tile }) {
         borderColor: 'transparent',
       }}
     >
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col justify-between items-start">
         {cta.eyebrow && (
           <span className="num" style={{ color: 'var(--primary-foreground)', opacity: 0.7 }}>
             {cta.eyebrow}
@@ -149,7 +149,7 @@ function TileBuilding({ tile }: { tile: Tile }) {
         borderColor: 'var(--neutral-700)',
       }}
     >
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col justify-between items-start">
         {building.eyebrow && (
           <span className="num" style={{ color: 'var(--primary)' }}>
             {building.eyebrow}
@@ -233,7 +233,7 @@ function ServicesList({
   if (!services?.length) return null
 
   return (
-    <section className="section-warm md:py-20 py-6">
+    <section className="md:py-20 py-6">
       <div className="container">
         <RevealOnScroll>
           <div className="mb-10 md:mb-16 max-w-2xl">
@@ -293,7 +293,7 @@ function ServicesBento({
   if (!tiles?.length) return null
 
   return (
-    <section className="section-warm py-12 md:py-24 px-6 md:px-12">
+    <section className="py-12 md:py-24 px-6 md:px-12">
       <div className="grid grid-cols-2 gap-8 mb-12 items-end">
         <div>{heading && <h2 className="text-headline">{heading}</h2>}</div>
         {description && (
