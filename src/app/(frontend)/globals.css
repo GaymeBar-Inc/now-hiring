@@ -63,7 +63,7 @@
   --secondary: var(--neutral-100);
   --secondary-foreground: var(--neutral-900);
   --muted: var(--neutral-100);
-  --muted-foreground: var(--neutral-500);
+  --muted-foreground: var(--neutral-600);
   --accent: var(--neutral-250);
   --accent-foreground: var(--neutral-900);
   --destructive: var(--destructive-base);
@@ -89,8 +89,8 @@
   --primary-foreground: var(--neutral-950);
   --secondary: var(--neutral-800);
   --secondary-foreground: var(--neutral-100);
-  --muted: var(--neutral-800);
-  --muted-foreground: var(--neutral-450);
+  --muted: var(--neutral-900);
+  --muted-foreground: var(--neutral-400);
   --accent: var(--neutral-800);
   --accent-foreground: var(--neutral-100);
   --destructive: var(--destructive-dark);
@@ -413,11 +413,20 @@
 }
 
 @keyframes orbit {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 @keyframes mark-pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%       { transform: scale(0.85); opacity: 0.7; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -440,14 +449,31 @@
   animation: swap 9s steps(1) infinite;
   opacity: 0;
 }
-.word-swap > span:nth-child(1) { animation-delay: 0s; }
-.word-swap > span:nth-child(2) { animation-delay: 3s; }
-.word-swap > span:nth-child(3) { animation-delay: 6s; }
+.word-swap > span:nth-child(1) {
+  animation-delay: 0s;
+}
+.word-swap > span:nth-child(2) {
+  animation-delay: 3s;
+}
+.word-swap > span:nth-child(3) {
+  animation-delay: 6s;
+}
 
 @keyframes swap {
-  0%        { opacity: 0; transform: translateY(0.3em); }
-  3%, 33%   { opacity: 1; transform: translateY(0); }
-  36%, 100% { opacity: 0; transform: translateY(-0.3em); }
+  0% {
+    opacity: 0;
+    transform: translateY(0.3em);
+  }
+  3%,
+  33% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  36%,
+  100% {
+    opacity: 0;
+    transform: translateY(-0.3em);
+  }
 }
 
 /* ─── Kinetic emphasis float ──────────────────────────────────────────────── */
@@ -458,8 +484,13 @@
 }
 
 @keyframes drift-text {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-4px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 /* ─── Skills marquee ──────────────────────────────────────────────────────── */
@@ -480,7 +511,9 @@
 }
 
 @keyframes marquee {
-  to { transform: translateX(-100%); }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 /* ─── Ambient blob ────────────────────────────────────────────────────────── */
@@ -503,18 +536,38 @@
 }
 
 @keyframes drift-a {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33%       { transform: translate(40px, -20px) scale(1.1); }
-  66%       { transform: translate(-20px, 30px) scale(0.95); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -20px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .word-swap > span { animation: none; }
-  .word-swap > span:not(:first-child) { display: none; }
-  .word-swap > span:first-child { opacity: 1; transform: none; }
-  .marquee-track { animation: none; }
-  .kinetic { animation: none; }
-  .blob-a { animation: none; }
+  .word-swap > span {
+    animation: none;
+  }
+  .word-swap > span:not(:first-child) {
+    display: none;
+  }
+  .word-swap > span:first-child {
+    opacity: 1;
+    transform: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .kinetic {
+    animation: none;
+  }
+  .blob-a {
+    animation: none;
+  }
 }
 
 /* ─── Theme flash prevention ─────────────────────────────────────────────── */
