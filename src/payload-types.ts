@@ -2248,6 +2248,17 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  logo?: {
+    /**
+     * Logo image — SVG, PNG, or JPG
+     */
+    image?: (number | null) | Media;
+    /**
+     * Brand name shown next to the logo image
+     */
+    text?: string | null;
+  };
+  copyright?: string | null;
   navItems?:
     | {
         link: {
@@ -2427,6 +2438,13 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  logo?:
+    | T
+    | {
+        image?: T;
+        text?: T;
+      };
+  copyright?: T;
   navItems?:
     | T
     | {
