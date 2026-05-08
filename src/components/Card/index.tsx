@@ -69,10 +69,12 @@ export const Card: React.FC<{
 
   return (
     <article
-      className={`post-card flex flex-row md:flex-col hover:cursor-pointer${className ? ` ${className}` : ''}`}
+      className={`post-card flex flex-row items-center md:flex-col md:items-stretch hover:cursor-pointer${className ? ` ${className}` : ''}`}
       ref={card.ref}
     >
-      <div className="post-thumb">
+      <div
+        className="post-thumb w-28 h-28 shrink-0 md:w-full md:h-auto md:aspect-[4/3]"
+      >
         {metaImage && typeof metaImage !== 'string' && (
           <Media
             resource={metaImage}
@@ -105,7 +107,7 @@ export const Card: React.FC<{
         </div>
       </div>
 
-      <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '1rem 1.75rem', flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <div
           style={{
             display: 'flex',

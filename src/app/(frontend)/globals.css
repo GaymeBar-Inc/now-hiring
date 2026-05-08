@@ -639,7 +639,6 @@
   );
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
 }
 .post-thumb::after {
   content: '';
