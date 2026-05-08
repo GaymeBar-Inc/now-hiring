@@ -63,7 +63,7 @@
   --secondary: var(--neutral-100);
   --secondary-foreground: var(--neutral-900);
   --muted: var(--neutral-100);
-  --muted-foreground: var(--neutral-600);
+  --muted-foreground: var(--neutral-500);
   --accent: var(--neutral-250);
   --accent-foreground: var(--neutral-900);
   --destructive: var(--destructive-base);
@@ -365,7 +365,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bento-tile:hover { transform: none; }
+  .bento-tile:hover {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -396,7 +398,9 @@
   border: 1px solid var(--border);
   border-radius: 1.25rem;
   padding: 2rem;
-  transition: border-color 250ms, transform 250ms;
+  transition:
+    border-color 250ms,
+    transform 250ms;
   position: relative;
   overflow: hidden;
 }

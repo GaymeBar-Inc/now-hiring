@@ -1059,13 +1059,25 @@ export interface SubscribeBlock {
  * via the `definition` "TestimonialsBlock".
  */
 export interface TestimonialsBlock {
+  /**
+   * Small label above the heading, e.g. "— Receipts"
+   */
+  eyebrow?: string | null;
   heading?: string | null;
+  /**
+   * Subtext shown to the right of the heading
+   */
+  body?: string | null;
   testimonials?:
     | {
         quote: string;
         author: string;
         role?: string | null;
         company?: string | null;
+        /**
+         * Renders this quote with a primary-color background as the focal card
+         */
+        featured?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -1635,7 +1647,9 @@ export interface SubscribeBlockSelect<T extends boolean = true> {
  * via the `definition` "TestimonialsBlock_select".
  */
 export interface TestimonialsBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
   heading?: T;
+  body?: T;
   testimonials?:
     | T
     | {
@@ -1643,6 +1657,7 @@ export interface TestimonialsBlockSelect<T extends boolean = true> {
         author?: T;
         role?: T;
         company?: T;
+        featured?: T;
         id?: T;
       };
   id?: T;
