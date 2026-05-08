@@ -56,7 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <InitTheme />
         <link href={faviconUrl} rel="icon" sizes="32x32" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <Providers>
           <AdminBar
             adminBarProps={{
