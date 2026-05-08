@@ -365,6 +365,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .bento-tile:hover { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-stagger > * {
     opacity: 1;
@@ -378,6 +382,48 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* ─── Bento grid ─────────────────────────────────────────────────────────── */
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+}
+.bento-tile {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  transition: border-color 250ms, transform 250ms;
+  position: relative;
+  overflow: hidden;
+}
+.bento-tile:hover {
+  border-color: color-mix(in oklch, var(--primary) 60%, var(--border));
+  transform: translateY(-2px);
+}
+.bento-tile .num {
+  font-family: var(--font-mono);
+  color: var(--primary-on-bg);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+/* ─── Tag pill ────────────────────────────────────────────────────────────── */
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--primary) 20%, var(--background));
+  color: var(--primary-on-bg);
+  border: 1px solid color-mix(in oklch, var(--primary) 30%, transparent);
 }
 
 /* ─── Animated mark ──────────────────────────────────────────────────────── */

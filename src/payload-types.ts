@@ -946,12 +946,67 @@ export interface Form {
  * via the `definition` "ServicesBlock".
  */
 export interface ServicesBlock {
+  layout?: ('list' | 'bento') | null;
   heading?: string | null;
   description?: string | null;
   services?:
     | {
         title: string;
         description: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Add service, CTA, or "Currently Building" tiles to the bento grid.
+   */
+  tiles?:
+    | {
+        kind: 'service' | 'cta' | 'currentlyBuilding';
+        /**
+         * e.g. "01 / COMPANY IMPACT"
+         */
+        number?: string | null;
+        title?: string | null;
+        description?: string | null;
+        size?: ('span-2' | 'span-4') | null;
+        tags?:
+          | {
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        cta?: {
+          /**
+           * e.g. "— Book a slot"
+           */
+          eyebrow?: string | null;
+          /**
+           * e.g. "3 SLOTS · MAY"
+           */
+          availability?: string | null;
+          heading?: string | null;
+          body?: string | null;
+          buttonLabel?: string | null;
+          buttonHref?: string | null;
+        };
+        building?: {
+          /**
+           * e.g. "— Currently building"
+           */
+          eyebrow?: string | null;
+          /**
+           * e.g. "LIVE · WK 19"
+           */
+          liveLabel?: string | null;
+          heading?: string | null;
+          checklist?:
+            | {
+                label: string;
+                done?: boolean | null;
+                id?: string | null;
+              }[]
+            | null;
+        };
         id?: string | null;
       }[]
     | null;
@@ -1487,6 +1542,7 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "ServicesBlock_select".
  */
 export interface ServicesBlockSelect<T extends boolean = true> {
+  layout?: T;
   heading?: T;
   description?: T;
   services?:
@@ -1494,6 +1550,46 @@ export interface ServicesBlockSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+        id?: T;
+      };
+  tiles?:
+    | T
+    | {
+        kind?: T;
+        number?: T;
+        title?: T;
+        description?: T;
+        size?: T;
+        tags?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
+        cta?:
+          | T
+          | {
+              eyebrow?: T;
+              availability?: T;
+              heading?: T;
+              body?: T;
+              buttonLabel?: T;
+              buttonHref?: T;
+            };
+        building?:
+          | T
+          | {
+              eyebrow?: T;
+              liveLabel?: T;
+              heading?: T;
+              checklist?:
+                | T
+                | {
+                    label?: T;
+                    done?: T;
+                    id?: T;
+                  };
+            };
         id?: T;
       };
   id?: T;
