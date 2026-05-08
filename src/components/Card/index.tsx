@@ -8,7 +8,10 @@ import type { Post } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { KeywordPill } from '@/components/ui/keyword-pill'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'keywords' | 'publishedAt'> &
+export type CardPostData = Pick<
+  Post,
+  'slug' | 'categories' | 'meta' | 'title' | 'keywords' | 'publishedAt'
+> &
   Partial<Pick<Post, 'content'>>
 
 interface LexicalNode {
@@ -66,7 +69,7 @@ export const Card: React.FC<{
 
   return (
     <article
-      className={`post-card hover:cursor-pointer${className ? ` ${className}` : ''}`}
+      className={`post-card flex flex-row md:flex-col hover:cursor-pointer${className ? ` ${className}` : ''}`}
       ref={card.ref}
     >
       <div className="post-thumb">
@@ -112,10 +115,7 @@ export const Card: React.FC<{
             gap: '0.5rem',
           }}
         >
-          <div
-            className="flex flex-wrap gap-1.5"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="flex flex-wrap gap-1.5" onClick={(e) => e.stopPropagation()}>
             {showCategories && hasCategories && (
               <Fragment>
                 {categories?.map((category, i) => {
@@ -157,7 +157,12 @@ export const Card: React.FC<{
         {titleToUse && (
           <h3
             className="font-display"
-            style={{ fontWeight: 600, fontSize: '1.375rem', lineHeight: 1.2, marginBottom: '0.75rem' }}
+            style={{
+              fontWeight: 600,
+              fontSize: '1.375rem',
+              lineHeight: 1.2,
+              marginBottom: '0.75rem',
+            }}
           >
             <Link
               className="not-prose no-underline"
@@ -172,7 +177,12 @@ export const Card: React.FC<{
 
         {sanitizedDescription && (
           <p
-            style={{ fontSize: '0.9375rem', color: 'var(--muted-foreground)', lineHeight: 1.55, flex: 1 }}
+            style={{
+              fontSize: '0.9375rem',
+              color: 'var(--muted-foreground)',
+              lineHeight: 1.55,
+              flex: 1,
+            }}
           >
             {sanitizedDescription}
           </p>
@@ -190,7 +200,11 @@ export const Card: React.FC<{
         >
           <span
             className="font-mono"
-            style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)', letterSpacing: '0.08em' }}
+            style={{
+              fontSize: '0.75rem',
+              color: 'var(--muted-foreground)',
+              letterSpacing: '0.08em',
+            }}
           >
             {readMinutes} MIN READ
           </span>

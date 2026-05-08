@@ -54,19 +54,25 @@ export const ArchiveBlock: React.FC<
       id={`block-${id}`}
       style={{ borderTop: '1px solid var(--border)' }}
     >
-      <div
-        className="flex justify-between items-baseline mb-12"
-      >
+      <div className="flex justify-between items-baseline mb-12">
         <div>
           {eyebrow && (
             <span
               className="font-mono"
-              style={{ fontSize: '0.75rem', letterSpacing: '0.12em', color: 'var(--primary-on-bg)' }}
+              style={{
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                color: 'var(--primary-on-bg)',
+              }}
             >
               {eyebrow}
             </span>
           )}
-          {heading && <h2 className="text-headline" style={{ marginTop: '1rem' }}>{heading}</h2>}
+          {heading && (
+            <h2 className="text-headline" style={{ marginTop: '1rem' }}>
+              {heading}
+            </h2>
+          )}
         </div>
         <Link
           href="/posts"

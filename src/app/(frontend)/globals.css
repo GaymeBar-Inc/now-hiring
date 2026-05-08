@@ -622,8 +622,6 @@
   border-radius: var(--radius);
   border: 1px solid var(--border);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
   transition:
     transform 250ms,
     border-color 250ms;
