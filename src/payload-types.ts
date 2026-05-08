@@ -575,6 +575,7 @@ export interface Page {
     | MediaBlock
     | ArchiveBlock
     | FormBlock
+    | MarqueeBlock
     | ServicesBlock
     | SkillsBlock
     | SubscribeBlock
@@ -945,6 +946,46 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlock".
+ */
+export interface MarqueeBlock {
+  /**
+   * Optional small label above the ticker strip
+   */
+  eyebrow?: string | null;
+  variant?: ('text' | 'images') | null;
+  /**
+   * Text items to scroll. Every 3rd is auto-italicised unless any item has manual emphasis set.
+   */
+  items?:
+    | {
+        label: string;
+        /**
+         * Italic + accent colour. Setting this on any item disables auto-italicise.
+         */
+        emphasis?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Client logos to scroll.
+   */
+  logos?:
+    | {
+        image: number | Media;
+        /**
+         * Alt text override (falls back to the media file alt)
+         */
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'marquee';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1458,6 +1499,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        marquee?: T | MarqueeBlockSelect<T>;
         services?: T | ServicesBlockSelect<T>;
         skills?: T | SkillsBlockSelect<T>;
         subscribe?: T | SubscribeBlockSelect<T>;
@@ -1561,6 +1603,30 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlock_select".
+ */
+export interface MarqueeBlockSelect<T extends boolean = true> {
+  eyebrow?: T;
+  variant?: T;
+  items?:
+    | T
+    | {
+        label?: T;
+        emphasis?: T;
+        id?: T;
+      };
+  logos?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

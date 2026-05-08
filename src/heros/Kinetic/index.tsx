@@ -114,45 +114,6 @@ export const KineticHero: React.FC<Page['hero']> = ({
         </div>
       </div>
 
-      {Array.isArray(marquee) &&
-        marquee.length > 0 &&
-        (() => {
-          const hasManualEmphasis = marquee.some(({ emphasis }) => emphasis)
-          return (
-            <div
-              className="marquee"
-              style={{
-                marginTop: '6rem',
-                borderTop: '1px solid var(--border)',
-                borderBottom: '1px solid var(--border)',
-                padding: '1.5rem 0',
-              }}
-              aria-hidden="true"
-            >
-              {[0, 1].map((trackIndex) => (
-                <div className="marquee-track" key={trackIndex}>
-                  {marquee.map(({ label, emphasis, id }, i) => {
-                    const isEmphasised = hasManualEmphasis ? (emphasis ?? false) : i % 3 === 0
-                    return (
-                      <span
-                        key={`${trackIndex}-${id ?? i}`}
-                        className="font-display"
-                        style={{
-                          fontWeight: 500,
-                          fontSize: '2.5rem',
-                          color: isEmphasised ? 'var(--primary-on-bg)' : 'var(--foreground)',
-                          fontStyle: isEmphasised ? 'italic' : 'normal',
-                        }}
-                      >
-                        {label}
-                      </span>
-                    )
-                  })}
-                </div>
-              ))}
-            </div>
-          )
-        })()}
     </section>
   )
 }
