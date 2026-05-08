@@ -9,13 +9,15 @@ type Tile = NonNullable<ServicesBlockProps['tiles']>[number]
 // ── Tile sub-components ────────────────────────────────────────────────────────
 
 function TileService({ tile }: { tile: Tile }) {
-  const cols = tile.size === 'span-4' ? 4 : 2
-  const isWide = cols === 4
+  const isWide = tile.size === 'span-4'
 
   return (
     <div
-      className="bento-tile flex flex-col justify-between gap-2"
-      style={{ gridColumn: `span ${cols}`, minHeight: 280 }}
+      className={cn(
+        'bento-tile flex flex-col justify-between gap-2',
+        isWide ? 'col-span-6 md:col-span-4' : 'col-span-3 md:col-span-2',
+      )}
+      style={{ minHeight: 280 }}
     >
       <div className="flex justify-between items-start">
         {tile.number && <span className="num">{tile.number}</span>}
@@ -58,9 +60,8 @@ function TileCta({ tile }: { tile: Tile }) {
 
   return (
     <div
-      className="bento-tile flex flex-col justify-between gap-2"
+      className="bento-tile flex flex-col justify-between gap-2 col-span-3 md:col-span-2"
       style={{
-        gridColumn: 'span 2',
         minHeight: 280,
         background: 'var(--primary)',
         color: 'var(--primary-foreground)',
@@ -140,9 +141,8 @@ function TileBuilding({ tile }: { tile: Tile }) {
 
   return (
     <div
-      className="bento-tile flex flex-col justify-between gap-2 overflow-hidden"
+      className="bento-tile flex flex-col justify-between gap-2 overflow-hidden col-span-3 md:col-span-2"
       style={{
-        gridColumn: 'span 2',
         minHeight: 280,
         background: 'var(--neutral-900)',
         color: 'var(--neutral-100)',

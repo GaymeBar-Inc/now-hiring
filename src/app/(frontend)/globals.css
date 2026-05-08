@@ -3,7 +3,7 @@
 @plugin "tailwindcss-animate";
 
 @source "../../../**/*.{ts,tsx}";
-@source inline("lg:col-span-4 lg:col-span-6 lg:col-span-8 lg:col-span-12 border-border bg-card border-error bg-error/30 border-success bg-success/30 border-warning bg-warning/30");
+@source inline("lg:col-span-4 lg:col-span-6 lg:col-span-8 lg:col-span-12 col-span-3 col-span-6 md:col-span-2 md:col-span-4 border-border bg-card border-error bg-error/30 border-success bg-success/30 border-warning bg-warning/30");
 
 /* ─── Dark mode via data-theme attribute ──────────────────────────────────── */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
