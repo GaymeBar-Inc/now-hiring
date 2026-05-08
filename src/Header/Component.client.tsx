@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 
 import type { Header, Media as MediaType } from '@/payload-types'
 
-import { Mark } from '@/components/Mark'
+import { Logo } from '@/components/Logo/Logo'
 import { Media } from '@/components/Media'
 import { HeaderNav } from './Nav'
 
@@ -40,7 +40,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     >
       <div className="flex justify-between w-full max-w-3xl border-4 border-neutral-150 rounded-full py-3 px-4 md:py-4 md:px-6">
         <Link href="/" className="flex items-center gap-3">
-          {logoImage && typeof logoImage === 'object' ? (
+          {logoImage && typeof logoImage === 'object' && (
             <div className="relative h-[34px] w-[34px]">
               <Media
                 resource={logoImage}
@@ -49,10 +49,11 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 priority
               />
             </div>
-          ) : (
-            <Mark size={28} />
           )}
           {logoText && <span className="text-xl font-semibold text-primary-mid">{logoText}</span>}
+          {!logoImage && !logoText && (
+            <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+          )}
         </Link>
         <HeaderNav data={data} />
       </div>

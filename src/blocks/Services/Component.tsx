@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { cn } from '@/utilities/ui'
-import { Mark } from '@/components/Mark'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import type { ServicesBlock as ServicesBlockProps } from '@/payload-types'
 
@@ -20,7 +19,6 @@ function TileService({ tile }: { tile: Tile }) {
     >
       <div className="flex justify-between items-start">
         {tile.number && <span className="num">{tile.number}</span>}
-        {isWide && <Mark size={32} />}
       </div>
 
       <div>
