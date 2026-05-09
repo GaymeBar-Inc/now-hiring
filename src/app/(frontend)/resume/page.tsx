@@ -4,6 +4,7 @@ import { marked } from 'marked'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Resume } from '@/payload-types'
+import ResumePageClient from './page.client'
 
 export async function generateMetadata(): Promise<Metadata> {
   const payload = await getPayload({ config: configPromise })
@@ -35,6 +36,7 @@ export default async function ResumePage() {
 
   return (
     <>
+      <ResumePageClient />
       <link rel="stylesheet" href="/resume-stylesheet.css" />
       <div className="resume" dangerouslySetInnerHTML={{ __html: html }} />
     </>
