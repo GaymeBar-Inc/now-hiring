@@ -640,16 +640,6 @@
   position: relative;
   overflow: hidden;
 }
-.post-thumb::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(
-    45deg,
-    transparent 0 8px,
-    color-mix(in oklch, var(--primary) 18%, transparent) 8px 9px
-  );
-}
 
 /* ─── Theme flash prevention ─────────────────────────────────────────────── */
 
