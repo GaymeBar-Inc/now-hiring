@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import type { MarqueeBlock as MarqueeBlockProps, Media as MediaType } from '@/payload-types'
 
 type TextItem = NonNullable<MarqueeBlockProps['items']>[number]
@@ -41,7 +42,7 @@ function ImageTrack({ logos }: { logos: LogoItem[] }) {
         const naturalWidth = mediaImage.width ?? 160
         const naturalHeight = mediaImage.height ?? 80
         return (
-          <img
+          <Image
             key={id ?? i}
             src={mediaImage.url}
             alt={altText}

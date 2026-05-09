@@ -32,7 +32,7 @@ export async function Footer() {
       <div>
         <Link
           href="/"
-          aria-label={logoText ?? 'Go to homepage'}
+          aria-label={logoText ? undefined : 'Go to homepage'}
           className="flex items-center gap-3 no-underline"
           style={{ color: 'var(--primary-on-bg)', marginBottom: '1rem' }}
         >
