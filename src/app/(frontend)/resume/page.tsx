@@ -38,7 +38,8 @@ export default async function ResumePage() {
     <>
       <ResumePageClient />
       <link rel="stylesheet" href="/resume-stylesheet.css" />
-      <div className="resume" dangerouslySetInnerHTML={{ __html: html }} />
+      <style dangerouslySetInnerHTML={{ __html: `html,body{max-width:none;margin:0;padding:0;}` }} />
+      <div className="resume container mx-auto px-6 py-8" dangerouslySetInnerHTML={{ __html: html }} />
     </>
   )
 }
