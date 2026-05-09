@@ -38,11 +38,15 @@ function ImageTrack({ logos }: { logos: LogoItem[] }) {
         const mediaImage = image as MediaType
         const altText = alt || mediaImage.alt || ''
         if (!mediaImage.url) return null
+        const naturalWidth = mediaImage.width ?? 160
+        const naturalHeight = mediaImage.height ?? 80
         return (
           <img
             key={id ?? i}
             src={mediaImage.url}
             alt={altText}
+            width={naturalWidth}
+            height={naturalHeight}
             style={{ height: '80px', width: 'auto', objectFit: 'contain', display: 'block', flexShrink: 0 }}
           />
         )
