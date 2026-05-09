@@ -113,7 +113,7 @@ const getCachedPageBySlug = unstable_cache(
     return result.docs?.[0] || null
   },
   ['page-by-slug'],
-  { tags: ['pages'] },
+  { tags: ['pages'], revalidate: 60 },
 )
 
 // Per-request only — used for draft/preview mode to always fetch fresh data

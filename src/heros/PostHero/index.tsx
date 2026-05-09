@@ -25,7 +25,7 @@ export const PostHero: React.FC<{ post: Post }> = ({ post }) => {
         <div className="relative overflow-hidden rounded-lg" style={{ height: '28rem' }}>
           {hasImage ? (
             <>
-              <Media resource={heroImage} priority fill imgClassName="object-cover object-center" />
+              <Media resource={heroImage} priority fill size="100vw" imgClassName="object-cover object-center" />
               {/* Gradient for text legibility */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
             </>
