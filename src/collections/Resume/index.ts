@@ -8,6 +8,24 @@ export const Resume: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'updatedAt', '_status'],
+    livePreview: {
+      url: () => {
+        const params = new URLSearchParams({
+          path: '/resume',
+          collection: 'resumes',
+          previewSecret: process.env.PREVIEW_SECRET || '',
+        })
+        return `/next/preview?${params.toString()}`
+      },
+    },
+    preview: () => {
+      const params = new URLSearchParams({
+        path: '/resume',
+        collection: 'resumes',
+        previewSecret: process.env.PREVIEW_SECRET || '',
+      })
+      return `/next/preview?${params.toString()}`
+    },
   },
   fields: [
     {
