@@ -26,33 +26,32 @@ export function renderPostCard(post: Post, preview = false): string {
   const description = post.meta?.description ?? null
   const publishedAt = post.publishedAt ? formatDate(post.publishedAt) : null
 
-  const imageHtml =
-    imageUrl !== null
-      ? `<tr>
-        <td style="padding:0;">
-          <a href="${postUrl}" style="display:block;text-decoration:none;">
-            <img src="${imageUrl}" alt="${post.title}" width="598" style="max-width:100%;height:220px;object-fit:cover;display:block;" />
-          </a>
-        </td>
-      </tr>`
-      : ''
-
   const dateHtml = publishedAt
-    ? `<p style="margin:0 0 10px;font-size:11px;color:#9a9590;font-family:'Courier New',Courier,monospace;letter-spacing:0.1em;text-transform:uppercase;">${publishedAt}</p>`
+    ? `<p style="margin:0 0 8px;font-size:11px;color:#9a9590;font-family:'Courier New',Courier,monospace;letter-spacing:0.1em;text-transform:uppercase;">${publishedAt}</p>`
     : ''
 
   const descriptionHtml = description
-    ? `<p style="margin:10px 0 0;font-size:15px;color:#7a7570;line-height:1.55;font-family:'Plus Jakarta Sans',Arial,Helvetica,sans-serif;">${description}</p>`
+    ? `<p style="margin:8px 0 0;font-size:14px;color:#7a7570;line-height:1.5;font-family:'Plus Jakarta Sans',Arial,Helvetica,sans-serif;">${description}</p>`
     : ''
 
-  const readMoreHtml = `<p style="margin:18px 0 0;font-size:11px;font-family:'Courier New',Courier,monospace;letter-spacing:0.1em;"><a href="${postUrl}" style="color:#2d7a95;text-decoration:none;text-transform:uppercase;">Read article →</a></p>`
+  const readMoreHtml = `<p style="margin:14px 0 0;font-size:11px;font-family:'Courier New',Courier,monospace;letter-spacing:0.1em;"><a href="${postUrl}" style="color:#2d7a95;text-decoration:none;text-transform:uppercase;">Read article →</a></p>`
 
-  return `<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border:1px solid #e2ddd6;border-radius:8px;overflow:hidden;margin-bottom:20px;">
-  ${imageHtml}
-  <tr>
-    <td style="padding:22px 28px 26px;background-color:#ffffff;">
+  const thumbCell = imageUrl
+    ? `<td width="120" valign="top" style="width:120px;padding:0;vertical-align:top;">
+        <a href="${postUrl}" style="display:block;text-decoration:none;">
+          <img src="${imageUrl}" alt="${post.title}" width="120" height="120" style="display:block;width:120px;height:120px;object-fit:cover;" />
+        </a>
+      </td>`
+    : ''
+
+  const contentPadding = imageUrl ? '16px 20px 18px' : '18px 22px 20px'
+
+  return `<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="border:1px solid #e2ddd6;border-radius:8px;overflow:hidden;margin-bottom:14px;background-color:#ffffff;">
+  <tr valign="top">
+    ${thumbCell}
+    <td valign="top" style="padding:${contentPadding};vertical-align:top;">
       ${dateHtml}
-      <h2 style="margin:0;font-size:20px;font-weight:700;line-height:1.25;font-family:'Spectral',Georgia,'Times New Roman',serif;">
+      <h2 style="margin:0;font-size:17px;font-weight:700;line-height:1.25;font-family:'Spectral',Georgia,'Times New Roman',serif;">
         <a href="${postUrl}" style="color:#1e1c18;text-decoration:none;">${post.title}</a>
       </h2>
       ${descriptionHtml}
