@@ -4,7 +4,7 @@ import configPromise from '@payload-config'
 import type { Resume } from '@/payload-types'
 import { spawnSync } from 'child_process'
 import { writeFileSync, readFileSync, unlinkSync, existsSync } from 'fs'
-import { tmpdir } from 'os'
+import { tmpdir, platform } from 'os'
 import { join } from 'path'
 
 export async function GET(
@@ -39,20 +39,36 @@ export async function GET(
   try {
     writeFileSync(inputPath, resume.content, 'utf-8')
 
-    const result = spawnSync(
-      'xvfb-run',
-      [
-        'pandoc',
-        inputPath,
-        '-f', 'markdown',
-        '-t', 'pdf',
-        '--pdf-engine=wkhtmltopdf',
-        '-c', cssPath,
-        '-s',
-        '-o', outputPath,
-      ],
-      { encoding: 'utf-8', timeout: 30_000 },
-    )
+    const pandocArgs = [
+      inputPath,
+      '-f',
+      'markdown',
+      '-t',
+      'pdf',
+      '--pdf-engine=wkhtmltopdf',
+      '-c',
+      cssPath,
+      '-s',
+      '-V',
+      'margin-top=0',
+      '-V',
+      'margin-bottom=0',
+      '-V',
+      'margin-left=0',
+      '-V',
+      'margin-right=0',
+      '-o',
+      outputPath,
+    ]
+
+    // xvfb-run is Linux-only (virtual X11 display for headless wkhtmltopdf).
+    // macOS uses native graphics and doesn't need it.
+    const [cmd, args] =
+      platform() === 'darwin'
+        ? (['pandoc', pandocArgs] as const)
+        : (['xvfb-run', ['pandoc', ...pandocArgs]] as const)
+
+    const result = spawnSync(cmd, args, { encoding: 'utf-8', timeout: 30_000 })
 
     if (result.status !== 0) {
       const errMsg = result.stderr || result.error?.message || 'Pandoc failed'
