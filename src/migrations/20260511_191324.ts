@@ -78,11 +78,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`ALTER TABLE "_pages_v" ALTER COLUMN "version_hero_manifesto" TYPE jsonb USING NULL::jsonb`)
 
   // Restore each row as proper Lexical editor JSON
-  for (const row of pagesResult.rows as ManifestoPageRow[]) {
+  for (const row of pagesResult.rows as unknown as ManifestoPageRow[]) {
     const lexical = JSON.stringify(textToLexical(row.hero_manifesto))
     await db.execute(sql`UPDATE pages SET hero_manifesto = ${lexical}::jsonb WHERE id = ${row.id}`)
   }
-  for (const row of versionsResult.rows as ManifestoPageVersionRow[]) {
+  for (const row of versionsResult.rows as unknown as ManifestoPageVersionRow[]) {
     const lexical = JSON.stringify(textToLexical(row.version_hero_manifesto))
     await db.execute(sql`UPDATE _pages_v SET version_hero_manifesto = ${lexical}::jsonb WHERE id = ${row.id}`)
   }
