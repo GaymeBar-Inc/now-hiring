@@ -484,46 +484,6 @@ export interface Page {
   title: string;
   hero: {
     type: 'none' | 'kinetic' | 'landingImpact' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-    heading?: string | null;
-    richText?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: number | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-            /**
-             * Choose how the link should be rendered.
-             */
-            appearance?: ('default' | 'outline') | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
     media?: (number | null) | Media;
     /**
      * Short label left of the rule, e.g. "NOW HIRING ME — INDEX"
@@ -560,13 +520,27 @@ export interface Page {
      * Short body copy shown left of the CTAs
      */
     manifesto?: string | null;
-    /**
-     * Skills ticker below the hero. Every 3rd item is auto-italicised.
-     */
-    marquee?:
+    links?:
       | {
-          label: string;
-          emphasis?: boolean | null;
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline') | null;
+          };
           id?: string | null;
         }[]
       | null;
@@ -1471,23 +1445,6 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
-        heading?: T;
-        richText?: T;
-        links?:
-          | T
-          | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                    appearance?: T;
-                  };
-              id?: T;
-            };
         media?: T;
         eyebrow?: T;
         version?: T;
@@ -1505,11 +1462,19 @@ export interface PagesSelect<T extends boolean = true> {
                   };
             };
         manifesto?: T;
-        marquee?:
+        links?:
           | T
           | {
-              label?: T;
-              emphasis?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
               id?: T;
             };
       };

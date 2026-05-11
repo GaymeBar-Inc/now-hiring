@@ -3,11 +3,11 @@ import dynamic from 'next/dynamic'
 
 import type { Page } from '@/payload-types'
 
-const HighImpactHero = dynamic(() =>
-  import('@/heros/HighImpact').then((m) => ({ default: m.HighImpactHero })),
-)
 const KineticHero = dynamic(() =>
   import('@/heros/Kinetic').then((m) => ({ default: m.KineticHero })),
+)
+const HighImpactHero = dynamic(() =>
+  import('@/heros/HighImpact').then((m) => ({ default: m.HighImpactHero })),
 )
 const LandingImpactHero = dynamic(() =>
   import('@/heros/LandingImpact').then((m) => ({ default: m.LandingImpactHero })),
@@ -20,8 +20,8 @@ const MediumImpactHero = dynamic(() =>
 )
 
 const heroes = {
-  highImpact: HighImpactHero,
   kinetic: KineticHero,
+  highImpact: HighImpactHero,
   landingImpact: LandingImpactHero,
   lowImpact: LowImpactHero,
   mediumImpact: MediumImpactHero,

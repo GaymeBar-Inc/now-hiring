@@ -47,31 +47,6 @@ export const hero: Field = {
       required: true,
     },
     {
-      name: 'heading',
-      type: 'text',
-      label: 'Heading',
-    },
-    {
-      name: 'richText',
-      type: 'richText',
-      editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [
-            ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-            FixedToolbarFeature(),
-            InlineToolbarFeature(),
-          ]
-        },
-      }),
-      label: false,
-    },
-    linkGroup({
-      overrides: {
-        maxRows: 2,
-      },
-    }),
-    {
       name: 'media',
       type: 'upload',
       admin: {
@@ -105,16 +80,22 @@ export const hero: Field = {
       },
       fields: [
         { name: 'before', type: 'text', admin: { description: 'e.g. "I build"' } },
-        { name: 'emphasis', type: 'text', admin: { description: 'Italic accent word, e.g. "software"' } },
-        { name: 'middle', type: 'text', admin: { description: 'e.g. "that earns its place on the"' } },
+        {
+          name: 'emphasis',
+          type: 'text',
+          admin: { description: 'Italic accent word, e.g. "software"' },
+        },
+        {
+          name: 'middle',
+          type: 'text',
+          admin: { description: 'e.g. "that earns its place on the"' },
+        },
         {
           name: 'rotatingWords',
           type: 'array',
           maxRows: 3,
           admin: { description: 'Up to 3 words that cycle in the headline' },
-          fields: [
-            { name: 'word', type: 'text', required: true },
-          ],
+          fields: [{ name: 'word', type: 'text', required: true }],
         },
       ],
     },
@@ -126,18 +107,11 @@ export const hero: Field = {
         description: 'Short body copy shown left of the CTAs',
       },
     },
-    {
-      name: 'marquee',
-      type: 'array',
-      admin: {
-        condition: (_, { type } = {}) => type === 'kinetic',
-        description: 'Skills ticker below the hero. Every 3rd item is auto-italicised.',
+    linkGroup({
+      overrides: {
+        maxRows: 2,
       },
-      fields: [
-        { name: 'label', type: 'text', required: true },
-        { name: 'emphasis', type: 'checkbox', defaultValue: false },
-      ],
-    },
+    }),
   ],
   label: false,
 }
