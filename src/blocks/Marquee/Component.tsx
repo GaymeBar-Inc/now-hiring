@@ -49,11 +49,18 @@ function ImageTrack({ logos }: { logos: LogoItem[] }) {
         return (
           <Image
             key={id ?? i}
+            className="invert-0 dark:invert"
             src={mediaImage.url}
             alt={altText}
             width={naturalWidth}
             height={naturalHeight}
-            style={{ height: '80px', width: 'auto', objectFit: 'contain', display: 'block', flexShrink: 0 }}
+            style={{
+              height: '80px',
+              width: 'auto',
+              objectFit: 'contain',
+              display: 'block',
+              flexShrink: 0,
+            }}
           />
         )
       })}
